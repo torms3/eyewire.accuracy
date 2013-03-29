@@ -30,8 +30,8 @@ query_str = ['SELECT task_id,segments,seeds,channel_id,' ...
 % Inner query approach is faster than the tID list construction one.
 inner_query = get_qeury_for_affected_task_IDs( where_clause );
 query_str = [query_str 'and tasks.id IN (' inner_query ')'];
-% comma_separated_tIDs = regexprep(num2str(unique(tIDs)'),' +',',');
-% query_str = [query_str 'and tasks.id IN (' comma_separated_tIDs ')'];
+% tIDs_str = regexprep(num2str(unique(tIDs)'),' +',',');
+% query_str = [query_str 'and tasks.id IN (' tIDs_str ')'];
 
 [task,seg,seed,channel,cell_IDs,weight] = mysql( query_str );
 

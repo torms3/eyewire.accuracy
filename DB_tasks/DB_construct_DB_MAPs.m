@@ -47,6 +47,6 @@ DB_MAPs.VOL = VOL;
 %
 [file_name] = make_DB_MAPs_file_name( cell_ID, period );
 full_path = [save_path file_name];
-save(full_path,DB_MAPs);
+save(full_path,'DB_MAPs');
 
 end
