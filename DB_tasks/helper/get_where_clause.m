@@ -1,4 +1,4 @@
-function [where_clause] = DB_get_where_clause( cell_ID, period, t_status, v_status )
+function [where_clause] = get_where_clause( cell_ID, period, t_status, v_status )
 
 %% WHERE condition setting
 %
@@ -10,9 +10,9 @@ where_clause = ['WHERE ' t_status_str 'AND ' v_status_str];
 where_clause = [where_clause 'AND user_id!=1 '];
 
 % add cell clause, if any
-[where_clause] = DB_add_cell_clause( where_clause, cell_ID );
+[where_clause] = add_cell_clause( where_clause, cell_ID );
 
 % add period clause, if any
-[where_clause] = DB_add_period_clause( where_clause, period );
+[where_clause] = add_period_clause( where_clause, period );
 
 end

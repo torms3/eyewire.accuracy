@@ -1,4 +1,4 @@
-function [query_str] = DB_add_period_clause( query_str, period )
+function [query_str] = add_period_clauseDB_add_period_clause( query_str, period )
 
 % check the period
 [b_since,b_until] = check_period( period );

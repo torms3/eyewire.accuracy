@@ -26,7 +26,7 @@ query_str = ['SELECT DISTINCT(tasks.cell) '...
         	];
 
 % get WHERE clause
-[where_clause] = DB_get_where_clause( 0, period, 0, 0 );
+[where_clause] = get_where_clause( 0, period, 0, 0 );
 
 query_str = [query_str where_clause 'ORDER BY tasks.cell '];
 [cell_IDs] = mysql( query_str );

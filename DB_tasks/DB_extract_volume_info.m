@@ -26,7 +26,7 @@ query_str = ['SELECT volumes.id,volumes.path '...
 query_str = sprintf(query_str,status);
 
 % add cell clause, if any
-[query_str] = DB_add_cell_clause( query_str, cell_ID );
+[query_str] = add_cell_clause( query_str, cell_ID );
 
 query_str = [query_str 'ORDER BY volumes.id '];
 [id,vol_path] = mysql( query_str );

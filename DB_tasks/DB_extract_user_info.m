@@ -21,7 +21,7 @@ end
 
 %% Get WHERE clause
 %
-[where_clause] = DB_get_where_clause( cell_ID, period, t_status, v_status );
+[where_clause] = get_where_clause( cell_ID, period, t_status, v_status );
 
 
 %% Create MAP_u_info
