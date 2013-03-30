@@ -1,4 +1,4 @@
-function [file_name] = make_DB_MAPs_file_name( cell_ID, period )
+function [save_dir] = USM_make_save_dir_name( cell_ID, period )
 
 %% Argument validation
 % 
@@ -11,11 +11,11 @@ if( ~exist('period','var') )
 end
 
 
-% file name
-file_name = sprintf('DB_MAPs__cell_%d',cell_ID);
+% prefix
+prefix = sprintf('USM__cell_%d',cell_ID);
 
 % period suffix
 [period_suffix] = get_period_suffix( period );
-file_name = [file_name period_suffix '.mat'];
+save_dir = [prefix period_suffix];
 
 end
