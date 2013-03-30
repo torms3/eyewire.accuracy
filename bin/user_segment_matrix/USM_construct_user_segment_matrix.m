@@ -13,7 +13,7 @@ end
 
 %% Get DB_MAPs
 %
-save_path = get_DB_MAP_path();
+save_path = DB_get_DB_MAP_path();
 if( update )
 	[DB_MAPs] = DB_construct_DB_MAPs( save_path, true, true, cell_ID, period );
 else
