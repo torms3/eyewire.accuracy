@@ -66,8 +66,8 @@ for epoch = 1:iter
 		
 
 		% logistic function inlining
-		SUM = sum((w.*s) - theta);		% default model
-		% SUM = w'*(s - theta);			% nonnegativity model
+		% SUM = sum((w.*s) - theta);		% default model
+		SUM = w'*(s - theta);			% nonnegativity model
 		o = 1.0./(1.0 + exp(-SUM));
 		
 		% error
@@ -78,12 +78,12 @@ for epoch = 1:iter
 		common = eta*o*(1-o)*err;
 		% common = eta*err;
 
-		W(idx) 		= w + (s.*common);		
-		THETA(idx) 	= theta - common;
+		% W(idx) 		= w + (s.*common);		
+		% THETA(idx) 	= theta - common;
 
 		% nonnegativity constraints
-		% W(idx) 		= max(0,w + ((s - theta).*common));	% w >= 0
-		% THETA(idx) 	= min(1,max(0,theta - w*common));	% theta >= 0
+		W(idx) 		= max(0,w + ((s - theta).*common));	% (w >= 0)
+		THETA(idx) 	= min(1,max(0,theta - w*common));	% (theta >= 0) and (theta <=1)
 
 	end
 	
