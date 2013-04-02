@@ -17,11 +17,11 @@ k_partition = cell(K,1);
 for k = 1:K
 
 	head_idx = n_k1*(k - 1) + 1;
-	tail_idx = min(n_s1,head_idx + n_k - 1);
+	tail_idx = min(n_s1,head_idx + n_k1 - 1);
 	idx1 = rand_idx1(head_idx:tail_idx);
 
 	head_idx = n_k0*(k - 1) + 1;
-	tail_idx = min(n_s0,head_idx + n_0 - 1);
+	tail_idx = min(n_s0,head_idx + n_k0 - 1);
 	idx0 = rand_idx0(head_idx:tail_idx);
 
 	k_partition{k} = [idx1 idx0];

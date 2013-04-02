@@ -1,18 +1,20 @@
 
 %% normal eta setting
 %
-% [setting] = CM_prepare_setting( 0.01, iter );
-% CM_K_fold_cross_validation( save_path, data, setting, K, map_tIDs );
-% [setting] = CM_prepare_setting( 0.02, iter );
-% CM_K_fold_cross_validation( save_path, data, setting, K, map_tIDs );
-% [setting] = CM_prepare_setting( 0.05, iter );
-% CM_K_fold_cross_validation( save_path, data, setting, K, map_tIDs );
-% [setting] = CM_prepare_setting( 0.1, iter );
-% CM_K_fold_cross_validation( save_path, data, setting, K, map_tIDs );
-% [setting] = CM_prepare_setting( 0.15, iter );
-% CM_K_fold_cross_validation( save_path, data, setting, K, map_tIDs );
+iter = 100;
+partition_mode = 'segment';
+[setting] = CM_prepare_setting( 0.01, iter );
+CM_K_fold_cross_validation( save_path, data, setting, K, partition_mode );
+[setting] = CM_prepare_setting( 0.02, iter );
+CM_K_fold_cross_validation( save_path, data, setting, K, partition_mode );
+[setting] = CM_prepare_setting( 0.05, iter );
+CM_K_fold_cross_validation( save_path, data, setting, K, partition_mode );
+[setting] = CM_prepare_setting( 0.1, iter );
+CM_K_fold_cross_validation( save_path, data, setting, K, partition_mode );
+[setting] = CM_prepare_setting( 0.15, iter );
+CM_K_fold_cross_validation( save_path, data, setting, K, partition_mode );
 [setting] = CM_prepare_setting( 0.2, iter );
-CM_K_fold_cross_validation( save_path, data, setting, K, map_tIDs );
+CM_K_fold_cross_validation( save_path, data, setting, K, partition_mode );
 
 
 %% eta setting for linear-dependence on segment volume
