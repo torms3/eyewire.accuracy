@@ -24,18 +24,13 @@ end
 
 function [CM_error] = compute_error( err, data )
 
-%% RMSE
-%
+% RMSE
 RMSE = sqrt(sum((data.V_i.*err).^2)/size(data.S_ui,2));
 
-
-%% CE
-%
+% CE
 CE = (abs(err)*data.V_i')/sum(data.V_i);
 
-
-%% Volume precision & recall
-%
+% volume precision & recall
 fn_idx = (err > 0.5);
 fp_idx = (err < -0.5);
 tp_idx = logical(data.sigma) & ~fn_idx;
@@ -44,9 +39,7 @@ fnv = double(fn_idx)*data.V_i';
 fpv = double(fp_idx)*data.V_i';
 tpv = double(tp_idx)*data.V_i';
 
-
-%% Result
-%
+% result
 CM_error.RMSE 	= RMSE;
 CM_error.CE 	= CE;
 CM_error.tpv 	= tpv;

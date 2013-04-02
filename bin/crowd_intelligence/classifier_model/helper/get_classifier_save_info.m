@@ -11,7 +11,7 @@ function [save_info] = get_classifier_save_info( save_path, n_users, setting )
 %
 
 save_info.save_path = save_path;
-prefix = sprintf('params__u_%d_eta_%0.12f_iter_%d',n_users,setting.eta,setting.iter);
+prefix = sprintf('params__u_%d_eta_%g_iter_%d',n_users,setting.eta,setting.iter);
 save_info.prefix = prefix;
 
 end

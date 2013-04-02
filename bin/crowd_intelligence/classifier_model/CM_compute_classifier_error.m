@@ -9,9 +9,9 @@ IDX = S > -1;
 W = params.w*ones(1,data.n_items);
 THETA = params.theta*ones(1,data.n_items);
 
-SUM = sum(IDX.*(W.*S - THETA));
+SUM = sum(IDX.*(W.*S - THETA));			% default model
 % SUM = sum(IDX.*(W.*(S - THETA)));		% nonnegativity model
-prediction = 1.0./(1.0 + exp(-SUM));	% default model
+prediction = 1.0./(1.0 + exp(-SUM));
 
 % RMSE
 err = data.sigma - prediction;
