@@ -37,10 +37,12 @@ params.samples = nnz(sample_idx);
 
 % statistics
 params.epoch_time = zeros(1,params.iter);
-params.RMSE = zeros(1,params.samples);
-params.CE = zeros(1,params.samples);
-params.tpv = zeros(1,params.samples);
-params.fnv = zeros(1,params.samples);
-params.fpv = zeros(1,params.samples);
+
+% params.RMSE = zeros(1,params.samples);
+% params.CE = zeros(1,params.samples);
+% params.tpv = zeros(1,params.samples);
+% params.fnv = zeros(1,params.samples);
+% params.fpv = zeros(1,params.samples);
+params.error = cell(1,params.samples);
 
 end

@@ -27,23 +27,27 @@ query_str = [query_str 'ORDER BY sent '];
 mysql('close');
 
 
+CHAT.uIDs 	= uIDs;
+CHAT.msg 	= msg;
+CHAT.sent	= sent;
+
 %% Extract chat information
 %
-unique_uIDs = unique(uIDs);
-nu = numel( unique_uIDs );
-vals = cell(1,nu);
-for i = 1:nu
+% unique_uIDs = unique(uIDs);
+% nu = numel( unique_uIDs );
+% vals = cell(1,nu);
+% for i = 1:nu
     
-    uID = unique_uIDs(i);
-    fprintf( '(%d / %d) user (ID=%d) is now processing...\n', i, nu, uID );
+%     uID = unique_uIDs(i);
+%     fprintf( '(%d / %d) user (ID=%d) is now processing...\n', i, nu, uID );
         
-    vals{i}.msg = msg(uIDs == uID);
-    vals{i}.sent = sent(uIDs == uID);
-    vals{i}.n_msg = numel(vals{i}.msg);
+%     vals{i}.msg = msg(uIDs == uID);
+%     vals{i}.sent = sent(uIDs == uID);
+%     vals{i}.n_msg = numel(vals{i}.msg);
     
-end
+% end
 
-keys = num2cell(unique_uIDs);
-CHAT = containers.Map( keys, vals );
+% keys = num2cell(unique_uIDs);
+% CHAT = containers.Map( keys, vals );
 
 end

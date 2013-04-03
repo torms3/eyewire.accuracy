@@ -78,11 +78,12 @@ for epoch = 1:iter
 		common = eta*o*(1-o)*err;
 		% common = eta*err;
 
-		% W(idx) 		= w + (s.*common);		
+		% W(idx) 		= w + (s.*common);
 		% THETA(idx) 	= theta - common;
 
 		% nonnegativity constraints
-		W(idx) 		= max(0,w + ((s - theta).*common));	% (w >= 0)
+		% W(idx) 		= max(0,w + ((s - theta).*common));	% (w >= 0)
+		W(idx) 		= min(1,max(0,w + ((s - theta).*common)));	% (w >= 0)
 		THETA(idx) 	= min(1,max(0,theta - w*common));	% (theta >= 0) and (theta <=1)
 
 	end
@@ -99,14 +100,13 @@ for epoch = 1:iter
 
 		tic		
 		
-		% [RMSE,CE] = CM_compute_classifier_error( data, params );
 		[CM_error] = CM_compute_classifier_error( data, params );
-		
-		params.RMSE(sample_cnt) = CM_error.RMSE;
-		params.CE(sample_cnt) 	= CM_error.CE;
-		params.tpv(sample_cnt) 	= CM_error.tpv;
-		params.fnv(sample_cnt) 	= CM_error.fnv;
-		params.fpv(sample_cnt) 	= CM_error.fpv;
+		params.error{sample_cnt} = CM_error;
+		% params.RMSE(sample_cnt) = CM_error.RMSE;
+		% params.CE(sample_cnt) 	= CM_error.CE;
+		% params.tpv(sample_cnt) 	= CM_error.tpv;
+		% params.fnv(sample_cnt) 	= CM_error.fnv;
+		% params.fpv(sample_cnt) 	= CM_error.fpv;
 		
 		% save params
 		file_suffix = sprintf('_sample_%d.mat',epoch);
@@ -120,8 +120,8 @@ for epoch = 1:iter
 		error_calculation_time = toc;
 		
 		fprintf('%dth epoch: error calculation time=%f\n',epoch,error_calculation_time);
-		fprintf('%dth epoch: RMSE = \t%f\n',epoch,params.RMSE(sample_cnt));
-		fprintf('%dth epoch: CE = \t%f\n',epoch,params.CE(sample_cnt));
+		fprintf('%dth epoch: RMSE = \t%f\n',epoch,CM_error.RMSE);
+		fprintf('%dth epoch: CE = \t%f\n',epoch,CM_error.CE);
 		fprintf('%dth epoch: v_prec = \t%f\n',epoch,CM_error.tpv/(CM_error.tpv+CM_error.fpv));
 		fprintf('%dth epoch: v_rec = \t%f\n',epoch,CM_error.tpv/(CM_error.tpv+CM_error.fnv));
 
@@ -141,7 +141,7 @@ fprintf('total elapsed time=%f\n',finish_time);
 
 %% Plot learning curve
 %
-plot_learning_curve( params );
+% plot_learning_curve( params );
 
 end
 

@@ -30,23 +30,24 @@ file_list = dir([save_path,'params*']);
 
 sample_epoch = params.sample_epoch;
 n_samples = params.samples;
-RMSE 	= zeros(1,n_samples);
-CE 		= zeros(1,n_samples);
-tpv 	= zeros(1,n_samples);
-fnv 	= zeros(1,n_samples);
-fpv 	= zeros(1,n_samples);
+train_error = cell(1,n_samples);
+% RMSE 	= zeros(1,n_samples);
+% CE 		= zeros(1,n_samples);
+% tpv 	= zeros(1,n_samples);
+% fnv 	= zeros(1,n_samples);
+% fpv 	= zeros(1,n_samples);
 for idx = 1:n_samples
 	
 	file_suffix = sprintf('_sample_%d.mat',sample_epoch(idx));
 	load([save_path save_info.prefix file_suffix]);
 	
 	[CM_error] 	= CM_compute_classifier_error( data, params );
-	
-	RMSE(idx) 	= CM_error.RMSE;
-	CE(idx) 	= CM_error.CE;
-	tpv(idx) 	= CM_error.tpv;
-	fnv(idx) 	= CM_error.fnv;
-	fpv(idx) 	= CM_error.fpv;
+	train_error{idx} = CM_error;
+	% RMSE(idx) 	= CM_error.RMSE;
+	% CE(idx) 	= CM_error.CE;
+	% tpv(idx) 	= CM_error.tpv;
+	% fnv(idx) 	= CM_error.fnv;
+	% fpv(idx) 	= CM_error.fpv;
 	
 end
 
@@ -55,11 +56,12 @@ end
 
 % test result
 test_result.epochs 		= sample_epoch;
-test_result.RMSE 		= RMSE;
-test_result.CE 			= CE;
-test_result.tpv 		= tpv;
-test_result.fnv 		= fnv;
-test_result.fpv 		= fpv;
+test_result.error 		= train_error;
+% test_result.RMSE 		= RMSE;
+% test_result.CE 			= CE;
+% test_result.tpv 		= tpv;
+% test_result.fnv 		= fnv;
+% test_result.fpv 		= fpv;
 test_result.ERR_const 	= ERR_const;
 test_result.ERR_exp 	= ERR_exp;
 save([save_path,'test_result.mat'],'test_result');

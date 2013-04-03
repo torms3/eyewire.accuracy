@@ -1,27 +1,26 @@
 function plot_classification_error( save_path, n_users, iter, CE, NEM )
 
 % eta
-% eta(1) = 0.01;
+eta(1) = 0.01;
 % eta(2) = 0.02;
 % eta(3) = 0.05;
 % eta(4) = 0.1;
 % eta(5) = 0.15;
 % eta(6) = 0.2;
-eta(1) = 0.000001;
-eta(2) = 0.000002;
-eta(3) = 0.000005;
-eta(4) = 0.00001;
-eta(5) = 0.00002;
-eta(6) = 0.00005;
-eta(7) = 0.0001;
-eta(8) = 0.0002;
+% eta(1) = 0.000001;
+% eta(2) = 0.000002;
+% eta(3) = 0.000005;
+% eta(4) = 0.00001;
+% eta(5) = 0.00002;
+% eta(6) = 0.00005;
 n_eta = numel(eta);
 
 % data save path
 save_info = cell(n_eta,1);
 for i = 1:n_eta
 
-	save_info{i} = get_classifier_save_info( n_users, eta(i), iter );	
+	setting = CM_prepare_setting( eta(i), iter );
+	save_info{i} = get_classifier_save_info( save_info, n_users, setting );	
 
 end
 
@@ -39,7 +38,8 @@ color = colormap( lines );
 hold on;
 for i = 1:n_eta
 
-	params = initialize_classifier_parameters( n_users, eta(i), iter );	
+	setting = CM_prepare_setting( eta(i), iter );
+	params = initialize_classifier_parameters( n_users, setting );	
 
 	% load
 	file_suffix = sprintf('_sample_%d.mat',iter);
