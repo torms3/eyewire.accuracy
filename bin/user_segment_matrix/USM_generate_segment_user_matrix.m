@@ -11,36 +11,38 @@ function [s1,s0,uIDs] = USM_generate_segment_user_matrix( MAP_s_iu, META )
 n_items_s1 	= META(0).offset_s1;
 n_items_s0	= META(0).offset_s0;
 
-uIDs 	= get_uIDs( MAP_s_iu );
-n_users = numel(uIDs);
+uIDs 	= get_uIDs( MAP_s_iu );	% ?
+n_users = numel(uIDs);			% ?
 
 
 %% s_ui
 %
 s1 = -ones(n_items_s1,n_users);
 s0 = -ones(n_items_s0,n_users);
+v1 = zeros(1,n_items_s1);
+v0 = zeros(1,n_items_s0);
 
 
 %% Cube-wise processing
 %
-keys 	= MAP_s_iu.keys;
+tIDs 	= MAP_s_iu.keys;
 vals	= MAP_s_iu.values;
 for i = 1:MAP_s_iu.Count
 
-	tID = keys{i};
+	tID = tIDs{i};
 
-	fprintf( '%dth cube_row (tID=%d) is now processing...\n', i, tID );
+	fprintf('%dth cube_row (tID=%d) is now processing...\n',i,tID);
 
 	MAP_cube_row = vals{i};
 	
 
 	%% User-tasks
 	%
-	keys2 	= MAP_cube_row.keys;
+	keys 	= MAP_cube_row.keys;
 	vals2	= MAP_cube_row.values;
 	for j = 1:MAP_cube_row.Count
 
-		uID = keys2{j};
+		uID = keys{j};
 		meta = META(tID);
 
 		% data element
@@ -54,6 +56,9 @@ for i = 1:MAP_s_iu.Count
 		u_idx = find(uIDs == uID);
 		s1(idx_s1,u_idx) = chunk_s1;
 		s0(idx_s0,u_idx) = chunk_s0;
+
+		v1(idx_s1) = meta.segvol_s1;	% ?
+		v0(idx_s0) = meta.segvol_s0;	% ?
 
 	end
 

@@ -1,12 +1,12 @@
-function [MAP_vol_info] = DB_extract_volume_info( cell_ID, status )
+function [MAP_vol_info] = DB_extract_volume_info( cell_IDs, status )
 
 %% Argument validation
 %
-if( ~exist('cell_ID','var') )
-    cell_ID = 0;
+if( ~exist('cell_IDs','var') )
+    cell_IDs = [0];
 end
 if( ~exist('status','var') )
-    status = 0;
+    status = [0];
 end
 
 
@@ -20,13 +20,14 @@ mysql('use omniweb');
 % MySQL query 1
 query_str = ['SELECT volumes.id,volumes.path '...
              'FROM volumes ' ...
-             'INNER JOIN tasks ON volumes.id=tasks.channel_id ' ...
-             'WHERE tasks.status=%d '
+             'INNER JOIN tasks ON volumes.id=tasks.channel_id ' ...             
             ];
-query_str = sprintf(query_str,status);
+status_str = get_condition_str( 'tasks.status', status );
+where_clause = ['WHERE ' status_str];
+query_str = [query_str where_clause];
 
 % add cell clause, if any
-[query_str] = add_cell_clause( query_str, cell_ID );
+[query_str] = add_cell_clause( query_str, cell_IDs );
 
 query_str = [query_str 'ORDER BY volumes.id '];
 [id,vol_path] = mysql( query_str );

@@ -29,6 +29,10 @@ for i = 1:numel(vIDs)
 	% votes for this cube
 	vID 	= vIDs(i);
 	vInfo 	= V(vID);
+	% discard validations with weight = 0
+	% if( vInfo.weight == 0 )
+	% 	continue;
+	% end
 	seg 	= vInfo.segs;
 
 	% total segments for this cube

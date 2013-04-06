@@ -29,7 +29,7 @@ for i = 1:MAP_s_ui.Count
 
 	uID = uIDs{i};
 
-	% fprintf( '%dth user_row (uID=%d) is now processing...\n', i, uID );
+	% fprintf('%dth user_row (uID=%d) is now processing...\n',i,uID);
 
 	MAP_user_row = vals{i};
 	

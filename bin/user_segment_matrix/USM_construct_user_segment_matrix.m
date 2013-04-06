@@ -1,9 +1,9 @@
-function [USM_data] = USM_construct_user_segment_matrix( update, cell_ID, period )
+function [USM_data] = USM_construct_user_segment_matrix( update, cell_IDs, period )
 
 %% Argument validation
 %
-if( ~exist('cell_ID','var') )
-	cell_ID = 0;
+if( ~exist('cell_IDs','var') )
+	cell_IDs = [0];
 end
 if( ~exist('period','var') )
 	period.since = '';
@@ -15,9 +15,9 @@ end
 %
 save_path = DB_get_DB_MAP_path();
 if( update )
-	[DB_MAPs] = DB_construct_DB_MAPs( save_path, true, true, cell_ID, period );
+	[DB_MAPs] = DB_construct_DB_MAPs( save_path, true, true, cell_IDs, period );
 else
-	[file_name] = make_DB_MAPs_file_name( cell_ID, period );	
+	[file_name] = make_DB_MAPs_file_name( cell_IDs, period );	
 	load([save_path file_name]);
 end
 
@@ -38,7 +38,7 @@ MAP_s_ui 		= USM_meta.MAP_s_ui;
 %% Save
 %
 [save_path] = USM_get_data_path();
-[save_dir] 	= USM_make_save_dir_name( cell_ID, period );
+[save_dir] 	= USM_make_save_dir_name( cell_IDs, period );
 mkdir(save_path,save_dir);
 
 % meta data

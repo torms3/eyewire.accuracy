@@ -1,9 +1,9 @@
-function [MAP_u_info] = DB_extract_user_info( cell_ID, period, t_status, v_status )
+function [MAP_u_info] = DB_extract_user_info( cell_IDs, period, t_status, v_status )
 
 %% Argument validation
 %
-if( ~exist('cell_ID','var') )
-    cell_ID = 0;
+if( ~exist('cell_IDs','var') )
+    cell_IDs = [0];
 end
 if( ~exist('period','var') )
     period.since = '';
@@ -21,7 +21,7 @@ end
 
 %% Get WHERE clause
 %
-[where_clause] = get_where_clause( cell_ID, period, t_status, v_status );
+[where_clause] = get_where_clause( cell_IDs, period, t_status, v_status );
 
 
 %% Create MAP_u_info

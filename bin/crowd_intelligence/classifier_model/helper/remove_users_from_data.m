@@ -11,6 +11,7 @@ function [data] = remove_users_from_data( USM_data, users )
 %	users:	user indices to remove (not uIDs, but indices)%
 
 if( isempty(users) )
+	data = USM_data;
 	return;
 end
 
