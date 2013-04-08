@@ -44,7 +44,7 @@ for i = 1:T.Count
 
 	% triples
 	vIDs = tInfo.vIDs;
-	nv = numel(vIDs);
+	nv = numel(vI,Ds);
 	assert( nv > 0 );
 	triples = zeros(nv,nv+1,2);
 
