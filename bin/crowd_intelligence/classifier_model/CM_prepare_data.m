@@ -1,4 +1,4 @@
-function [data] = CM_prepare_data( USM_data, super_index )
+function [data] = CM_prepare_data( USM_data, super_idx )
 
 %% Super users for cell 10
 %
