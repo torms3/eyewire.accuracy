@@ -8,7 +8,7 @@ for i = 1:2
 	img = triples(:,:,i);
 	[row,col] = find(img);
 	% dim = max(max(row),max(col));
-	dim = 30;
+	dim = 33;
 	img = img(1:dim,1:dim);
 
 	% draw image
@@ -41,7 +41,7 @@ result(isnan(result)) = 0;
 img = result;
 [row,col] = find(img);
 % dim = max(max(row),max(col));
-dim = 30;
+dim = 33;
 img = img(1:dim,1:dim);
 
 % draw image
@@ -58,7 +58,13 @@ colormap hot;
 colorbar;
 
 m = 1:dim;
-f_m = floor(m.*(exp(-0.16*m)+0.2));
+% f_m = floor(m.*(exp(-0.16*m)+0.2));
+
+a = 0.75;
+b = 0.24;
+c = 0.22;
+f_m = floor(m.*min(0.99,a*exp(-b*m)+c));
+
 p = plot(m,f_m,'b');
 set(p,'LineWidth',2);
 

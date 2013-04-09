@@ -23,8 +23,7 @@ end
 
 %% Construct where clause
 % period
-period.since = '';
-% period.since = '''2013-03-15 12:00:00''';
+period.since = '''2013-03-15 12:00:00''';
 period.until = '';
 
 % get WHERE clause
@@ -32,7 +31,7 @@ period.until = '';
 
 % SAC tasks
 tIDs_str = regexprep(num2str(unique(SAC_tIDs)),' +',',');
-where_clause = [where_clause 'AND tasks.id IN (' tIDs_str ')'];
+where_clause = [where_clause 'AND tasks.id IN (' tIDs_str ') '];
 
 
 %% Extract DB information
@@ -40,7 +39,7 @@ where_clause = [where_clause 'AND tasks.id IN (' tIDs_str ')'];
 [U] 	= DB_create_MAP_user_info( where_clause );
 [T] 	= DB_create_MAP_task_info( where_clause );
 [V] 	= DB_create_MAP_validation_info( where_clause );
-[VOL]	= DB_extract_volume_info( cell_IDs, t_status );
+[VOL]	= DB_create_MAP_volume_info( where_clause );
 
 
 %% Post-processing

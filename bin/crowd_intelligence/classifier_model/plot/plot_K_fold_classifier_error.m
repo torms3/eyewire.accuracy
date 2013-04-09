@@ -120,12 +120,12 @@ if( EXP.K > 1 )	% K-fold cross-validation
 	rec  = tpv./(tpv + fnv);
 	CE 	 = (fpv + fnv)/58303421;
 
-	th_const.prec 	= th_const.tpv/(th_const.tpv + th_const.fnv);
-	th_const.rec 	= th_const.tpv/(th_const.tpv + th_const.fpv);
+	th_const.prec 	= th_const.tpv/(th_const.tpv + th_const.fpv);
+	th_const.rec 	= th_const.tpv/(th_const.tpv + th_const.fnv);
 	th_const.CE 	= (th_const.fpv + th_const.fnv)/58303421;
 
-	th_exp.prec = th_exp.tpv/(th_exp.tpv + th_exp.fnv);
-	th_exp.rec 	= th_exp.tpv/(th_exp.tpv + th_exp.fpv);
+	th_exp.prec = th_exp.tpv/(th_exp.tpv + th_exp.fpv);
+	th_exp.rec 	= th_exp.tpv/(th_exp.tpv + th_exp.fnv);
 	th_exp.CE 	= (th_exp.fpv + th_exp.fnv)/58303421;
 	
 	% train

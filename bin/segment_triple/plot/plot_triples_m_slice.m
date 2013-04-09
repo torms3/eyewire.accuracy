@@ -1,11 +1,11 @@
 function plot_triples_m_slice( triples, m )
 
-figure();
-
+% figure();
+clf;
 colormap hot;
 
 % threshold
-th = m*(exp(-0.16*m)+0.2);
+th = m*min(0.99,exp(-0.16*m)+0.2);
 
 % sigma = 0 -> i = 1
 % sigma = 1 -> i = 2
@@ -39,7 +39,9 @@ for i = 1:2
 		set( ch, 'FaceVertexCData', fvcd );
 
 		% draw decision line		
-		line([th th],ylim,'Color','b','LineWidth',2);
+		% line([th th],ylim,'Color','b','LineWidth',2);
+		disp_th = floor(th) + 1 - 0.5;
+		line([disp_th disp_th],ylim,'Color','b','LineWidth',2);
 
 	hold off;
 
@@ -73,14 +75,14 @@ fprintf( 'precision=%f\n', precision );
 fprintf( 'recall=%f\n', recall );
 
 % print recall
-% subplot(2,2,2);
-% prec_str = sprintf( 'Precision = %f', precision );
-% text(sum(xlim)/2.,sum(ylim)*0.85,prec_str,'FontSize',30,'FontWeight','bold');
+subplot(2,2,2);
+prec_str = sprintf( 'Precision = %f', precision );
+text(sum(xlim)/2.,sum(ylim)*0.85,prec_str,'FontSize',30,'FontWeight','bold');
 
 % print precision
-% subplot(2,2,4);
-% recall_str = sprintf( 'Recall = %f', recall );
-% text(sum(xlim)/2.,sum(ylim)*0.85,recall_str,'FontSize',30,'FontWeight','bold');
+subplot(2,2,4);
+recall_str = sprintf( 'Recall = %f', recall );
+text(sum(xlim)/2.,sum(ylim)*0.85,recall_str,'FontSize',30,'FontWeight','bold');
 
 end
 

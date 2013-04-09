@@ -5,11 +5,11 @@ function [query_str] = add_period_clauseDB_add_period_clause( query_str, period 
 
 % extract data during specific period
 if( b_since )
-    since_clause = sprintf('and validations.finish > %s ',period.since);
+    since_clause = sprintf('AND validations.finish>%s ',period.since);
     query_str = [query_str since_clause];
 end
 if( b_until )
-    until_clause = sprintf('and validations.finish < %s ',period.until);
+    until_clause = sprintf('AND validations.finish<%s ',period.until);
     query_str = [query_str until_clause];
 end
 

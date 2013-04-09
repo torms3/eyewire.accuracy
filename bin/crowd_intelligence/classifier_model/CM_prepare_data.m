@@ -10,6 +10,6 @@ function [data] = CM_prepare_data( USM_data, super_idx )
 
 %% Remove super-users
 %
-[data] = remove_users_from_data( USM_data, super_index );
+[data] = remove_users_from_data( USM_data, super_idx );
 
 end

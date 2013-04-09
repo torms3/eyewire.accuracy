@@ -41,12 +41,19 @@ for i = 1:nv
     %     error('invalid seg ID: user=%s vID=%d tID=%d chID=%d',cell2mat(uInfo.username),v_id,tID,chID);
     % end
     
+    % u_seg = tInfo.union;
+    % [~,idx,~] = intersect( u_seg, match );
+    % tpv = tpv + sum(tInfo.seg_size(idx));
+    % [~,idx,~] = intersect( u_seg, miss );
+    % fnv = fnv + sum(tInfo.seg_size(idx));
+    % [~,idx,~] = intersect( u_seg, extra );
+    % fpv = fpv + sum(tInfo.seg_size(idx));
     u_seg = tInfo.union;
-    [~,idx,~] = intersect( u_seg, match );
+    idx = ismember( u_seg, match );
     tpv = tpv + sum(tInfo.seg_size(idx));
-    [~,idx,~] = intersect( u_seg, miss );
+    idx = ismember( u_seg, miss );
     fnv = fnv + sum(tInfo.seg_size(idx));
-    [~,idx,~] = intersect( u_seg, extra );
+    idx = ismember( u_seg, extra );
     fpv = fpv + sum(tInfo.seg_size(idx));
 
     % hotspot cubes

@@ -2,15 +2,21 @@ function [MAP_user_seg] = USM_create_MAP_user_segment( U, V, T, VOL )
 
 %% User-wise processing
 %
-keys 	= U.keys;
+idx = 0;
+uIDs 	= U.keys;
 for i = 1:U.Count 
 
-	uID = keys{i};
+	uID = uIDs{i};
 
 	% fprintf( '%dth user (u_id=%d) is now processing...\n', i, uID );
     
 	uInfo = U(uID);
-	vals{i} = extract_user_row( uInfo, V, T, VOL );
+	val = extract_user_row( uInfo, V, T, VOL );
+	if( ~isempty(val) )
+		idx = idx + 1;
+		vals{idx} = val;
+		keys{idx} = [uID];
+	end
 
 end
 
@@ -23,6 +29,7 @@ function [MAP_user_row] = extract_user_row( uInfo, V, T, VOL )
 
 %% Iterate through validations of each user
 %
+idx = 0;
 vIDs = uInfo.vIDs;
 for i = 1:numel(vIDs)
 
@@ -30,9 +37,11 @@ for i = 1:numel(vIDs)
 	vID 	= vIDs(i);
 	vInfo 	= V(vID);
 	% discard validations with weight = 0
-	% if( vInfo.weight == 0 )
-	% 	continue;
-	% end
+	if( vInfo.weight == 0 )
+		continue;
+	else
+		idx = idx + 1;
+	end
 	seg 	= vInfo.segs;
 
 	% total segments for this cube
@@ -42,15 +51,19 @@ for i = 1:numel(vIDs)
 	n_seg 	= VOL(chID).n_seg;
 
 	% data element
-	vals{i}.tInfo	= tInfo;	% info. from MAP_t_info
-	vals{i}.n_seg 	= n_seg;	% info. from MAP_vol_info
-	vals{i}.seg 	= seg;		% info. from MAP_v_info
+	vals{idx}.tInfo	= tInfo;	% info. from MAP_t_info
+	vals{idx}.n_seg = n_seg;	% info. from MAP_vol_info
+	vals{idx}.seg 	= seg;		% info. from MAP_v_info
 
 	% keys
-	keys{i} = [tID];
+	keys{idx} = [tID];
 
 end
 
-MAP_user_row = containers.Map( keys, vals );
+if( idx == 0 )
+	MAP_user_row = [];
+else
+	MAP_user_row = containers.Map( keys, vals );
+end
 
 end

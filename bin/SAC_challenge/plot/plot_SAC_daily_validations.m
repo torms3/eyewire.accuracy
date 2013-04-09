@@ -2,8 +2,8 @@ function plot_SAC_daily_validations( daily_stat )
 
 %% Options
 %
-% weekend_bg = 'bar';
-weekend_bg = 'line';
+weekend_bg = 'bar';
+% weekend_bg = 'line';
 
 
 %% Extract information from stat

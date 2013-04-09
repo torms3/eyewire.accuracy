@@ -22,7 +22,7 @@ if( ~isempty(value) )
 	end
 	str(end) = ')';
 	str = regexprep(str,' +',' OR ');
-	cond_str = str;
+	cond_str = [str ' '];
 end
 
 % values to avoid
@@ -35,9 +35,9 @@ if( ~isempty(avoid) )
 	str = regexprep(str,' +',' AND ');
 	
 	if( isempty(cond_str) )
-		cond_str = str;
+		cond_str = [str ' '];
 	else
-		cond_str = ['(' cond_str ' AND ' str ')'];
+		cond_str = ['(' cond_str 'AND ' str ') '];
 	end	
 end
 
