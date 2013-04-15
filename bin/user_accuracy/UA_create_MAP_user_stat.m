@@ -38,15 +38,9 @@ invalid_idx = find(user_stat.id == 0);
 user_stat.id(invalid_idx,:) = [];
 
 % usernames & weight
-% [04/01/2013 kisuklee]
-% Too vulnerable. Should be replaced to more robust one ASAP.
 usernames = extractfield(cell2mat(DB_MAPs.U.values),'username')';
 weight = extractfield(cell2mat(DB_MAPs.U.values),'weight')';
-% vals = DB_MAPs.U.values;
-% vals(:,invalid_idx) = [];
-% vals = struct2cell(cell2mat(vals));
-% usernames = reshape(vals(1,1,:),1,[])';
-% weight = reshape(vals(2,1,:),1,[])';
+weight = num2cell(weight);
 
 % create a new list of data element
 % 1:id, 2:tp, 3:fn, 4:fp, 5:nv 6:tpv 7:fnv 8:fpv 9:hot

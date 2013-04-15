@@ -9,79 +9,79 @@ end
 
 
 %% Option
-upper_right_mode = 0;   % only display the 'good' zone
-plot_mode = 1;          % plot prec. vs. rec. curve
-user_name_mode = 1;     % gname
-accumulate_mode = 0;    % 
-reverse_mode = 0;       % bright color -> dark color
+%
+upper_right_mode    = false;    % only display the 'good' zone
+plot_mode           = true;     % plot prec. vs. rec. curve
+user_name_mode      = true;     % gname
+accumulate_mode     = false;    % 
+reverse_mode        = false;    % bright color -> dark color
+
+% cell-type
+cell_type = 'normal';
+% cell_type = 'sac';
 
 
 %% Read information
 %
-[IDs] = cell2mat(STAT.keys);
-U = cell2mat(STAT.values);
-[tp]     = extractfield(U,'tp');
-[fn]     = extractfield(U,'fn');
-[fp]     = extractfield(U,'fp');
-[nv]     = extractfield(U,'nv');
-[s_prec] = extractfield(U,'seg_prec');
-[s_rec]  = extractfield(U,'seg_rec');
-[v_prec] = extractfield(U,'v_prec');
-[v_rec]  = extractfield(U,'v_rec');
-[names]  = extractfield(U,'username');
-[w]      = extractfield(U,'weight');
+uIDs    = cell2mat(STAT.keys);
+U       = cell2mat(STAT.values);
+v_prec  = extractfield(U,'v_prec');
+v_rec   = extractfield(U,'v_rec');
 
 
-%% Calculate precision and recall
 %% Preprocessing for plotting the figure
 %
-n_seg = tp + fn + fp;
-
 % data validation
 valid_idx = ~(isnan(v_prec) | isnan(v_rec));
-v_prec = v_prec(valid_idx);
-v_rec = v_rec(valid_idx);
-s_prec = s_prec(valid_idx);
-s_rec = s_rec(valid_idx);
-nv = nv(valid_idx);
-IDs = IDs(valid_idx);
-n_seg = n_seg(valid_idx);
-names = names(valid_idx);
-w = w(valid_idx);
-
+uIDs = uIDs(valid_idx);
+U = U(valid_idx);
 
 % sort
-[n_seg,idx] = sort( n_seg, 'descend' );
-v_prec = v_prec(idx);
-v_rec = v_rec(idx);
-s_prec = s_prec(idx);
-s_rec = s_rec(idx);
-nv = nv(idx);
-IDs = IDs(idx);
-names = names(idx);
-w = w(idx);
+tp = extractfield(U,'tp');
+fn = extractfield(U,'fn');
+fp = extractfield(U,'fp');
+n_seg = tp + fn + fp;
+
+[n_seg,idx] = sort(n_seg,'descend');
+uIDs = uIDs(idx);
+U = U(idx);
+
+% name
+names = extractfield(U,'username');
 
 
 %% stat
 %
-n_users = numel(IDs);
+n_users = numel(uIDs);
+v_prec  = extractfield(U,'v_prec');
+v_rec   = extractfield(U,'v_rec');
 good_idx = (v_prec > cut_line.prec) & (v_rec > cut_line.rec);
 bad_idx  = ~good_idx; 
-n_good = nnz(good_idx);
-n_bad = n_users - n_good;
-assert( n_bad == nnz(bad_idx) );
-goodIDs = IDs(good_idx);
-badIDs = IDs(bad_idx);
+n_good  = nnz(good_idx);
+n_bad   = n_users - n_good;
+assert(n_bad == nnz(bad_idx));
+goodIDs = uIDs(good_idx);
+badIDs  = uIDs(bad_idx);
 
 % # cubes 
-nv_filter = nv > 20;
-% nv_filter = nv > 0;
+nv = extractfield(U,'nv');
+switch( cell_type )
+case 'normal'
+    nv_filter = nv > 0;
+case 'sac'
+    nv_filter = nv > 20;
+end
 
+% weight
+w = extractfield(U,'weight');
 enf = good_idx & (w==0) & nv_filter;
 disenf = bad_idx & (w==1);
-[enfIDs] = IDs(enf);
-% [enfIDs] = qualify_enfranchisement_candidates( enfIDs );
-disenfIDs = IDs(disenf);
+[enfIDs] = uIDs(enf);
+switch( cell_type )
+case 'normal'
+    % [enfIDs] = qualify_enfranchisement_candidates( enfIDs );
+end
+disenfIDs = uIDs(disenf);
 
 fprintf('%d out of %d users (%.2f %%) are above the cut-line.\n',n_good,n_users,n_good*100.0/n_users);
 fprintf('%d out of %d users (%.2f %%) are below the cut-line.\n',n_bad,n_users,n_bad*100.0/n_users);
@@ -92,19 +92,14 @@ uIDs_info.goodIDs   = goodIDs;
 uIDs_info.badIDs    = badIDs;
 uIDs_info.enfIDs    = enfIDs;
 uIDs_info.disenfIDs = disenfIDs;
-uIDs_info.voter     = union( IDs(good_idx & (w==1)), enfIDs );
+uIDs_info.voter     = union(uIDs(good_idx & (w==1)),enfIDs);
 
 
 %% Plot
 %
-if( plot_mode == 0 )
+if( ~plot_mode )
     return;
 end
-
-%% Number of validations histogram
-%
-% figure();
-% hist(nv,20);
 
 
 %% Precision vs. Recall curve
@@ -120,30 +115,30 @@ set( gca, 'YColor', 'w' );
 axis equal;
 
 % thresholding
-% % Global
-% unit = 100;
-% stage = 6;
-% from = 0;
-% to = 6;
-
-% % SAC
-unit = 50;
-stage = 6;
-from = 0;
-to = 6;
+switch( cell_type )
+case 'normal'
+    unit = 100;
+    stage = 6;
+    from = 0;
+    to = 6;
+case 'sac'
+    unit = 50;
+    stage = 6;
+    from = 0;
+    to = 6;
+end
 
 color = colormap( hot(stage+1) );
 for i = from:to
 
-    if( reverse_mode == 1 )
+    if( reverse_mode )
         th = (stage - i);
     else
         th = i;
     end
     
-    if( accumulate_mode == 1 )            
+    if( accumulate_mode )            
         idx = nv > th*unit;
-        disp(nnz(idx));
     else
         lower_idx = (nv >= th*unit);
         if( th == stage )
@@ -186,7 +181,7 @@ for i = from:to
                     'MarkerEdgeColor', 'k', ...
                     'MarkerFaceColor', color(th+1,:) );
     % Username
-    if( user_name_mode == 1 )
+    if( user_name_mode )
         set(gcf,'DefaultTextColor','w');
         gname( names(idx1) );
     end
@@ -196,7 +191,7 @@ for i = from:to
                     'MarkerEdgeColor', color(th+1,:) );                    
     
     % Username
-    if( user_name_mode == 1 )    
+    if( user_name_mode )    
         set(gcf,'DefaultTextColor','w');
         gname( names(idx0) );
     end
