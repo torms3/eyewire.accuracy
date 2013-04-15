@@ -42,20 +42,11 @@ if( ~isempty(update_uIDs) )
 				];
 	query_str = sprintf(query_str,weight);
 
-	% construct IN clause
-	% in_clause = sprintf('%d',update_uIDs(1));
-	% for i = 2:numel(update_uIDs)
-		
-	% 	in_clause = [in_clause ',%d'];
-	% 	in_clause = sprintf(in_clause,update_uIDs(i));
-
-	% end
 	uIDs_str = regexprep(num2str(update_uIDs),' +',',');
 	query_str = [query_str uIDs_str ')'];
 
 	% execute the query
-	% mysql( query_str );
-	disp(query_str);
+	mysql( query_str );	
 	
 end
 
@@ -82,8 +73,7 @@ if( ~isempty(new_uIDs) )
 	query_str = [query_str values];
 
 	% execute the query
-	% mysql( query_str );
-	disp(query_str);
+	mysql( query_str );
 
 end
 

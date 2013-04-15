@@ -47,6 +47,26 @@ for i = 1:T.Count
 
 	end
 
+	% k = 1;	
+	% for j = 1:numel(vIDs)
+
+	% 	vID = vIDs(j);
+	% 	vInfo = V(vID);
+
+	% 	if( vInfo.datenum > T(tInfo.children(k)).datenum )
+	% 		tInfo.spawn = [tInfo.spawn (j-1)];
+	% 		k = k + 1;
+	% 		if( k > numel(tInfo.children) )
+	% 			break;
+	% 		end
+	% 	end		
+
+	% end
+
+	% if( k == numel(tInfo.children) )
+	% 	tInfo.spawn = [tInfo.spawn numel(vIDs)];
+	% end
+
 	% update
 	T(tID) = tInfo;
 

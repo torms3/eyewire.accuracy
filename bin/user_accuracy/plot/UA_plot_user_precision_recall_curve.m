@@ -1,85 +1,78 @@
-function [uIDs_info] = UA_plot_user_precision_recall_curve( STAT, cut_line )
+function [uIDs_info] = UA_plot_user_precision_recall_curve( STAT, cell_type, cut_line )
 
 %% Argument validation
 %
+if( ~exist('cell_type','var') )
+    cell_type = 'any';
+end
 if( ~exist('cut_line','var') )
-    cut_line.prec   = 0.5;
-    cut_line.rec    = 0.5;
+    switch( cell_type )
+    case 'sac'
+        cut_line.prec   = 0.8;
+        cut_line.rec    = 0.8;
+    otherwise
+        cut_line.prec   = 0.7;
+        cut_line.rec    = 0.7;
+    end
 end
 
 
 %% Option
-%
 upper_right_mode    = false;    % only display the 'good' zone
 plot_mode           = true;     % plot prec. vs. rec. curve
 user_name_mode      = true;     % gname
 accumulate_mode     = false;    % 
 reverse_mode        = false;    % bright color -> dark color
 
-% cell-type
-cell_type = 'normal';
-% cell_type = 'sac';
-
-
-%% Read information
-%
-uIDs    = cell2mat(STAT.keys);
-U       = cell2mat(STAT.values);
-v_prec  = extractfield(U,'v_prec');
-v_rec   = extractfield(U,'v_rec');
-
 
 %% Preprocessing for plotting the figure
 %
 % data validation
+keys = cell2mat(STAT.keys);
+vals = cell2mat(STAT.values);
+[v_prec] = extractfield( vals, 'v_prec' );
+[v_rec]  = extractfield( vals, 'v_rec' );
 valid_idx = ~(isnan(v_prec) | isnan(v_rec));
-uIDs = uIDs(valid_idx);
-U = U(valid_idx);
-
-% sort
-tp = extractfield(U,'tp');
-fn = extractfield(U,'fn');
-fp = extractfield(U,'fp');
-n_seg = tp + fn + fp;
-
-[n_seg,idx] = sort(n_seg,'descend');
-uIDs = uIDs(idx);
-U = U(idx);
-
-% name
-names = extractfield(U,'username');
+keys = keys(valid_idx);
+vals = vals(valid_idx);
+[v_prec] = extractfield( vals, 'v_prec' );
+[v_rec]  = extractfield( vals, 'v_rec' );
 
 
 %% stat
 %
+uIDs = keys;
 n_users = numel(uIDs);
-v_prec  = extractfield(U,'v_prec');
-v_rec   = extractfield(U,'v_rec');
 good_idx = (v_prec > cut_line.prec) & (v_rec > cut_line.rec);
 bad_idx  = ~good_idx; 
-n_good  = nnz(good_idx);
-n_bad   = n_users - n_good;
-assert(n_bad == nnz(bad_idx));
+n_good = nnz(good_idx);
+n_bad = n_users - n_good;
+assert( n_bad == nnz(bad_idx) );
 goodIDs = uIDs(good_idx);
-badIDs  = uIDs(bad_idx);
-
-% # cubes 
-nv = extractfield(U,'nv');
-switch( cell_type )
-case 'normal'
-    nv_filter = nv > 0;
-case 'sac'
-    nv_filter = nv > 20;
-end
+badIDs = uIDs(bad_idx);
 
 % weight
-w = extractfield(U,'weight');
+[w] = extractfield( vals, 'weight' );
+% overwriting cell-type specific weight
+if( ~strcmp(cell_type,'any') )
+    [SAC_uIDs,SAC_w] = DB_extract_cell_type_specific_weight( cell_type );
+    [~,ia,ib] = intersect(uIDs,SAC_uIDs);
+    w(ia) = SAC_w(ib);
+end
+
+% # cubes 
+[nv] = extractfield( vals, 'nv' );
+switch( cell_type )
+case 'sac'
+    nv_filter = nv > 20;
+otherwise
+    nv_filter = nv > 0;
+end
 enf = good_idx & (w==0) & nv_filter;
 disenf = bad_idx & (w==1);
 [enfIDs] = uIDs(enf);
-switch( cell_type )
-case 'normal'
-    % [enfIDs] = qualify_enfranchisement_candidates( enfIDs );
+if( strcmp(cell_type,'any') )
+    [enfIDs] = qualify_enfranchisement_candidates( enfIDs );
 end
 disenfIDs = uIDs(disenf);
 
@@ -101,6 +94,10 @@ if( ~plot_mode )
     return;
 end
 
+if( user_name_mode )
+    [names] = extractfield( vals, 'username' );
+end
+
 
 %% Precision vs. Recall curve
 %
@@ -116,17 +113,15 @@ axis equal;
 
 % thresholding
 switch( cell_type )
-case 'normal'
-    unit = 100;
-    stage = 6;
-    from = 0;
-    to = 6;
 case 'sac'
     unit = 50;
-    stage = 6;
-    from = 0;
-    to = 6;
+otherwise
+    unit = 100;
 end
+stage = 6;
+from = 0;
+to = 6;
+
 
 color = colormap( hot(stage+1) );
 for i = from:to

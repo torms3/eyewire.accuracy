@@ -39,8 +39,7 @@ user_stat.id(invalid_idx,:) = [];
 
 % usernames & weight
 usernames = extractfield(cell2mat(DB_MAPs.U.values),'username')';
-weight = extractfield(cell2mat(DB_MAPs.U.values),'weight')';
-weight = num2cell(weight);
+weight = num2cell(extractfield(cell2mat(DB_MAPs.U.values),'weight')');
 
 % create a new list of data element
 % 1:id, 2:tp, 3:fn, 4:fp, 5:nv 6:tpv 7:fnv 8:fpv 9:hot

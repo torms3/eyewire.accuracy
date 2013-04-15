@@ -36,7 +36,7 @@ vals = cell(1,nu);
 for i = 1:nu
     
     uID = unique_uIDs(i);
-    % fprintf( '(%d / %d) user (ID=%d) is now processing...\n', i, nu, uID );
+    fprintf( '(%d / %d) user (ID=%d) is now processing...\n', i, nu, uID );
     
     vals{i}.username = cell2mat(name(user == uID));
     vals{i}.weight = weight(user == uID);
