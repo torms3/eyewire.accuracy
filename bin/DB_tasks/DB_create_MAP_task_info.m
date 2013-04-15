@@ -13,16 +13,8 @@ mysql('use omniweb');
 query_str = ['SELECT tasks.id,validations.id ' ...
              'FROM validations ' ...
              'INNER JOIN tasks ON task_id=tasks.id ' ...
-             'WHERE user_id!=0 AND user_id!=1 ' ...
-             'AND validations.status=0 ' ... % SHOULD BE MODIFIED LATER!!!
-            ];
-% [04/05/2013 kisuklee]
-% in or out?
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% query_str = [query_str where_clause];
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-[inner_query] = get_qeury_for_affected_task_IDs( where_clause );
-query_str = [query_str 'AND tasks.id IN (' inner_query ') '];
+             ];
+query_str = [query_str where_clause];
 query_str = [query_str 'ORDER BY validations.finish'];
 [tIDs,vIDs] = mysql( query_str );
 
@@ -33,8 +25,8 @@ query_str = ['SELECT task_id,segments,seeds,channel_id,cell,weight ' ...
              'INNER JOIN tasks ON task_id=tasks.id ' ...
              'WHERE user_id=0 '
             ];
-% inner_query = get_qeury_for_affected_task_IDs( where_clause );
-query_str = [query_str 'and tasks.id IN (' inner_query ') '];
+inner_query = get_qeury_for_affected_task_IDs( where_clause );
+query_str = [query_str 'AND tasks.id IN (' inner_query ') '];
 [task,seg,seed,channel,cell_IDs,weight,depth,left,right,created] = mysql( query_str );
 
 % MySQL close

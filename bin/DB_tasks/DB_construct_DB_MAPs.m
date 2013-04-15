@@ -22,7 +22,9 @@ end
 [U] 	= DB_extract_user_info( cell_IDs, period );
 [T] 	= DB_extract_task_info( cell_IDs, period );
 [V] 	= DB_extract_validation_info( cell_IDs, period );
-[VOL]	= DB_extract_volume_info( cell_IDs );
+
+chIDs = extractfield( cell2mat(T.values), 'chID' );
+[VOL]	= DB_extract_volume_info( chIDs );
 
 
 %% Post-processing

@@ -14,5 +14,4 @@ sigma(ismember(u_seg,c_seg)) = 1;
 
 S_ui = zeros(nnz(valid_idx),numel(u_seg));
 
-
 end
