@@ -11,7 +11,7 @@ n = sum(s > 0.5,1);
 m = sum(s > -0.5,1);
 prob = n./m;
 prediction_const = prob > th_const;
-prediction_exp = prob > (exp(-0.16*m) + th_exp);
+prediction_exp = prob > min(0.99,(exp(-0.16*m) + th_exp));
 
 err_const = sigma - double(prediction_const);
 err_exp = sigma - double(prediction_exp);

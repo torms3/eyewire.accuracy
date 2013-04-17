@@ -56,12 +56,18 @@ for idx = begin_idx:n_samples
 	draw( params, color(idx,:) );
 end
 
+axis equal;
+
 % reference lines
 line( xlim, [0 0], 'Color', 'r' );
 line( [0 0], ylim, 'Color', 'r' );
 
 line( xlim, [1 1], 'Color', 'y' );
 line( [1 1], ylim, 'Color', 'y' );
+
+% axis equal;
+% xlim([0.0 1.0]);
+% ylim([0.0 1.0]);
 
 h = colorbar;
 cbar_title = sprintf('sample count (epoch / %d)', params.period);
@@ -80,8 +86,8 @@ end
 
 function draw( params, color  )
 
-	scatter( params.theta, (params.w - params.theta), 'MarkerEdgeColor', color );
-	% scatter( params.theta, params.w, 'MarkerEdgeColor', color );
+	% scatter( params.theta, (params.w - params.theta), 'MarkerEdgeColor', color );
+	scatter( params.theta, params.w, 'MarkerEdgeColor', color );
 	% scatter( params.w.*params.theta, params.w.*(1 - params.theta), 'MarkerEdgeColor', color );
 	% scatter( params.theta, params.w, 'MarkerEdgeColor', color );
 

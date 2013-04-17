@@ -6,6 +6,11 @@ function [MAP_t_meta] = USM_create_MAP_task_segment_metadata( T, VOL )
 %
 
 
+%% Option
+%
+include_seed = false;
+
+
 %% Global offset
 %
 % s1 	sigma = 1
@@ -39,15 +44,13 @@ for i = 1:T.Count
 	seed 	= tInfo.seed;		% seed: seed segments
 	
 	% all set operations result in sorted lists
-	seg_s1	= setdiff( c_seg, seed );
-	% if( isempty(seg_s1) )
-	% 	seg_s1 = [];
-	% end
-	seg_s00	= setdiff( 1:n_seg, union( c_seg, seed ) );
-	% if( isempty(seg_s00) )
-	% 	seg_s00 = [];
-	% end
-	seg_s0	= intersect( seg_s00, u_seg );
+	if( include_seed )
+		seg_s1	= union(c_seg,seed);
+	else
+		seg_s1	= setdiff(c_seg,seed);
+	end		
+	seg_s00	= setdiff(1:n_seg,union(c_seg,seed));
+	seg_s0	= intersect(seg_s00,u_seg);
 
 	% data element
 	DE{i}.n_seg 	= n_seg;
@@ -56,8 +59,14 @@ for i = 1:T.Count
 	% DE{i}.seg_s00 	= seg_s00;
 	DE{i}.seg_s00 	= [];	% for saving memory
 
+	% [04/16/2013 kisuklee] seed index
+	if( include_seed )
+		DE{i}.seed 		= seed;
+		DE{i}.seed_idx 	= ismember(seg_s1,seed);
+	end
+
 	% [03/26/2013 kisuklee] segment volume
-	[~,idx,~] = intersect( u_seg, seg_s1 );
+	[~,idx,~] = intersect(u_seg,seg_s1);
 	segvol_s1 = tInfo.seg_size(idx);
 	if( isempty(segvol_s1) )
 		segvol_s1 = [];
@@ -75,7 +84,11 @@ for i = 1:T.Count
 	DE{i}.segvol_s0 = segvol_s0;
 
 	% offset information
-	offset 		= offset + (n_seg - numel(seed));
+	if( include_seed )
+		offset	= offset + n_seg;
+	else
+		offset	= offset + (n_seg - numel(seed));
+	end
 	offset_s1 	= offset_s1 + numel(seg_s1);
 	offset_s0 	= offset_s0 + numel(seg_s0);
 	offset_s00 	= offset_s00 + numel(seg_s00);

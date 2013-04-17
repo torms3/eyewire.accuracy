@@ -14,7 +14,8 @@ fpv = double(fp_idx)*data.V_i';
 tpv = double(tp_idx)*data.V_i';
 
 % CE
-CE = (fpv + fnv)/sum(data.V_i);
+% CE = (fpv + fnv)/sum(data.V_i);
+CE = (fpv + fnv)/(tpv + fnv + fpv);
 
 % result
 CM_error.SE 	= squared_sum;

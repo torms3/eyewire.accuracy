@@ -39,4 +39,8 @@ USM_data.sigma = [ones(1,size(S.s1,2)) zeros(1,size(S.s0,2))];
 [map_i_tID] = USM_get_map_seg_idx_to_tID( MAP_t_meta );
 USM_data.map_i_tID = [map_i_tID.s1 map_i_tID.s0];
 
+% seed idx
+% [seed_idx] = USM_get_seed_idx( MAP_t_meta );
+% USM_data.seed_idx = seed_idx;
+
 end

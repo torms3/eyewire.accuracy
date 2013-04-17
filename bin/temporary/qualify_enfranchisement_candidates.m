@@ -13,6 +13,9 @@ uIDs = [];
 for i = 1:numel(enfIDs)
 
 	uID = enfIDs(i);
+	if( ~isKey( U, uID ) )
+		continue;
+	end
 	if( numel(U(uID).vIDs) > th )
 		uIDs = [uIDs uID];
 	end

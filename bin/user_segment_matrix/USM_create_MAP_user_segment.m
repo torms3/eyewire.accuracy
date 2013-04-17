@@ -27,6 +27,11 @@ end
 
 function [MAP_user_row] = extract_user_row( uInfo, V, T, VOL )
 
+%% Option
+%
+include_seed = false;
+
+
 %% Iterate through validations of each user
 %
 idx = 0;
@@ -42,6 +47,8 @@ for i = 1:numel(vIDs)
 	else
 		idx = idx + 1;
 	end
+	% idx = idx + 1;	% TEMP
+
 	seg 	= vInfo.segs;
 
 	% total segments for this cube
@@ -53,7 +60,11 @@ for i = 1:numel(vIDs)
 	% data element
 	vals{idx}.tInfo	= tInfo;	% info. from MAP_t_info
 	vals{idx}.n_seg = n_seg;	% info. from MAP_vol_info
-	vals{idx}.seg 	= seg;		% info. from MAP_v_info
+	if( include_seed )
+		vals{idx}.seg = union(seg,tInfo.seed);
+	else
+		vals{idx}.seg = seg;
+	end	
 
 	% keys
 	keys{idx} = [tID];

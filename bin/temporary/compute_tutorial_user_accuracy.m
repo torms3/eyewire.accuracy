@@ -48,6 +48,7 @@ for i = 1:nv
 
 	% tutorial information	
 	difficulty = TUT_INFO(tID).difficulty;
+	sequence = TUT_INFO(tID).sequence;
 	celltype = TUT_INFO(tID).celltype;
 
 	% volume information
@@ -74,6 +75,7 @@ for i = 1:nv
     user_info{i}.fpv = fpv;
     user_info{i}.duration = duration;
     user_info{i}.difficulty = difficulty;
+    user_info{i}.sequence = sequence;
     user_info{i}.celltype = celltype;
 
 end
