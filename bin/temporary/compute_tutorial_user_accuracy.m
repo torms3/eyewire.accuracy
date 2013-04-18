@@ -54,8 +54,12 @@ for i = 1:nv
 	% volume information
 	chID = tInfo.chID;
 	volInfo = VOL(chID);
-
-	[match,miss,extra] = process_each_validation( vInfo, tInfo );
+	
+	% [match,miss,extra] = process_each_validation( vInfo, tInfo );
+    [VA] = process_each_validation( vInfo, tInfo );
+    match = VA.tp;
+    miss  = VA.fn;
+    extra = VA.fp;
 
 	% number of segments
     tp = numel(match);

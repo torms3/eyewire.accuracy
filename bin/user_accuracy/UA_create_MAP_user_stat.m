@@ -12,7 +12,7 @@ end
 if( ~exist('DB_MAPs','var') )
 	[DB_path] = DB_get_DB_MAP_path();
 	[file_name] = make_DB_MAPs_file_name( cell_IDs, period );
-	full_path = [DB_path file_name];
+	full_path = [DB_path '/' file_name];
 	try
 		load(full_path);
 	catch err

@@ -9,13 +9,13 @@ if( ~exist('usernames','var') )
 end
 
 % trace the evolution of parameters over epochs
-evolution = false;
+evolution = true;
 
 
 %% Load
 %
 % get the list of params files
-file_list = dir([save_path 'params*']);
+file_list = dir([save_path '/' 'params*']);
 if( numel(file_list) < 1 )
 	return;
 end
@@ -23,7 +23,7 @@ end
 [setting] = CM_prepare_setting( EXP.eta, EXP.iter );
 [params] = initialize_classifier_parameters( EXP.n_users, setting );
 [save_info] = get_classifier_save_info( save_path, EXP.n_users, setting );
-load([save_path file_list(1).name]);
+load([save_path '/' file_list(1).name]);
 
 sample_epoch = params.periodic_epoch;
 n_samples = params.periodic_samples;
@@ -51,7 +51,7 @@ end
 for idx = begin_idx:n_samples
 	
 	file_suffix = sprintf('_sample_%d.mat',sample_epoch(idx));
-	load([save_path save_info.prefix file_suffix]);
+	load([save_path '/' save_info.prefix file_suffix]);
 	
 	draw( params, color(idx,:) );
 end
@@ -86,8 +86,8 @@ end
 
 function draw( params, color  )
 
-	% scatter( params.theta, (params.w - params.theta), 'MarkerEdgeColor', color );
-	scatter( params.theta, params.w, 'MarkerEdgeColor', color );
+	scatter( params.theta, (params.w - params.theta), 'MarkerEdgeColor', color );
+	% scatter( params.theta, params.w, 'MarkerEdgeColor', color );
 	% scatter( params.w.*params.theta, params.w.*(1 - params.theta), 'MarkerEdgeColor', color );
 	% scatter( params.theta, params.w, 'MarkerEdgeColor', color );
 

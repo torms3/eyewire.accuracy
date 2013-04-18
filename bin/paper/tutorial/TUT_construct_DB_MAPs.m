@@ -2,17 +2,16 @@ function [DB_MAPs] = TUT_construct_DB_MAPs( uIDs )
 
 %% Extract DB information
 %
-[TUT_U] = TUT_extract_tutorial_user_info( uIDs );
-[TUT_V] = TUT_extract_tutorial_validation_info( uIDs );
-[TUT_T] = TUT_extract_tutorial_task_info();
-
-chIDs = extractfield( cell2mat(TUT_T.values), 'chID' );
-[TUT_VOL] = TUT_extract_tutorial_volume_info( chIDs );
+[TUT_U] 	= TUT_extract_tutorial_user_info( uIDs );
+[TUT_V] 	= TUT_extract_tutorial_validation_info( uIDs );
+[TUT_T] 	= TUT_extract_tutorial_task_info();
+[chIDs] 	= extractfield( cell2mat(TUT_T.values), 'chID' );
+[TUT_VOL] 	= TUT_extract_tutorial_volume_info( chIDs );
 
 
 %% Post-processing
 %
-[TUT_T] = DB_extract_segment_size_info( TUT_T, TUT_VOL );
+DB_extract_segment_info( TUT_T, TUT_VOL );
 
 
 %% Return DB MAPs

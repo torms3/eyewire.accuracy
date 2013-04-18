@@ -6,7 +6,9 @@ best_th = 0.0;
 % threshold = fliplr(0.04:0.05:0.94);
 % threshold = fliplr(0.981:0.001:0.989);
 % threshold = fliplr(0.951:0.001:0.959);
-threshold = fliplr(0.941:0.001:0.949);
+% threshold = fliplr(0.941:0.001:0.949);
+% threshold = fliplr(0.961:0.001:0.969);
+threshold = fliplr(0.971:0.001:0.979);
 for th = threshold
 	
 	[AI_MAP] = AI_calculate_accuracy( DB_MAPs, th );

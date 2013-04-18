@@ -15,7 +15,7 @@ end
 %
 save_path = DB_get_DB_MAP_path();
 if( update )
-	[DB_MAPs] = DB_construct_DB_MAPs( save_path, true, true, cell_IDs, period );
+	[DB_MAPs] = DB_construct_DB_MAPs( save_path, true, cell_IDs, period );
 else
 	[file_name] = make_DB_MAPs_file_name( cell_IDs, period );	
 	load([save_path file_name]);

@@ -23,6 +23,8 @@ plot_mode           = true;     % plot prec. vs. rec. curve
 user_name_mode      = true;     % gname
 accumulate_mode     = false;    % 
 reverse_mode        = false;    % bright color -> dark color
+promotion_check     = false;
+display_cutoff      = true;
 
 
 %% Preprocessing for plotting the figure
@@ -71,7 +73,7 @@ end
 enf = good_idx & (w==0) & nv_filter;
 disenf = bad_idx & (w==1);
 [enfIDs] = uIDs(enf);
-if( strcmp(cell_type,'any') )
+if( strcmp(cell_type,'any') && promotion_check )
     [enfIDs] = qualify_enfranchisement_candidates( enfIDs );
 end
 disenfIDs = uIDs(disenf);
@@ -159,7 +161,7 @@ for i = from:to
     xlabel( 'Recall' );
     ylabel( 'Precision' );
     
-    if( i == from )
+    if( display_cutoff && (i == from) )
         % precision cut-line
         line(xlim,[cut_line.prec cut_line.prec],'Color','r','LineWidth',2);
         % recall cut-line
@@ -183,7 +185,7 @@ for i = from:to
 
     idx0 = (w == 0) & idx;
     h2 = scatter( v_rec(idx0), v_prec(idx0), circle_size, 'o', ...
-                    'MarkerEdgeColor', color(th+1,:) );                    
+                    'MarkerEdgeColor', color(th+1,:) );
     
     % Username
     if( user_name_mode )    

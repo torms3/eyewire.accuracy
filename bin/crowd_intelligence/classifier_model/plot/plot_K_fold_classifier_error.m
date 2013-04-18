@@ -1,7 +1,7 @@
 function plot_K_fold_classifier_error( save_path )
 
 % extract dir list
-dir_list = dir([save_path 'param*']);
+dir_list = dir([save_path '/' 'param*']);
 if( numel(dir_list) < 1 )
 	return;
 end
@@ -31,7 +31,7 @@ for i = 1:n_dir
 
 	dir_name = dir_list(i).name;
 	[EXP] = parse_params_name( dir_name );
-	exp_path = [save_path dir_name '/'];
+	exp_path = [save_path '/' dir_name '/'];
 	plot_experiment( exp_path, EXP, color(i,:), h );
 
 end
@@ -83,7 +83,7 @@ if( EXP.K > 1 )	% K-fold cross-validation
 
 		% train load
 		k_suffix = sprintf('k_%d/',k);
-		k_path = [save_path k_suffix];
+		k_path = [save_path '/' k_suffix];
 		
 		save_info = get_classifier_save_info( k_path, EXP.n_users, setting );
 		file_suffix = sprintf('_sample_%d.mat',EXP.iter);

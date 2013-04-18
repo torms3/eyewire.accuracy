@@ -1,12 +1,9 @@
-function [DB_MAPs] = SAC_construct_DB_MAPs( seg_size, seg_num, cell_IDs, t_status )
+function [DB_MAPs] = SAC_construct_DB_MAPs( seg_info, cell_IDs, t_status )
 
 %% Argument validation
 %
-if( ~exist('seg_size','var') )
-	seg_size = false;
-end
-if( ~exist('seg_num','var') )
-	seg_num = false;
+if( ~exist('seg_info','var') )
+	seg_info = false;
 end
 if( ~exist('cell_IDs','var') )
 	cell_IDs = [0];
@@ -44,11 +41,8 @@ where_clause = [where_clause 'AND tasks.id IN (' tIDs_str ') '];
 
 %% Post-processing
 %
-if( seg_size )
-	[T] = DB_extract_segment_size_info( T, VOL );
-end
-if( seg_num )
-	[VOL] = DB_extract_segment_number_info( VOL );
+if( seg_info )
+	DB_extract_segment_size_info( T, VOL );
 end
 
 

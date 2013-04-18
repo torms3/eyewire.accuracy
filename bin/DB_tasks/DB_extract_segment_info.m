@@ -1,4 +1,4 @@
-function [T] = DB_extract_segment_size_info( T, VOL )
+function DB_extract_segment_info( T, VOL )
 
 %% Cube-wise processing
 %
@@ -14,11 +14,16 @@ for i = 1:T.Count
 	chID 	= tInfo.chID;
 	volInfo = VOL(chID);
 	seg 	= tInfo.union;
-	seg_size = get_size_of_segments( volInfo, seg );
+	
+	[segSize,nSeg] = get_size_of_segments( volInfo, seg );
 
 	% update task information
-	tInfo.seg_size = seg_size;
+	tInfo.seg_size = segSize;
 	T(tID) = tInfo;
+
+	% update volume information
+	volInfo.n_seg = nSeg;
+	VOL(chID) = volInfo;
 
 end
 

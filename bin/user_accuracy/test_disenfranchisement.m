@@ -36,7 +36,7 @@ for i = 1:numel(cell_IDs)
 	if( update )
 
 		% Extract DB MAPs
-		[DB_MAPs] = DB_construct_DB_MAPs( DB_path, true, false, cell_ID, period );
+		[DB_MAPs] = DB_construct_DB_MAPs( DB_path, true, cell_ID, period );
 
 		% Process user accuracy for this cell
 		process_user_accuracy( UA_path, DB_MAPs, cell_ID );

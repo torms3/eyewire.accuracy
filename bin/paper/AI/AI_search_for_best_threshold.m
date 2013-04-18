@@ -95,9 +95,6 @@ for i = th
 			iter = iter + 1;
 			% fprintf('%dth iteration.\n',iter);
 
-			% node1ID = extractfield( leftEdges, 'node1ID' );
-			% node2ID = extractfield( leftEdges, 'node2ID' );			
-
 			idx1 = ismember(node1ID,seed);
 			idx2 = ismember(node2ID,seed);
 
@@ -109,7 +106,6 @@ for i = th
 				break;
 			else
 				AI_seg = [AI_seg children];
-				% leftEdges = leftEdges(~(idx1 | idx2));
 				seed = children;
 				idx = ~(idx1 | idx2);
 				node1ID = node1ID(idx);
@@ -145,21 +141,10 @@ for i = th
 		best_stat.err = err;
 		best_stat.fs  = fs;
 	end
-	% if( best_stat.err > err )
-	% 	best_stat.threshold = i;
-	% 	best_stat.seg = AI_seg;
-	% 	best_stat.tpv = tpv;
-	% 	best_stat.fnv = fnv;
-	% 	best_stat.fpv = fpv;
-	% 	best_stat.err = err;
-	% end
 
 	if( best_stat.fs == 1.0 )
 		return;
 	end
-	% if( best_stat.err == 0.0 )
-	% 	return;
-	% end
 
 	% fprintf('threshold = %f, precision = %f\n',i,prec);
 	% fprintf('threshold = %f, recall = %f\n',i,rec);

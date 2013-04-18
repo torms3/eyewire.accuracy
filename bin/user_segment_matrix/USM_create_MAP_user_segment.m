@@ -29,7 +29,7 @@ function [MAP_user_row] = extract_user_row( uInfo, V, T, VOL )
 
 %% Option
 %
-include_seed = false;
+include_seed = true;
 
 
 %% Iterate through validations of each user

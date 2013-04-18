@@ -1,6 +1,6 @@
 function [hotspot_IDs,super_users] = get_VT_hotspots( V, T )
 
-hotspot = zeros(1,T.Count);
+hotspot_IDs = [];
 super_users = [];
 
 %% Validation-wise processing
@@ -18,15 +18,10 @@ for i = 1:V.Count
     % fprintf( '%dth validation (vID=%d) is now processing...\n', i, vID );
     
     if( vInfo.weight > 1 )
-        hotspot(i) = tID;
-        if( isempty(find(super_users == vInfo.uID)) )
-            super_users = [super_users vInfo.uID];
-        end
+        hotspot_IDs = union(hotspot_IDs,tID);
+        super_users = union(super_users,vInfo.uID);        
     end
     
 end
-
-hotspot_idx = find(hotspot);
-hotspot_IDs = hotspot(hotspot_idx);
 
 end

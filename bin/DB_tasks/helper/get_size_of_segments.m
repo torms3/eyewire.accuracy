@@ -1,20 +1,20 @@
-function [size_of_seg] = get_size_of_segments( volInfo, seg )
+function [size_of_seg,n_seg] = get_size_of_segments( volInfo, seg )
 
 size_of_seg = [];
 if( isempty(seg) )
 	return;
 end
+size_of_seg = zeros(1,numel(seg));
 
 vol_path = volInfo.path;
 seg_path = '/users/_default/segmentations/segmentation1/segments/';
 page_size = 100000;
 page_num = floor(max(seg)/page_size);
-
-page_num = 0;
 % if( page_num > 0 )
 % 	disp(page_num);
 % 	page_num = 0;
 % end
+page_num = 0;
 
 seg_file = sprintf('segment_page%d.data.ver4',page_num);
 full_path = [vol_path seg_path seg_file];
@@ -27,7 +27,8 @@ segSize = segSize(idx);
 
 % [size_of_seg] = segSize(seg);
 idx = ismember(segID,seg);
-[size_of_seg] = segSize(idx);
-
+[~,IA,IB] = intersect(segID,seg);
+size_of_seg(IB) = segSize(IA);
+[n_seg] = numel(segID);
 
 end
