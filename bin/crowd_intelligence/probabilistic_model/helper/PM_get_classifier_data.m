@@ -1,4 +1,4 @@
-function [data] = get_classifier_data( pre_data )	
+function [data] = PM_get_classifier_data( pre_data )	
 
 % core data
 data.S_ui = pre_data.S_ui;
@@ -11,5 +11,8 @@ data.map_u_uID = pre_data.map_u_uID;
 [n_users,n_items] = size(data.S_ui);
 data.n_users = n_users;
 data.n_items = n_items;
+
+% prior info
+data.prior = extract_prior( data, 'cube', 'voxel' );
 
 end

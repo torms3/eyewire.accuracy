@@ -42,9 +42,9 @@ UA.tnv = num2cell(UA.tnv);
 s_prec = num2cell(s_prec);
 s_rec = num2cell(s_rec);
 s_fs = num2cell(s_fs);
-v_prec = num2cell(s_prec);
-v_rec = num2cell(s_rec);
-v_fs = num2cell(s_fs);
+v_prec = num2cell(v_prec);
+v_rec = num2cell(v_rec);
+v_fs = num2cell(v_fs);
 
 s_p1 = num2cell(s_p1);
 s_p0 = num2cell(s_p0);

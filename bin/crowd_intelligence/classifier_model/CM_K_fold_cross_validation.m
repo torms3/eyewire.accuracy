@@ -27,10 +27,10 @@ end
 %
 n_users = size(data.S_ui,1);
 save_info = get_classifier_save_info( save_path, n_users, setting );
-K_suffix = sprintf('__K_%d/',K);
+K_suffix = sprintf('__K_%d',K);
 save_root_dir = [save_info.prefix K_suffix];
 mkdir(save_info.save_path,save_root_dir);
-save_root_path = [save_path save_root_dir];
+save_root_path = [save_path '/' save_root_dir];
 
 
 %% K-fold cross-validation setting
@@ -44,7 +44,7 @@ otherwise
 	assert(false);
 end
 file_name = sprintf('%d_partitoin.mat',K);
-save([save_root_path file_name],'k_partition');
+save([save_root_path '/' file_name],'k_partition');
 
 
 %% K-fold cross-validation
@@ -54,7 +54,7 @@ for k = 1:K
 	% save directory
 	k_suffix = sprintf('k_%d',k);
 	mkdir(save_root_path,k_suffix);
-	k_path = [save_root_path k_suffix '/'];
+	k_path = [save_root_path '/' k_suffix];
 
 	% get k-fold train and test data
 	[k_fold] = generate_K_fold_data( data, k_partition{k} );

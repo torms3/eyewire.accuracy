@@ -9,7 +9,7 @@ if( ~exist('usernames','var') )
 end
 
 % trace the evolution of parameters over epochs
-evolution = true;
+evolution = false;
 
 
 %% Load
@@ -86,8 +86,8 @@ end
 
 function draw( params, color  )
 
-	scatter( params.theta, (params.w - params.theta), 'MarkerEdgeColor', color );
-	% scatter( params.theta, params.w, 'MarkerEdgeColor', color );
+	% scatter( params.theta, (params.w - params.theta), 'MarkerEdgeColor', color );
+	scatter( params.theta, params.w, 'MarkerEdgeColor', color );
 	% scatter( params.w.*params.theta, params.w.*(1 - params.theta), 'MarkerEdgeColor', color );
 	% scatter( params.theta, params.w, 'MarkerEdgeColor', color );
 

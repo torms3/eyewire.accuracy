@@ -31,7 +31,7 @@ for i = 1:n_dir
 
 	dir_name = dir_list(i).name;
 	[EXP] = parse_params_name( dir_name );
-	exp_path = [save_path '/' dir_name '/'];
+	exp_path = [save_path '/' dir_name];
 	plot_experiment( exp_path, EXP, color(i,:), h );
 
 end
@@ -82,13 +82,13 @@ if( EXP.K > 1 )	% K-fold cross-validation
 	for k = 1:EXP.K
 
 		% train load
-		k_suffix = sprintf('k_%d/',k);
+		k_suffix = sprintf('k_%d',k);
 		k_path = [save_path '/' k_suffix];
 		
 		save_info = get_classifier_save_info( k_path, EXP.n_users, setting );
 		file_suffix = sprintf('_sample_%d.mat',EXP.iter);
 		file_name = [save_info.prefix file_suffix];
-		load([k_path file_name]);
+		load([k_path '/' file_name]);
 
 		% error info.
 		CM_error = cell2mat(params.error);
@@ -98,7 +98,7 @@ if( EXP.K > 1 )	% K-fold cross-validation
 
 		% test load
 		file_name = 'test_result.mat';
-		load([k_path file_name]);
+		load([k_path '/' file_name]);
 
 		% error info.
 		CM_error = cell2mat(test_result.error);

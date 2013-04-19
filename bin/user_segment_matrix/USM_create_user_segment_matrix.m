@@ -38,9 +38,11 @@ USM_data.V_i = [V.v1 V.v0];
 USM_data.sigma = [ones(1,size(S.s1,2)) zeros(1,size(S.s0,2))];
 [map_i_tID] = USM_get_map_seg_idx_to_tID( MAP_t_meta );
 USM_data.map_i_tID = [map_i_tID.s1 map_i_tID.s0];
+[map_u_uID] = USM_get_map_user_idx_to_uID( MAP_s_ui );
+USM_data.map_u_uID = map_u_uID;
 
 % seed idx
-[seed_idx] = USM_get_seed_idx( MAP_t_meta );
-USM_data.seed_idx = seed_idx;
+% [seed_idx] = USM_get_seed_idx( MAP_t_meta );
+% USM_data.seed_idx = seed_idx;
 
 end

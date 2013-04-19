@@ -26,7 +26,7 @@ save_info 	= get_classifier_save_info( save_path, params.n_users, setting );
 %% Load
 %
 % get the list of params files
-file_list = dir([save_path,'params*']);
+file_list = dir([save_path '/' 'params*']);
 
 sample_epoch = params.sample_epoch;
 n_samples = params.samples;
@@ -34,7 +34,7 @@ train_error = cell(1,n_samples);
 for idx = 1:n_samples
 	
 	file_suffix = sprintf('_sample_%d.mat',sample_epoch(idx));
-	load([save_path save_info.prefix file_suffix]);
+	load([save_path '/' save_info.prefix file_suffix]);
 	
 	[CM_error] 	= CM_compute_classifier_error( data, params );
 	train_error{idx} = CM_error;
@@ -49,6 +49,6 @@ test_result.epochs 		= sample_epoch;
 test_result.error 		= train_error;
 test_result.ERR_const 	= ERR_const;
 test_result.ERR_exp 	= ERR_exp;
-save([save_path,'test_result.mat'],'test_result');
+save([save_path '/' 'test_result.mat'],'test_result');
 
 end

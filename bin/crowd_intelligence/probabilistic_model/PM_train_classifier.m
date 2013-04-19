@@ -1,4 +1,4 @@
-function CM_train_classifier( save_path, pre_data, setting )
+function PM_train_classifier( save_path, pre_data, setting )
 %% Argument description
 %
 %	save_path
@@ -19,7 +19,7 @@ function CM_train_classifier( save_path, pre_data, setting )
 %% Data & parameter inititalization
 %
 data 		= get_classifier_data( pre_data );
-params 		= initialize_classifier_parameters( data.n_users, setting );
+params 		= PM_initialize_classifier_parameters( data.n_users, setting );
 save_info 	= get_classifier_save_info( save_path, params.n_users, setting );
 
 
@@ -45,8 +45,8 @@ for epoch = 1:iter
 	tic
 
 	% read parameters into local variables
-	W 		= params.w;
-	THETA 	= params.theta;	
+	A = params.a;
+	B = params.b;	
 
 	% get randomly permuted iteration indices for segments
 	rand_idx = randperm(n_items);
@@ -59,38 +59,30 @@ for epoch = 1:iter
 		idx 	= IDX(:,j);
 		
 		% avoid repeated index referencing		
-		s 		= S(idx,j);
-		v 		= V(j);
-		w 		= W(idx);
-		theta 	= THETA(idx);
-		
+		s = S(idx,j);
+		v = V(j);
+		a = A(idx);
+		b = B(idx);		
 
 		% logistic function inlining
-		% SUM = sum((w.*s) - theta);		% default model
-		SUM = w'*(s - theta);			% nonnegativity model
+		SUM = sum((a.*s) - b);		% default model
 		o = 1.0./(1.0 + exp(-SUM));
 		
 		% error
 		err = sigma(j) - o;
 		
 		% update
-		% common = eta*v*o*(1-o)*err;	% linear dependence on volume
 		common = eta*o*(1-o)*err;
-		% common = eta*err;
 
-		% W(idx) 		= w + (s.*common);
-		% THETA(idx) 	= theta - common;
-
-		% nonnegativity constraints
-		% W(idx) 		= max(0,w + ((s - theta).*common));	% (w >= 0)
-		W(idx) 		= min(1,max(0,w + ((s - theta).*common)));	% (w >= 0) and (w <= 1)
-		THETA(idx) 	= min(1,max(0,theta - w*common));	% (theta >= 0) and (theta <=1)
+		% default model
+		A(idx) = a + (s.*common);
+		B(idx) = b - common;
 
 	end
 	
 	% write local parameters back
-	params.w 		= W;
-	params.theta 	= THETA;	
+	params.a 		= A;
+	params.b 	= B;	
 
 	params.epoch_time(epoch) = toc;
 	fprintf('\n%dth epoch: iteration time=%f\n',epoch,params.epoch_time(epoch));

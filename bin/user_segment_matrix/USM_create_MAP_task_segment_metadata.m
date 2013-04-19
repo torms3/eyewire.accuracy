@@ -8,7 +8,7 @@ function [MAP_t_meta] = USM_create_MAP_task_segment_metadata( T, VOL )
 
 %% Option
 %
-include_seed = true;
+include_seed = false;
 
 
 %% Global offset

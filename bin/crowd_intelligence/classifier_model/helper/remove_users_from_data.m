@@ -20,13 +20,17 @@ S_ui 		= USM_data.S_ui;
 V_i 		= USM_data.V_i;
 sigma 		= USM_data.sigma;
 map_i_tID 	= USM_data.map_i_tID;
+map_u_uID 	= USM_data.map_u_uID;
 
 % remove users
 S_ui(users,:) = [];
+map_u_uID(users) = [];
 
 % remove segments
 valid_idx = S_ui > -1;
 idx_to_remove = (sum(valid_idx.*S_ui,1) == 0);
+disp(nnz(idx_to_remove));
+disp(sum(V_i(:,idx_to_remove)));
 
 S_ui(:,idx_to_remove) 		= [];
 V_i(:,idx_to_remove) 		= [];
@@ -38,5 +42,6 @@ data.S_ui 		= S_ui;
 data.V_i 		= V_i;
 data.sigma 		= sigma;
 data.map_i_tID 	= map_i_tID;
+data.map_u_uID 	= map_u_uID;
 
 end

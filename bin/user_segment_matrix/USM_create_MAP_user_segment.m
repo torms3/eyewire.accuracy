@@ -2,13 +2,12 @@ function [MAP_user_seg] = USM_create_MAP_user_segment( U, V, T, VOL )
 
 %% User-wise processing
 %
-idx = 0;
+idx 	= 0;
 uIDs 	= U.keys;
 for i = 1:U.Count 
 
 	uID = uIDs{i};
-
-	% fprintf( '%dth user (u_id=%d) is now processing...\n', i, uID );
+	% fprintf('%dth user (u_id=%d) is now processing...\n',i,uID);
     
 	uInfo = U(uID);
 	val = extract_user_row( uInfo, V, T, VOL );
@@ -29,7 +28,7 @@ function [MAP_user_row] = extract_user_row( uInfo, V, T, VOL )
 
 %% Option
 %
-include_seed = true;
+include_seed = false;
 
 
 %% Iterate through validations of each user
@@ -42,12 +41,12 @@ for i = 1:numel(vIDs)
 	vID 	= vIDs(i);
 	vInfo 	= V(vID);
 	% discard validations with weight = 0
-	if( vInfo.weight == 0 )
-		continue;
-	else
-		idx = idx + 1;
-	end
-	% idx = idx + 1;	% TEMP
+	% if( vInfo.weight == 0 )
+	% 	continue;
+	% else
+	% 	idx = idx + 1;
+	% end
+	idx = idx + 1;	% TEMP
 
 	seg 	= vInfo.segs;
 
