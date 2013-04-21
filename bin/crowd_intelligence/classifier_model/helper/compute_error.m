@@ -1,4 +1,4 @@
-function [CM_error] = compute_error( err, cl_err, data )
+function [model_error] = compute_error( err, cl_err, data )
 
 % RMSE
 squared_sum = sum((data.V_i.*err).^2);
@@ -18,14 +18,14 @@ tpv = double(tp_idx)*data.V_i';
 CE = (fpv + fnv)/(tpv + fnv + fpv);
 
 % result
-CM_error.SE 	= squared_sum;
-CM_error.RMSE 	= RMSE;
-CM_error.tpv 	= tpv;
-CM_error.fnv 	= fnv;
-CM_error.fpv 	= fpv;
-CM_error.CE 	= CE;
-CM_error.v 		= sum(data.V_i);
-CM_error.v_prec = tpv/(tpv + fpv);
-CM_error.v_rec  = tpv/(tpv + fnv);
+model_error.SE 		= squared_sum;
+model_error.RMSE 	= RMSE;
+model_error.tpv 	= tpv;
+model_error.fnv 	= fnv;
+model_error.fpv 	= fpv;
+model_error.CE 		= CE;
+model_error.v 		= sum(data.V_i);
+model_error.v_prec = tpv/(tpv + fpv);
+model_error.v_rec  = tpv/(tpv + fnv);
 
 end

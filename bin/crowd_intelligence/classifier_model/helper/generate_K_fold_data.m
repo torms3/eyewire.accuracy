@@ -10,6 +10,7 @@ test.S_ui 		= S(:,idx);
 test.V_i 		= V(:,idx);
 test.sigma 		= s(:,idx);
 test.map_i_tID 	= T(:,idx);
+test.map_u_uID	= data.map_u_uID;
 
 % training set
 S(:,idx) = [];
@@ -21,6 +22,7 @@ train.S_ui 		= S;
 train.V_i 		= V;
 train.sigma 	= s;
 train.map_i_tID = T;
+train.map_u_uID	= data.map_u_uID;
 
 % k-fold data
 k_fold.test	 	= test;

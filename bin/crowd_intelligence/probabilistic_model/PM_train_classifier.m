@@ -18,7 +18,7 @@ function PM_train_classifier( save_path, pre_data, setting )
 
 %% Data & parameter inititalization
 %
-data 		= get_classifier_data( pre_data );
+data 		= PM_get_classifier_data( pre_data );
 params 		= PM_initialize_classifier_parameters( data.n_users, setting );
 save_info 	= get_classifier_save_info( save_path, params.n_users, setting );
 
@@ -38,6 +38,7 @@ V 		= data.V_i;
 sigma 	= data.sigma;
 eta		= params.eta;
 period 	= params.period;
+prior 	= data.prior;
 
 sample_cnt = 1;
 for epoch = 1:iter
@@ -61,11 +62,13 @@ for epoch = 1:iter
 		% avoid repeated index referencing		
 		s = S(idx,j);
 		v = V(j);
+		p = prior(j);
 		a = A(idx);
-		b = B(idx);		
+		b = B(idx);
 
 		% logistic function inlining
-		SUM = sum((a.*s) - b);		% default model
+		SUM = sum((a.*s) + b);		% default model
+		SUM = SUM + p;				% prior
 		o = 1.0./(1.0 + exp(-SUM));
 		
 		% error
@@ -76,13 +79,17 @@ for epoch = 1:iter
 
 		% default model
 		A(idx) = a + (s.*common);
-		B(idx) = b - common;
+		B(idx) = b + common;
+
+		% nonnegativity model
+		A(idx) = a + (s.*common);
+		B(idx) = min(0,b + common);
 
 	end
 	
 	% write local parameters back
-	params.a 		= A;
-	params.b 	= B;	
+	params.a = A;
+	params.b = B;	
 
 	params.epoch_time(epoch) = toc;
 	fprintf('\n%dth epoch: iteration time=%f\n',epoch,params.epoch_time(epoch));
@@ -92,17 +99,12 @@ for epoch = 1:iter
 
 		tic		
 		
-		[CM_error] = CM_compute_classifier_error( data, params );
-		params.error{sample_cnt} = CM_error;
-		% params.RMSE(sample_cnt) = CM_error.RMSE;
-		% params.CE(sample_cnt) 	= CM_error.CE;
-		% params.tpv(sample_cnt) 	= CM_error.tpv;
-		% params.fnv(sample_cnt) 	= CM_error.fnv;
-		% params.fpv(sample_cnt) 	= CM_error.fpv;
+		[PM_error] = PM_compute_classifier_error( data, params );
+		params.error{sample_cnt} = PM_error;
 		
 		% save params
 		file_suffix = sprintf('_sample_%d.mat',epoch);
-		file_name = [save_info.prefix,file_suffix];
+		file_name = [save_info.prefix file_suffix];
 		try
 			save([save_path '/' file_name],'params');
 		catch err
@@ -112,10 +114,10 @@ for epoch = 1:iter
 		error_calculation_time = toc;
 		
 		fprintf('%dth epoch: error calculation time=%f\n',epoch,error_calculation_time);
-		fprintf('%dth epoch: RMSE = \t%f\n',epoch,CM_error.RMSE);
-		fprintf('%dth epoch: CE = \t%f\n',epoch,CM_error.CE);
-		fprintf('%dth epoch: v_prec = \t%f\n',epoch,CM_error.tpv/(CM_error.tpv+CM_error.fpv));
-		fprintf('%dth epoch: v_rec = \t%f\n',epoch,CM_error.tpv/(CM_error.tpv+CM_error.fnv));
+		fprintf('%dth epoch: RMSE = \t%f\n',epoch,PM_error.RMSE);
+		fprintf('%dth epoch: CE = \t%f\n',epoch,PM_error.CE);
+		fprintf('%dth epoch: v_prec = \t%f\n',epoch,PM_error.tpv/(PM_error.tpv+PM_error.fpv));
+		fprintf('%dth epoch: v_rec = \t%f\n',epoch,PM_error.tpv/(PM_error.tpv+PM_error.fnv));
 
 		sample_cnt = sample_cnt + 1;
 
@@ -133,28 +135,44 @@ fprintf('total elapsed time=%f\n',finish_time);
 
 %% Plot learning curve
 %
-% plot_learning_curve( params );
+plot_learning_curve( params );
 
 end
 
 
 function plot_learning_curve( params )
 
+tpv = extractfield( cell2mat(params.error), 'tpv' );
+fnv = extractfield( cell2mat(params.error), 'fnv' );
+fpv = extractfield( cell2mat(params.error), 'fpv' );
+CE  = extractfield( cell2mat(params.error), 'CE' );
+
+prec = tpv./(tpv + fpv);
+rec = tpv./(tpv + fnv);
+
 figure();
 
-% RMSE
-subplot(1,2,1);
-plot(params.sample_epoch,params.RMSE);
-xlabel('epochs');
-ylabel('RMSE');
+% precision
+subplot(2,2,1);
+plot(params.sample_epoch,prec);
+xlabel('Epochs');
+ylabel('Precision');
+grid on;
+grid minor;
+
+% recall
+subplot(2,2,2);
+plot(params.sample_epoch,rec);
+xlabel('Epochs');
+ylabel('Recall');
 grid on;
 grid minor;
 
 % CE
-subplot(1,2,2);
-plot(params.sample_epoch,params.CE);
+subplot(2,2,3);
+plot(params.sample_epoch,CE);
 xlabel('epochs');
-ylabel('CE');
+ylabel('Classification error');
 grid on;
 grid minor;
 

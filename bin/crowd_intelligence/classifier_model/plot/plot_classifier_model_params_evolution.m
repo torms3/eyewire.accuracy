@@ -19,9 +19,9 @@ file_list = dir([save_path '/' 'params*']);
 if( numel(file_list) < 1 )
 	return;
 end
-[EXP] = parse_params_name( file_list(1).name );
-[setting] = CM_prepare_setting( EXP.eta, EXP.iter );
-[params] = initialize_classifier_parameters( EXP.n_users, setting );
+[EXP] 		= parse_params_name( file_list(1).name );
+[setting] 	= CM_prepare_setting( EXP.eta, EXP.iter );
+[params] 	= initialize_classifier_parameters( EXP.n_users, setting );
 [save_info] = get_classifier_save_info( save_path, EXP.n_users, setting );
 load([save_path '/' file_list(1).name]);
 
@@ -35,9 +35,6 @@ grid on;
 grid minor;
 set( gca, 'XColor', 'w' );
 set( gca, 'YColor', 'w' );
-% xlabel( 'theta' );
-% ylabel( 'w - theta' );
-% title( 'theta vs. (w - theta)', 'BackgroundColor', 'w' );
 
 color = colormap( hot(n_samples) );
 
@@ -65,10 +62,6 @@ line( [0 0], ylim, 'Color', 'r' );
 line( xlim, [1 1], 'Color', 'y' );
 line( [1 1], ylim, 'Color', 'y' );
 
-% axis equal;
-% xlim([0.0 1.0]);
-% ylim([0.0 1.0]);
-
 h = colorbar;
 cbar_title = sprintf('sample count (epoch / %d)', params.period);
 ylabel( h, cbar_title );
@@ -87,9 +80,11 @@ end
 function draw( params, color  )
 
 	% scatter( params.theta, (params.w - params.theta), 'MarkerEdgeColor', color );
-	scatter( params.theta, params.w, 'MarkerEdgeColor', color );
+	% scatter( params.theta, params.w, 'MarkerEdgeColor', color );
 	% scatter( params.w.*params.theta, params.w.*(1 - params.theta), 'MarkerEdgeColor', color );
 	% scatter( params.theta, params.w, 'MarkerEdgeColor', color );
+
+	scatter( params.b, params.a, 'MarkerEdgeColor', color );
 
 end
 

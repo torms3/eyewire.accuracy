@@ -13,6 +13,6 @@ data.n_users = n_users;
 data.n_items = n_items;
 
 % prior info
-data.prior = extract_prior( data, 'cube', 'voxel' );
+data.prior = extract_prior( data, 'cube', 'supervoxel' );
 
 end
