@@ -1,4 +1,10 @@
-function [MAP_user_seg] = USM_create_MAP_user_segment( U, V, T, VOL )
+function [MAP_user_seg] = USM_create_MAP_user_segment( DB_MAPs, exclude_v0, include_seed )
+
+U 	= DB_MAPs.U;
+T 	= DB_MAPs.T;
+V 	= DB_MAPs.V;
+VOL = DB_MAPs.VOL;
+
 
 %% User-wise processing
 %
@@ -8,9 +14,8 @@ for i = 1:U.Count
 
 	uID = uIDs{i};
 	% fprintf('%dth user (u_id=%d) is now processing...\n',i,uID);
-    
-	uInfo = U(uID);
-	val = extract_user_row( uInfo, V, T, VOL );
+
+	val = extract_user_row( uID, DB_MAPs, exclude_v0, include_seed );
 	if( ~isempty(val) )
 		idx = idx + 1;
 		vals{idx} = val;
@@ -24,11 +29,14 @@ MAP_user_seg = containers.Map( keys, vals );
 end
 
 
-function [MAP_user_row] = extract_user_row( uInfo, V, T, VOL )
+function [MAP_user_row] = extract_user_row( uID, DB_MAPs, exclude_v0, include_seed )
 
-%% Option
-%
-include_seed = false;
+U 	= DB_MAPs.U;
+T 	= DB_MAPs.T;
+V 	= DB_MAPs.V;
+VOL = DB_MAPs.VOL;
+
+uInfo = U(uID);
 
 
 %% Iterate through validations of each user
@@ -41,11 +49,9 @@ for i = 1:numel(vIDs)
 	vID 	= vIDs(i);
 	vInfo 	= V(vID);
 	% discard validations with weight = 0
-	% if( vInfo.weight == 0 )
-	% 	continue;
-	% else
-	% 	idx = idx + 1;
-	% end
+	if( exclude_v0 && (vInfo.weight == 0) )
+		continue;
+	end
 	idx = idx + 1;	% TEMP
 
 	seg 	= vInfo.segs;

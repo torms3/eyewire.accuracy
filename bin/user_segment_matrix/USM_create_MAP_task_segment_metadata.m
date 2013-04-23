@@ -1,4 +1,4 @@
-function [MAP_t_meta] = USM_create_MAP_task_segment_metadata( T, VOL )
+function [MAP_t_meta] = USM_create_MAP_task_segment_metadata( T, VOL, include_seed )
 %% Argument description
 %
 %	T: 		MAP_t_info
@@ -6,9 +6,11 @@ function [MAP_t_meta] = USM_create_MAP_task_segment_metadata( T, VOL )
 %
 
 
-%% Option
+%% Argument validation
 %
-include_seed = false;
+if( ~exist('include_seed','var') )
+	include_seed = false;
+end
 
 
 %% Global offset

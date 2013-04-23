@@ -29,8 +29,6 @@ map_u_uID(users) = [];
 % remove segments
 valid_idx = S_ui > -1;
 idx_to_remove = (sum(valid_idx.*S_ui,1) == 0);
-disp(nnz(idx_to_remove));
-disp(sum(V_i(:,idx_to_remove)));
 
 S_ui(:,idx_to_remove) 		= [];
 V_i(:,idx_to_remove) 		= [];

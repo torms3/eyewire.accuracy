@@ -19,7 +19,7 @@ end
 
 %% Option
 upper_right_mode    = false;    % only display the 'good' zone
-plot_mode           = true;     % plot prec. vs. rec. curve
+plot_mode           = false;     % plot prec. vs. rec. curve
 user_name_mode      = true;     % gname
 accumulate_mode     = false;    % 
 reverse_mode        = false;    % bright color -> dark color
@@ -74,6 +74,7 @@ enf = good_idx & (w==0) & nv_filter;
 disenf = bad_idx & (w==1);
 [enfIDs] = uIDs(enf);
 if( strcmp(cell_type,'any') && promotion_check )
+    % [enfIDs] = qualify_enfranchisement_candidates( enfIDs );
     [enfIDs] = qualify_enfranchisement_candidates( enfIDs );
 end
 disenfIDs = uIDs(disenf);

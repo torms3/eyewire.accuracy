@@ -1,15 +1,24 @@
-function [USM_meta,USM_data] = USM_create_user_segment_matrix( DB_MAPs )
+function [USM_meta,USM_data] = USM_create_user_segment_matrix( DB_MAPs, exclude_v0, include_seed )
+
+%% Argument validation
+%
+if( ~exist('exclude_v0','var') )
+	exclude_v0 = false;
+end
+if( ~exist('include_seed','var') )
+	include_seed = false;
+end
 
 %% Create MAP for task-segment metadata
 %
 fprintf('Creating MAP_t_meta ...\n');
-[MAP_t_meta] = USM_create_MAP_task_segment_metadata( DB_MAPs.T, DB_MAPs.VOL );
+[MAP_t_meta] = USM_create_MAP_task_segment_metadata( DB_MAPs.T, DB_MAPs.VOL, include_seed );
 
 
 %% Create MAPs for user-segment data
 %
 fprintf('Creating MAP_user_segment ...\n');
-[MAP_user_seg] = USM_create_MAP_user_segment( DB_MAPs.U, DB_MAPs.V, DB_MAPs.T, DB_MAPs.VOL );
+[MAP_user_seg] = USM_create_MAP_user_segment( DB_MAPs, exclude_v0, include_seed );
 
 
 %% Create MAPs for user-segment matrix data
@@ -42,7 +51,9 @@ USM_data.map_i_tID = [map_i_tID.s1 map_i_tID.s0];
 USM_data.map_u_uID = map_u_uID;
 
 % seed idx
-% [seed_idx] = USM_get_seed_idx( MAP_t_meta );
-% USM_data.seed_idx = seed_idx;
+if( include_seed )
+	[seed_idx] = USM_get_seed_idx( MAP_t_meta );
+	USM_data.seed_idx = seed_idx;
+end
 
 end

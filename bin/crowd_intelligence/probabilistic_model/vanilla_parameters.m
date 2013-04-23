@@ -2,8 +2,8 @@ function [ERR] = vanilla_parameters( uSTAT, data, DB_MAPs )
 
 %% Options
 %
-novice_control 	= true;
-nonnegativity 	= true;
+novice_control 	= false;
+nonnegativity 	= false;
 prior_mode		= 'cube';
 % prior_mode		= 'seg';
 % prior_mode		= 'flat';
@@ -78,7 +78,7 @@ if( strcmp(prior_mode,'cube') )
 	for i = 1:DB_MAPs.T.Count
 
 		tID = keys{i};
-		fprintf('(%d/%d) tID = %d is now processing...\n',i,DB_MAPs.T.Count,tID);
+		% fprintf('(%d/%d) tID = %d is now processing...\n',i,DB_MAPs.T.Count,tID);
 		tInfo = vals{i};
 
 		seed = tInfo.seed;

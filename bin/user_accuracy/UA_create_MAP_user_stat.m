@@ -27,7 +27,7 @@ end
 % load user accuracy information
 cell_IDs_str = regexprep(num2str(unique(cell_IDs)),' +','_');
 file_name = sprintf('user_accuracy__cell_%s.dat',cell_IDs_str);
-user_stat = extract_user_stat( [UA_path file_name] );
+user_stat = extract_user_stat( [UA_path '/' file_name] );
 
 % load MAP_u_info for extracting usernames
 % full_path = get_DB_MAP_path( cell_IDs );

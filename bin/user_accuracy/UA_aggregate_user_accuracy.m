@@ -25,9 +25,10 @@ for i = 1:numel(cell_IDs)
 	cell_ID = cell_IDs(i);
 	fprintf('%dth cell (cell_id=%d) is now processing...\n',i,cell_ID);
 
+
 	% load user accuracy information	
 	file_name = make_DB_MAPs_file_name( cell_ID, period );
-	full_path = [DB_path file_name];
+	full_path = [DB_path '/' file_name];
 	load(full_path);	
 	[new_STAT] = UA_create_MAP_user_stat( cell_ID, period, DB_MAPs, UA_path );
 
@@ -44,6 +45,6 @@ end
 %% Save STAT
 %
 file_name = 'STAT.mat';
-save([UA_path file_name],'STAT');
+save([UA_path '/' file_name],'STAT');
 
 end

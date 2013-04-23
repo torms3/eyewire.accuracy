@@ -62,7 +62,7 @@ for i = 1:DB_MAPs.U.Count
     M(i,9) = UA_info.hot;   % # of hotspots
 
     UA.uID(i) = uID;
-    UA.nv(i)  = UA_info.nv;    
+    UA.nv(i)  = UA_info.nv;
     UA.tp(i)  = UA_info.tp;
     UA.fn(i)  = UA_info.fn;
     UA.fp(i)  = UA_info.fp;

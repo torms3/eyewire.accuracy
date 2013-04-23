@@ -13,7 +13,7 @@ end
 save_path = DB_get_DB_MAP_path();
 save_dir = ['DB_MAPs_' get_period_suffix( period )];
 mkdir(save_path,save_dir);
-DB_path = [save_path save_dir '/'];
+DB_path = [save_path '/' save_dir];
 
 
 %% Create user accuracy path
@@ -21,7 +21,7 @@ DB_path = [save_path save_dir '/'];
 save_path = UA_get_data_path();
 save_dir = ['user_accuracy_' get_period_suffix( period )];
 mkdir(save_path,save_dir);
-UA_path = [save_path save_dir '/'];
+UA_path = [save_path '/' save_dir];
 
 
 %% Cell-wise processing
@@ -50,7 +50,7 @@ end
 keys = num2cell(cell_IDs);
 STAT_per_cell = containers.Map( keys, vals );
 file_name = 'STAT_per_cell.mat';
-save([UA_path file_name],'STAT_per_cell');
+save([UA_path '/' file_name],'STAT_per_cell');
 
 
 %% Create user accuracy MAP

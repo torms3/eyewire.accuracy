@@ -4,8 +4,8 @@ function [result] = test_EyeWire_consensus( DB_MAPs, USM_data )
 [hotspot_IDs,super_users] = get_VT_hotspots( DB_MAPs.V, DB_MAPs.T );
 
 
-[super_uIDs,super_idx] = get_super_user_info( DB_MAPs.U, DB_MAPs.V );
-[data] = CM_prepare_data( USM_data, super_idx );
+[super_uIDs,~] = get_super_user_info( DB_MAPs.U, DB_MAPs.V );
+[data] = CM_prepare_data( USM_data, super_uIDs );
 
 s 		= data.S_ui;
 v 		= data.V_i;
@@ -36,5 +36,7 @@ result.tIDs = tIDs;
 result.fpv = fpv;
 result.fnv = fnv;
 result.hot = hot;
+
+result.chIDs = extractfield(cell2mat(values(DB_MAPs.T,num2cell(tIDs))),'chID');
 
 end

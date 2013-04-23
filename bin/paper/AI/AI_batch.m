@@ -16,16 +16,10 @@ for th = threshold
 	file_name = sprintf('AI_MAP__thresh_%f.mat',th);
 	save([save_path file_name],'AI_MAP');
 
-	tpv = sum(extractfield( cell2mat(AI_MAP.values), 'tpv' ));
-	fnv = sum(extractfield( cell2mat(AI_MAP.values), 'fnv' ));
-	fpv = sum(extractfield( cell2mat(AI_MAP.values), 'fpv' ));
+	[AI_stat] = AI_compute_AI_stat( AI_MAP );
 
-	prec = tpv/(tpv+fpv);
-	rec = tpv/(tpv+fnv);
-	fs = 2*(prec*rec)/(prec+rec);
-
-	if( best_fs < fs )
-		best_fs = fs;
+	if( best_fs < AI_stat.fs )
+		best_fs = AI_stat.fs;
 		best_th = th;
 		fprintf('Best f-score = %f\n',best_fs);
 		fprintf('Best threshold = %f\n',best_th);

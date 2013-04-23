@@ -21,6 +21,8 @@ end
 %% Construct where clause
 % period
 period.since = '''2013-03-15 12:00:00''';
+% period.since = '''2013-04-15 00:00:00''';
+% period.until = '''2013-04-22 00:00:00''';
 period.until = '';
 
 % get WHERE clause
