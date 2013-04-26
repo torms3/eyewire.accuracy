@@ -30,7 +30,11 @@ for i = 1:numel(cell_IDs)
 	file_name = make_DB_MAPs_file_name( cell_ID, period );
 	full_path = [DB_path '/' file_name];
 	load(full_path);	
-	[new_STAT] = UA_create_MAP_user_stat( cell_ID, period, DB_MAPs, UA_path );
+	% [new_STAT] = UA_create_MAP_user_stat( cell_ID, period, DB_MAPs, UA_path );
+	file_name = make_UA_file_name( cell_ID, period );
+	full_path = [UA_path '/' file_name];
+	load(full_path);
+	[new_STAT] = UA_create_MAP_uSTAT( UA, DB_MAPs );
 
 	% aggregate old and new MAPs
 	if( i == 1 )
@@ -44,7 +48,7 @@ end
 
 %% Save STAT
 %
-file_name = 'STAT.mat';
-save([UA_path '/' file_name],'STAT');
+% file_name = 'STAT.mat';
+% save([UA_path '/' file_name],'STAT');
 
 end

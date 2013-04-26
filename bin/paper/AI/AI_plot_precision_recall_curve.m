@@ -2,6 +2,7 @@ function AI_plot_precision_recall_curve( STAT, AI_accuracy, ERR_exp )
 
 %% Option
 accumulate_mode = false;
+nonlinear_color = false;
 
 
 %% Preprocessing for plotting the figure
@@ -26,6 +27,13 @@ vals = vals(valid_idx);
 nv_filter = nv > 0;
 
 
+%% Non-linear coloring
+%
+if( nonlinear_color )
+    nv = log10(nv);
+end
+
+
 %% Plot
 %
 
@@ -42,10 +50,15 @@ set( gca, 'YColor', 'w' );
 axis equal;
 
 % thresholding
-unit = 100;
-stage = 6;
+if( nonlinear_color )
+    unit = 0.25;
+    stage = 11;
+else
+    unit = 50;
+    stage = 11;
+end
 from = 0;
-to = 6;
+to = stage;
 
 color = colormap( hot(stage+1) );
 for i = from:to
@@ -86,7 +99,9 @@ for i = from:to
 
     idx0 = (w == 0) & idx;
     h2 = scatter( v_rec(idx0), v_prec(idx0), circle_size, 'o', ...
-                    'MarkerEdgeColor', color(th+1,:) );
+                    'MarkerEdgeColor', 'k', ...
+                    'MarkerFaceColor', color(th+1,:) );
+                    % 'MarkerEdgeColor', color(th+1,:) );
 
 end
 
@@ -103,9 +118,11 @@ AI_thresh = extractfield( cell2mat(AI_accuracy), 'threshold' );
 idx = ismember(AI_thresh,0.04:0.05:0.99);
 idx = idx | ismember(AI_thresh,0.94:0.005:0.99);
 idx = idx | ismember(AI_thresh,0.985:0.001:0.99);
-h1 = scatter( AI_rec(idx), AI_prec(idx), 50, 'o', ...
+plot( AI_rec(idx), AI_prec(idx) );
+h1 = scatter( AI_rec(idx), AI_prec(idx), 30, 'o', ...
                     'MarkerEdgeColor', 'w', ...
                     'MarkerFaceColor', 'b' );
+
 
 %% EyeWire consensus
 %
@@ -113,7 +130,7 @@ h2 = scatter( ERR_exp.v_rec, ERR_exp.v_prec, 200, 'p', ...
 					'MarkerEdgeColor', 'w', ...
                     'MarkerFaceColor', 'b' );
 
-h = legend([h1 h2],'AI accuracy','EyeWire consensus','Location','BestOutside');
+h = legend([h1 h2],'AI accuracy','EyeWire consensus','Location','NorthWest');
 set(h,'TextColor','w');
 set(h,'EdgeColor','w');
 M = findobj(h,'type','patch');

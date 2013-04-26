@@ -1,4 +1,11 @@
-function [UA_info] = process_each_user( uID, DB_MAPs, hotspot_IDs )
+function [UA_info] = process_each_user( uID, DB_MAPs, hotspot_IDs, include_seed )
+
+%% Argument validation
+%
+if( ~exist('include_seed','var') )
+    include_seed = false;
+end
+
 
 U   = DB_MAPs.U;
 T   = DB_MAPs.T;
@@ -36,7 +43,7 @@ for i = 1:nv
     tInfo   = T(tID);
 
     % [match,miss,extra] = process_each_validation( vInfo, tInfo );
-    [VA] = process_each_validation( vInfo, tInfo );
+    [VA] = process_each_validation( vInfo, tInfo, include_seed );
     
     % number of segments
     tp = tp + numel(VA.tp);

@@ -1,17 +1,9 @@
-function [UA] = UA_process_user_accuracy( savePath, DB_MAPs, cell_IDs, period )
+function [UA] = UA_process_user_accuracy( DB_MAPs, seed )
 
 %% Argument validation
 %
-if( ~exist('cell_IDs','var') )
-    cell_IDs = [0];
-end
-if( ~exist('period','var') )
-    period.since = '';
-    period.until = '';
-end
-if( ~exist('DB_MAPs','var') )
-    [DB_MAP_path] = DB_get_DB_MAP_path();
-    [DB_MAPs] = DB_construct_DB_MAPs( DB_MAP_path, true, cell_IDs, period );
+if( ~exist('seed','var') )
+    seed = false;
 end
 
 
@@ -22,9 +14,6 @@ end
 
 %% Process user accuracy
 %
-field_dim = 9;
-M = zeros(DB_MAPs.U.Count,field_dim);
-
 % [04/17/2013 kisuklee]
 % New candidate data structure
 nUsers  = DB_MAPs.U.Count;
@@ -49,18 +38,8 @@ for i = 1:DB_MAPs.U.Count
     uID = keys{i};
     fprintf('%dth user (uID=%d) is now processing...\n',i,uID);
         
-    [UA_info] = process_each_user( uID, DB_MAPs, hotspot_IDs );
-    
-    M(i,1) = uID;
-    M(i,2) = UA_info.tp;
-    M(i,3) = UA_info.fn;
-    M(i,4) = UA_info.fp;
-    M(i,5) = UA_info.nv;
-    M(i,6) = UA_info.tpv;
-    M(i,7) = UA_info.fnv;
-    M(i,8) = UA_info.fpv;
-    M(i,9) = UA_info.hot;   % # of hotspots
-
+    [UA_info] = process_each_user( uID, DB_MAPs, hotspot_IDs, seed );
+      
     UA.uID(i) = uID;
     UA.nv(i)  = UA_info.nv;
     UA.tp(i)  = UA_info.tp;
@@ -74,12 +53,5 @@ for i = 1:DB_MAPs.U.Count
     UA.hot(i) = UA_info.hot;
     
 end
-
-
-%% Output the result into a file
-%
-cell_IDs_str = regexprep(num2str(unique(cell_IDs)),' +','_');
-fileName = sprintf('user_accuracy__cell_%s.dat',cell_IDs_str);
-dlmwrite([savePath '/' fileName],M);
 
 end

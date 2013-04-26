@@ -17,10 +17,6 @@ s_p0 = UA.tn./(UA.tn + UA.fp);
 v_p1 = v_rec;
 v_p0 = UA.tnv./(UA.tnv + UA.fpv);
 
-% s_a = log(s_p1./(1 - s_p0));
-% s_b = log((1 - s_p1)./s_p0);
-% v_a = log(v_p1./(1 - v_p0));
-% v_b = log((1 - v_p1)./v_p0);
 s_a = log((s_p1.*s_p0)./((1 - s_p1).*(1 - s_p0)));
 s_b = log((1 - s_p1)./s_p0);
 v_a = log((v_p1.*v_p0)./((1 - v_p1).*(1 - v_p0)));
