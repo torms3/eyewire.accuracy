@@ -48,13 +48,15 @@ end
 %% Vanilla parameter
 %
 [ERR] = vanilla_parameters( uSTAT, data, DB_MAPs );
+[ERR__flat] = vanilla_parameters( uSTAT, data, DB_MAPs, 'flat' );
 [ERR_wo_v0] = vanilla_parameters( uSTAT, data_wo_v0, DB_MAPs );
+[ERR_wo_v0__flat] = vanilla_parameters( uSTAT, data_wo_v0, DB_MAPs, 'flat' );
 
 
 %% Save the results
 %
 cellIDs_str = regexprep(num2str(unique(cellIDs)),' +','_');
 fileName = sprintf('ERR__cell_%s.mat',cellIDs_str);
-save([savePath '/' fileName],'ERR','ERR_wo_v0');
+save([savePath '/' fileName],'ERR','ERR__flat','ERR_wo_v0','ERR_wo_v0__flat');
 
 end

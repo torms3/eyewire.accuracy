@@ -1,4 +1,4 @@
-function [DB_MAPs] = SAC_construct_DB_MAPs( seg_info, cell_IDs, t_status )
+function [DB_MAPs] = SAC_construct_DB_MAPs( seg_info, cell_IDs, period, t_status )
 
 %% Argument validation
 %
@@ -7,6 +7,10 @@ if( ~exist('seg_info','var') )
 end
 if( ~exist('cell_IDs','var') )
 	cell_IDs = [0];
+end
+if( ~exist('period','var') )
+	period.since = '''2013-03-15 12:00:00''';
+	period.until = '';
 end
 if( ~exist('t_status','var') )
 	t_status = [0 10];
@@ -19,15 +23,7 @@ end
 
 
 %% Construct where clause
-% period
-% period.since = '''2013-03-15 12:00:00''';
-% period.since = '''2013-04-15 00:00:00''';
-% period.until = '';
-
-% KETA Competition
-period.since = '''2013-04-21 00:00:00''';
-period.until = '''2013-04-22 00:00:00''';
-
+%
 % get WHERE clause
 [where_clause] = get_where_clause( cell_IDs, period, t_status, 0 );
 

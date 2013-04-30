@@ -76,7 +76,7 @@ for i = 1:numel(vIDs)
     volInfo = VOL(chID);
 
 	% [match,miss,extra] = process_each_validation( vInfo, tInfo );
-    [VA] = process_each_validation( vInfo, tInfo );
+    [VA] = process_each_validation( vInfo, tInfo, false );
     match = VA.tp;
     miss  = VA.fn;
     extra = VA.fp;

@@ -1,12 +1,18 @@
-function [ERR] = vanilla_parameters( uSTAT, data, DB_MAPs )
+function [ERR] = vanilla_parameters( uSTAT, data, DB_MAPs, prior_mode )
+
+%% Argument validation
+%
+if( ~exist('prior_mode','var') )
+	prior_mode = 'cube';
+	% prior_mode = 'seg';
+	% prior_mode = 'flat';
+end
+
 
 %% Options
 %
 novice_control 	= false;
 nonnegativity 	= false;
-prior_mode		= 'cube';
-% prior_mode		= 'seg';
-% prior_mode		= 'flat';
 
 
 %% Extract vanilla parameters a and b for each EyeWirers

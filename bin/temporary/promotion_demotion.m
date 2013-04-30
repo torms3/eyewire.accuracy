@@ -39,13 +39,13 @@ for i = 1:numel(cell_IDs)
 
 		% Process user accuracy for this cell
 		% [UA] = UA_process_user_accuracy( UA_path, DB_MAPs, cell_ID );
-		[UA] = UA_construct_user_accuracy( UA_path, false, DB_MAPs, cell_ID );
+		[UA] = UA_construct_user_accuracy( UA_path, false, DB_MAPs, cell_ID, period );
 
 	end
 
 	% Cell-wise user stat
 	% vals{i} = UA_create_MAP_user_stat( cell_ID, period, DB_MAPs, UA_path );
-	vals{i} = UA_create_MAP_uSTAT( UA, DB_MAPs )
+	vals{i} = UA_create_MAP_uSTAT( UA, DB_MAPs );
 
 end
 
