@@ -1,6 +1,7 @@
 function [size_of_seg,n_seg] = get_size_of_segments( volInfo, seg )
 
 size_of_seg = [];
+n_seg = 0;
 if( isempty(seg) )
 	return;
 end
