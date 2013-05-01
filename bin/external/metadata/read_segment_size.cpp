@@ -42,8 +42,12 @@ void mexFunction(int nlhs, mxArray *plhs[],
 		OmSegmentDataV4* data = reinterpret_cast<OmSegmentDataV4*>(buf);
 		
 		int nData = fileSize/sizeof(OmSegmentDataV4);
-		OmSegID segID[nData] = {0,};
-		uint64_t size[nData] = {0,};
+		//OmSegID segID[nData] = {0,};
+		//uint64_t size[nData] = {0,};
+		OmSegID segID[nData];
+		uint64_t size[nData];
+		memset(segID,0,nData*sizeof(OmSegID));
+		memset(size,0,nData*sizeof(uint64_t));
 		for( int i = 0; i < nData; ++i )
 		{
 			segID[i] = data[i].value;

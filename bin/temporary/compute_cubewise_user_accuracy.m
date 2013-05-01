@@ -1,4 +1,11 @@
-function [STAT] = compute_cubewise_user_accuracy( DB_MAPs )
+function [CW_STAT] = compute_cubewise_user_accuracy( DB_MAPs, seed )
+
+%% Argument validation
+%
+if( ~exist('seed','var') )
+    seed = false;
+end
+
 
 %% Extract hotspot cube IDs
 %
@@ -14,7 +21,7 @@ for i = 1:DB_MAPs.U.Count
 	fprintf('%dth user (user_id=%d) is now processing...\n',i,uID);
 
 	% CWUA stands for 'Cube-Wise User Accuracy'
-	[user_info] = CWUA_process_each_user( uID, DB_MAPs, hotspot_IDs );
+	[user_info] = CWUA_process_each_user( uID, DB_MAPs, hotspot_IDs, seed );
 
 	% Data Element
 	vals{i} = user_info;
@@ -24,12 +31,12 @@ end
 
 %% Create and return a MAP for user accuracy
 %
-STAT = containers.Map( keys, vals );
+CW_STAT = containers.Map( keys, vals );
 
 end
 
 
-function [user_info] = CWUA_process_each_user( uID, DB_MAPs, hotspot_IDs )
+function [user_info] = CWUA_process_each_user( uID, DB_MAPs, hotspot_IDs, seed )
 
 %% Initialization
 %
@@ -76,7 +83,7 @@ for i = 1:numel(vIDs)
     volInfo = VOL(chID);
 
 	% [match,miss,extra] = process_each_validation( vInfo, tInfo );
-    [VA] = process_each_validation( vInfo, tInfo, false );
+    [VA] = process_each_validation( vInfo, tInfo, seed );
     match = VA.tp;
     miss  = VA.fn;
     extra = VA.fp;

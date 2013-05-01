@@ -1,4 +1,4 @@
-function [DB_MAPs] = TUT_construct_DB_MAPs( uIDs )
+function [TUT_DB_MAPs] = TUT_construct_DB_MAPs( uIDs )
 
 %% Extract DB information
 %
@@ -11,14 +11,14 @@ function [DB_MAPs] = TUT_construct_DB_MAPs( uIDs )
 
 %% Post-processing
 %
-DB_extract_segment_info( TUT_T, TUT_VOL );
+% DB_extract_segment_info( TUT_T, TUT_VOL );
 
 
 %% Return DB MAPs
 %
-DB_MAPs.U 	= TUT_U;
-DB_MAPs.T 	= TUT_T;
-DB_MAPs.V 	= TUT_V;
-DB_MAPs.VOL = TUT_VOL;
+TUT_DB_MAPs.U 	= TUT_U;
+TUT_DB_MAPs.T 	= TUT_T;
+TUT_DB_MAPs.V 	= TUT_V;
+TUT_DB_MAPs.VOL = TUT_VOL;
 
 end
