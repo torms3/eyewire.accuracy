@@ -11,7 +11,7 @@ function [TUT_DB_MAPs] = TUT_construct_DB_MAPs( uIDs )
 
 %% Post-processing
 %
-% DB_extract_segment_info( TUT_T, TUT_VOL );
+DB_extract_segment_info( TUT_T, TUT_VOL );
 
 
 %% Return DB MAPs
