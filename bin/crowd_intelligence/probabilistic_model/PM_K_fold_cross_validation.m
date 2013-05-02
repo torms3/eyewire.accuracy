@@ -37,9 +37,9 @@ save_root_path = [save_path '/' save_root_dir];
 %
 switch( partition_mode )
 case 'task'
-	[k_partition] = get_K_fold_task_partition( data.map_i_tID, K );	
+	[k_partition] = get_K_fold_task_partition( data.map_i_tID, K );
 case 'segment'
-	[k_partition] = get_K_fold_segment_partition( data, K );	
+	[k_partition] = get_K_fold_segment_partition( data, K );
 otherwise
 	assert(false);
 end

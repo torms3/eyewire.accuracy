@@ -17,50 +17,63 @@ for i = 1:nFile
 	cellIDs(i) = cell2mat(C);
 	
 	CE(i,1) = ERR.exp.CE;
-	CE(i,2) = ERR.v_error.CE;
-	CE(i,3) = ERR__flat.v_error.CE;
+	CE(i,2) = ERR.s_error.CE;
+	CE(i,3) = ERR__flat.s_error.CE;
 	CE(i,4) = ERR_wo_v0.exp.CE;
-	CE(i,5) = ERR_wo_v0.v_error.CE;
-	CE(i,6) = ERR_wo_v0__flat.v_error.CE;
+	CE(i,5) = ERR_wo_v0.s_error.CE;
+	CE(i,6) = ERR_wo_v0__flat.s_error.CE;
 
 	prec(i,1) = ERR.exp.v_prec;
-	prec(i,2) = ERR.v_error.v_prec;
-	prec(i,3) = ERR__flat.v_error.v_prec;
+	prec(i,2) = ERR.s_error.v_prec;
+	prec(i,3) = ERR__flat.s_error.v_prec;
 	prec(i,4) = ERR_wo_v0.exp.v_prec;
-	prec(i,5) = ERR_wo_v0.v_error.v_prec;
-	prec(i,6) = ERR_wo_v0__flat.v_error.v_prec;
+	prec(i,5) = ERR_wo_v0.s_error.v_prec;
+	prec(i,6) = ERR_wo_v0__flat.s_error.v_prec;
 
 	rec(i,1) = ERR.exp.v_rec;
-	rec(i,2) = ERR.v_error.v_rec;
-	rec(i,3) = ERR__flat.v_error.v_rec;
+	rec(i,2) = ERR.s_error.v_rec;
+	rec(i,3) = ERR__flat.s_error.v_rec;
 	rec(i,4) = ERR_wo_v0.exp.v_rec;
-	rec(i,5) = ERR_wo_v0.v_error.v_rec;
-	rec(i,6) = ERR_wo_v0__flat.v_error.v_rec;
+	rec(i,5) = ERR_wo_v0.s_error.v_rec;
+	rec(i,6) = ERR_wo_v0__flat.s_error.v_rec;
 
 end
 
+legendStr = {'novice + expert, major voting'; ...
+			 'novice + expert, plug-in parameters'; ...
+			 'novice + expert, plug-in parameters with flat prior'; ...
+			 'expert only, major voting'; ...
+			 'expert only, plug-in parameters'; ...
+			 'expert only, plug-in parameters with flat prior'; ...
+			};
+idx = [4 1 2];
+
 subplot(3,1,1);
-bar(CE);
+bar(CE(:,idx));
 labels = strtrim(cellstr(num2str(cellIDs))');
 set(gca,'XTickLabel',labels);
 ylabel('Classification error');
+title('Classification with plug-in parameters');
+legend(legendStr(idx),'Location','NorthWest');
 grid on;
 
 subplot(3,1,2);
-bar(1-prec);
+bar(1-prec(:,idx));
 % ylim([0.8 1.0]);
 labels = strtrim(cellstr(num2str(cellIDs))');
 set(gca,'XTickLabel',labels);
 ylabel('1 - Precision');
+legend(legendStr(idx),'Location','NorthWest');
 grid on;
 grid minor;
 
 subplot(3,1,3);
-bar(1-rec);
+bar(1-rec(:,idx));
 % ylim([0.90 1.0]);
 labels = strtrim(cellstr(num2str(cellIDs))');
 set(gca,'XTickLabel',labels);
 ylabel('1 - Recall');
+legend(legendStr(idx),'Location','NorthEast');
 grid on;
 grid minor;
 

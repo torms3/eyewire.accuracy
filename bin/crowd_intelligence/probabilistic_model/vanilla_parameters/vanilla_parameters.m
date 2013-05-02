@@ -26,10 +26,16 @@ v_a = extractfield( vals, 'v_a' )';
 v_b = extractfield( vals, 'v_b' )';
 
 % validation
-s_a(isnan(s_a) | isinf(s_a)) = 0;
-s_b(isnan(s_b) | isinf(s_b)) = 0;
-v_a(isnan(v_a) | isinf(v_a)) = 0;
-v_b(isnan(v_b) | isinf(v_b)) = 0;
+s_a(isnan(s_a)) = 0;
+s_b(isnan(s_b)) = 0;
+v_a(isnan(v_a)) = 0;
+v_b(isnan(v_b)) = 0;
+
+epsilonInf = 1.0;
+s_a(isinf(s_a)) = epsilonInf*sign(s_a(isinf(s_a)));
+s_b(isinf(s_b)) = epsilonInf*sign(s_b(isinf(s_b)));
+v_a(isinf(v_a)) = epsilonInf*sign(v_a(isinf(v_a)));
+v_b(isinf(v_b)) = epsilonInf*sign(v_b(isinf(v_b)));
 
 
 %% Novice control

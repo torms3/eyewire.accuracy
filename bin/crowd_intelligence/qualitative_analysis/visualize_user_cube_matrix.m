@@ -1,4 +1,9 @@
-function visualize_user_cube_matrix( DB_MAPs )
+function [UCM] = visualize_user_cube_matrix( DB_MAPs, cellID )
+
+	%% Options
+	%
+	random_shuffle = false;
+
 
 	U = DB_MAPs.U;
 	T = DB_MAPs.T;
@@ -7,7 +12,7 @@ function visualize_user_cube_matrix( DB_MAPs )
 	nUser = U.Count;
 	nCube = T.Count;
 	
-	M = zeros(nUser,nCube);
+	UCM = zeros(nUser,nCube);
 
 	uIDs = cell2mat(U.keys)';
 	tIDs = cell2mat(T.keys);
@@ -24,7 +29,7 @@ function visualize_user_cube_matrix( DB_MAPs )
 
 		uInfo = vals{i};
 		cubes = extractfield( cell2mat(values( V, num2cell(uInfo.vIDs))), 'tID' );		
-		M(i,ismember(tIDs,cubes)) = 1;
+		UCM(i,ismember(tIDs,cubes)) = 1;
 
 	end
 
@@ -32,18 +37,28 @@ function visualize_user_cube_matrix( DB_MAPs )
 	%% Visualize
 	%
 	figure();
-	subplot(1,2,1);
-	imagesc(M);
+	if( random_shuffle )
+		subplot(1,2,1);
+	end
+	imagesc(UCM);
 	colormap(gray);
+	xlabel('cube index');
+	ylabel('user index');
+	titleStr = sprintf('visualization for user-cube matrix, cell %d',cellID);
+	title(titleStr);
 
 
 	%% Random shuffling of the cubes
 	%
-	randIdx = randperm(numel(tIDs));
-	M = M(:,randIdx);
+	if( random_shuffle )
+		randIdx = randperm(numel(tIDs));
+		UCM = UCM(:,randIdx);
 
-	subplot(1,2,2);
-	imagesc(M);	
-
+		subplot(1,2,2);
+		imagesc(UCM);
+		xlabel('shuffled cube index');
+		ylabel('user index');
+		title('after randomly shuffling cubes');
+	end
 
 end
