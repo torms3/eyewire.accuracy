@@ -9,21 +9,31 @@ fn_idx = (cl_err > 0.5);
 fp_idx = (cl_err < -0.5);
 tp_idx = logical(data.sigma) & ~fn_idx;
 
+fn = sum(double(fn_idx));
+fp = sum(double(fp_idx));
+tp = sum(double(tp_idx));
+
 fnv = double(fn_idx)*data.V_i';
 fpv = double(fp_idx)*data.V_i';
 tpv = double(tp_idx)*data.V_i';
 
-% CE
-% CE = (fpv + fnv)/sum(data.V_i);
-CE = (fpv + fnv)/(tpv + fnv + fpv);
-
 % result
 model_error.SE 		= squared_sum;
 model_error.RMSE 	= RMSE;
+
+% supervoxel-based
+model_error.tp 		= tp;
+model_error.fn 		= fn;
+model_error.fp 		= fp;
+model_error.s_CE 	= (fp + fn)/(tp + fn + fp);
+model_error.s_prec = tp/(tp + fp);
+model_error.s_rec  = tp/(tp + fn);
+
+% voxel-based
 model_error.tpv 	= tpv;
 model_error.fnv 	= fnv;
 model_error.fpv 	= fpv;
-model_error.CE 		= CE;
+model_error.CE 		= (fpv + fnv)/(tpv + fnv + fpv);
 model_error.v 		= sum(data.V_i);
 model_error.v_prec = tpv/(tpv + fpv);
 model_error.v_rec  = tpv/(tpv + fnv);
