@@ -3,7 +3,7 @@ function plot_classifier_model_params_evolution( save_path, usernames )
 %% Options
 %
 % present username
-gname_mode = true;
+gname_mode = false;
 if( ~exist('usernames','var') )
 	gname_mode = false;
 end

@@ -8,7 +8,7 @@ IDX = (S > -1);
 m = sum(IDX,1);
 th = params.theta;
 U = (sum(IDX.*S,1)./m) - th(m);
-prediction = 1.0./(1.0 + exp(-U));
+prediction = 1.0./(1.0 + exp(-params.beta*U));
 
 % RMSE
 err 	= data.sigma - prediction;

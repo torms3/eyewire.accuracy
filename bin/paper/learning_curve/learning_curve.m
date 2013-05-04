@@ -3,8 +3,9 @@ function learning_curve( M, nCube, wSize, step )
 %% Options
 %
 plot_collective = false;
-plot_average = true;
-plot_individual = false;
+plot_average = false;
+plot_individual = true;
+plot_qualtiles = true;
 
 
 %% Global variables
@@ -49,6 +50,11 @@ stdErr = zeros(3,nStep);	% for aPrec, aRec, and aFs
 uPrec = zeros(nUser,nStep);
 uRec = zeros(nUser,nStep);
 uFs = zeros(nUser,nStep);
+
+% qualtiles
+qPrec = zeros(3,nStep);
+qRec = zeros(3,nStep);
+qFs = zeros(3,nStep);
 
 % hotspot analysis
 % global uFnv uFpv uHotFnv uHotFpv;
@@ -105,6 +111,11 @@ for i = 1:nStep
 	aRec(i) = mean(uRec(:,i));
 	% aFs(i) = 2*(aPrec(i)*aRec(i))/(aPrec(i) + aRec(i));
 	aFs(i) = mean(uFs(:,i));
+
+	% qualtiles
+	qPrec(:,i) = quantile(uPrec(:,i),[0.25,0.5,0.75]');
+	qRec(:,i) = quantile(uRec(:,i),[0.25,0.5,0.75]');
+	qFs(:,i) = quantile(uFs(:,i),[0.25,0.5,0.75]');
 	
 	stdErr(1,i) = std(uPrec(:,i));
 	stdErr(2,i) = std(uRec(:,i));
@@ -138,6 +149,12 @@ end
 % indificual learning curve
 if( plot_individual )
 	plot_individual_learning_curve( x, uPrec, uRec, uFs );
+end
+
+% qualtile
+if( plot_qualtiles )
+	plot_qualtiles_accuracy( x, qPrec, qRec, qFs );
+	title(title_str);
 end
 
 end
@@ -184,21 +201,52 @@ function plot_individual_learning_curve( x, uPrec, uRec, uFs )
 
 	nUser = size(uPrec,1);
 	X = ones(nUser,1)*x;
-
+	% X = reshape(X,1,[]);
 	figure;
 
 	% precision
 	subplot(1,2,1);
 	plot(x,uPrec,'b.');
+	% h = scatter(X,reshape(uPrec,1,[]),'ob','filled');
 	xlabel('center of moving window');
 	ylabel('individual precision');
 	grid on;
-
+	
 	% recall
 	subplot(1,2,2);
 	plot(x,uRec,'r.');
+	% h = scatter(X,reshape(uRec,1,[]),'or','filled');
 	xlabel('center of moving window');
 	ylabel('individual recall');
+	grid on;
+	
+end
+
+
+function plot_qualtiles_accuracy( x, qPrec, qRec, qFs )
+
+	figure;
+	hold on;
+	h = zeros(1,6);
+
+	xlim([0 500]);
+	
+	% Q3 (75%)
+	h(1) = plot(x,qRec(3,:),'-r','LineWidth',0.5);
+	h(2) = plot(x,qPrec(3,:),'-b','LineWidth',0.5);
+	
+	% Q2 (50%)
+	h(3) = plot(x,qRec(2,:),'-r','LineWidth',2);
+	h(4) = plot(x,qPrec(2,:),'-b','LineWidth',2);	
+
+	% Q1 (25%)
+	h(5) = plot(x,qRec(1,:),'-r','LineWidth',5);
+	h(6) = plot(x,qPrec(1,:),'-b','LineWidth',5);
+
+	hold off;
+	legend(h,'Q3 recall','Q3 precision','Q2 recall','Q2 precision','Q1 recall','Q1 precision','Location','Best');
+	xlabel('center of moving window');
+	ylabel('quartiles of accuracy');
 	grid on;
 
 end

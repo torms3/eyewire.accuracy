@@ -1,7 +1,8 @@
 function [model_error] = compute_error( err, cl_err, data )
 
 % RMSE
-squared_sum = sum((data.V_i.*err).^2);
+squared_sum = sum(err.^2);
+% squared_sum = sum((data.V_i.*err).^2);
 RMSE = sqrt(squared_sum/size(data.S_ui,2));
 
 % volume precision & recall

@@ -23,6 +23,16 @@ params 		= initialize_threshold( data, setting );
 save_info 	= get_classifier_save_info( save_path, params.n_users, setting );
 
 
+%% Figures
+%
+figure;
+h1 = gca;
+figure;
+h2 = gca;
+figure;
+h3 = gca;
+
+
 %% Iteration
 %
 tic
@@ -39,6 +49,7 @@ V 		= data.V_i;
 sigma 	= data.sigma;
 eta		= params.eta;
 period 	= params.period;
+Beta	= 3.3;
 
 sample_cnt = 1;
 for epoch = 1:iter
@@ -65,13 +76,14 @@ for epoch = 1:iter
 
 		% logistic function inlining
 		u = sum(s)/m - theta;
-		o = 1.0./(1.0 + exp(-u));
+		o = 1.0./(1.0 + exp(-params.beta*u));
 		
 		% error
 		err = sigma(j) - o;
 		
 		% update
-		THETA(m) = max(0,min(0.99,theta - eta*v*o*(1-o)*err));
+		% THETA(m) = max(0,min(0.99,theta - eta*o*(1-o)*err));
+		THETA(m) = max(0,min(0.99,theta - eta*err));
 
 	end
 	
@@ -101,10 +113,17 @@ for epoch = 1:iter
 		error_calculation_time = toc;
 		
 		fprintf('%dth epoch: error calculation time=%f\n',epoch,error_calculation_time);
-		fprintf('%dth epoch: RMSE = \t%f\n',epoch,CM_error.RMSE);
+		fprintf('%dth epoch: SE = \t%f\n',epoch,CM_error.SE);
 		fprintf('%dth epoch: CE = \t%f\n',epoch,CM_error.CE);
 		fprintf('%dth epoch: v_prec = \t%f\n',epoch,CM_error.tpv/(CM_error.tpv+CM_error.fpv));
 		fprintf('%dth epoch: v_rec = \t%f\n',epoch,CM_error.tpv/(CM_error.tpv+CM_error.fnv));
+
+		x = params.sample_epoch(1:sample_cnt);
+		y = extractfield( cell2mat(params.error(1:sample_cnt)), 'SE' );
+		plot_learning_curve( h1, x, y );
+		y = extractfield( cell2mat(params.error(1:sample_cnt)), 's_CE' );
+		plot_learning_curve( h2, x, y );
+		plot_parameters( h3, params );
 
 		sample_cnt = sample_cnt + 1;
 
@@ -135,11 +154,12 @@ th_idx = unique(m);
 theta(th_idx) = 1;
 
 % theta
-epsilon_theta 	= 0.99;
+epsilon_theta 	= 0.01;
 params.n_users	= data.n_users;
-% params.theta	= theta.*rand(1,max(m))*epsilon_theta;
-params.theta 	= theta*epsilon_theta;
+% params.theta 	= theta.*epsilon_theta.*rand(size(theta));
+params.theta 	= exp(-0.16*(1:max(m))) + 0.2;
 params.th_idx	= th_idx;
+params.beta 	= 3.3;
 
 % learning rate
 params.eta = setting.eta;
@@ -162,5 +182,34 @@ params.samples = nnz(sample_idx);
 % statistics
 params.epoch_time = zeros(1,params.iter);
 params.error = cell(1,params.samples);
+
+end
+
+
+function plot_learning_curve( h, x, y )
+
+% CE
+plot(h,x,y);
+xlabel(h,'epochs');
+grid(h,'on');
+grid(h,'minor');
+
+drawnow
+
+end
+
+
+function plot_parameters( h, params )
+
+x = 1:numel(params.theta);
+y = exp(-0.16*x) + 0.2;
+plot(h,x,y,'-r');
+hold(h,'on');
+scatter(h,x,params.theta);
+hold(h,'off');
+grid(h,'on');
+grid(h,'minor');
+
+drawnow
 
 end

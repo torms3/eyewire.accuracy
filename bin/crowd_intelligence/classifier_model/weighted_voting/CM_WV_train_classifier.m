@@ -1,4 +1,4 @@
-function CM_train_classifier( save_path, pre_data, setting )
+function CM_WV_train_classifier( save_path, pre_data, setting )
 %% Argument description
 %
 %	save_path
@@ -23,6 +23,14 @@ params 		= initialize_classifier_parameters( data.n_users, setting );
 save_info 	= get_classifier_save_info( save_path, params.n_users, setting );
 
 
+%% Figures
+%
+figure;
+h1 = gca;
+figure;
+h2 = gca;
+
+
 %% Iteration
 %
 tic
@@ -39,18 +47,22 @@ sigma 	= data.sigma;
 eta		= params.eta;
 period 	= params.period;
 
+M = sum(S > -0.5,1);
+dEta = (0.999*eta)/iter;
+
 sample_cnt = 1;
 for epoch = 1:iter
 
 	tic
 
+	% decreasing the learning rate parameter eta
+	eta = params.eta/epoch;
+
 	% read parameters into local variables
-	W 		= params.w;
-	THETA 	= params.theta;	
+	W = params.w;
 
 	% get randomly permuted iteration indices for segments
 	rand_idx = randperm(n_items);
-	% rand_idx = 1:n_items;
 
 	% iterate through whole segments
 	for i = 1:n_items
@@ -62,12 +74,12 @@ for epoch = 1:iter
 		s 		= S(idx,j);
 		v 		= V(j);
 		w 		= W(idx);
-		theta 	= THETA(idx);
-		
+		m 		= M(j);
+		thresh 	= exp(-0.16*m) + 0.2;		
 
 		% logistic function inlining
-		% SUM = sum((w.*s) - theta);		% default model
-		SUM = w'*(s - theta);			% nonnegativity model
+		SUM = (w'*s)/m - thresh;		% default model
+		% SUM = w'*(s - theta);			% nonnegativity model
 		o = 1.0./(1.0 + exp(-SUM));
 		
 		% error
@@ -75,22 +87,21 @@ for epoch = 1:iter
 		
 		% update
 		% common = eta*v*o*(1-o)*err;	% linear dependence on volume
-		common = eta*o*(1-o)*err;
+		common 	= eta*o*(1-o)*err;
 		% common = eta*err;
 
-		% W(idx) 		= w + (s.*common);
-		% THETA(idx) 	= theta - common;
-
+		% default model
+		% W(idx) 	= w + (s.*common)/m;
 		% nonnegativity constraints
-		% W(idx) 		= max(0,w + ((s - theta).*common));	% (w >= 0)
-		W(idx) 		= min(1,max(0,w + ((s - theta).*common)));	% (w >= 0) and (w <= 1)
-		THETA(idx) 	= min(1,max(0,theta - w*common));	% (theta >= 0) and (theta <=1)
+		W(idx) 	= min(1,max(0,w + (s.*common)/m));	% (w >= 0) and (w <=1)
 
-	end
+	end	
+
+	% decreasing the learning rate parameter eta
+	% eta = eta - dEta;
 	
 	% write local parameters back
 	params.w 		= W;
-	params.theta 	= THETA;	
 
 	params.epoch_time(epoch) = toc;
 	fprintf('\n%dth epoch: iteration time=%f\n',epoch,params.epoch_time(epoch));
@@ -100,8 +111,8 @@ for epoch = 1:iter
 
 		tic		
 		
-		[CM_error] = CM_compute_classifier_error( data, params );
-		params.error{sample_cnt} = CM_error;
+		[CM_error] = CM_WV_compute_classifier_error( data, params );
+		params.error{sample_cnt} = CM_error;;
 		
 		% save params
 		file_suffix = sprintf('_sample_%d.mat',epoch);
@@ -120,6 +131,11 @@ for epoch = 1:iter
 		fprintf('%dth epoch: v_prec = \t%f\n',epoch,CM_error.tpv/(CM_error.tpv+CM_error.fpv));
 		fprintf('%dth epoch: v_rec = \t%f\n',epoch,CM_error.tpv/(CM_error.tpv+CM_error.fnv));
 
+		x = params.sample_epoch(1:sample_cnt);
+		y = extractfield( cell2mat(params.error(1:sample_cnt)), 'CE' );
+		plot_learning_curve( h1, x, y );
+		plot_parameters( h2, params );
+
 		sample_cnt = sample_cnt + 1;
 
 	else
@@ -133,32 +149,31 @@ end
 finish_time = toc;
 fprintf('total elapsed time=%f\n',finish_time);
 
+end
 
-%% Plot learning curve
-%
-% plot_learning_curve( params );
+
+function plot_learning_curve( h, x, y )
+
+% CE
+plot(h,x,y);
+xlabel(h,'epochs');
+ylabel(h,'CE');
+grid(h,'on');
+grid(h,'minor');
+
+drawnow
 
 end
 
 
-function plot_learning_curve( params )
+function plot_parameters( h, params )
 
-figure();
-
-% RMSE
-subplot(1,2,1);
-plot(params.sample_epoch,params.RMSE);
-xlabel('epochs');
-ylabel('RMSE');
+scatter(h,1:params.n_users,params.w);
+xlabel(h,'user index');
+ylabel(h,'w');
 grid on;
 grid minor;
 
-% CE
-subplot(1,2,2);
-plot(params.sample_epoch,params.CE);
-xlabel('epochs');
-ylabel('CE');
-grid on;
-grid minor;
+drawnow
 
 end
