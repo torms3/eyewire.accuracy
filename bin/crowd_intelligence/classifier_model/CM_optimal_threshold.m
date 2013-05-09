@@ -40,6 +40,8 @@ tic
 % global valid index
 IDX = data.S_ui > -1;
 M = sum(IDX,1);
+N = sum(data.S_ui > 0.5,1);
+prob = N./M;
 
 % avoid structure field referencing
 iter 	= params.iter;
@@ -49,7 +51,6 @@ V 		= data.V_i;
 sigma 	= data.sigma;
 eta		= params.eta;
 period 	= params.period;
-Beta	= 3.3;
 
 sample_cnt = 1;
 for epoch = 1:iter
@@ -62,8 +63,15 @@ for epoch = 1:iter
 	% get randomly permuted iteration indices for segments
 	rand_idx = randperm(n_items);
 
+	% only consider false items
+	% prediction = prob > THETA(M);
+	% err = sigma - double(prediction);
+	% err_idx = find(logical(err > 0.5));
+	% rand_idx = err_idx(randperm(numel(err_idx)));
+
 	% iterate through whole segments
-	for i = 1:n_items
+	% for i = 1:n_items
+	for i = 1:numel(rand_idx)
 
 		j 		= rand_idx(i);
 		idx 	= IDX(:,j);

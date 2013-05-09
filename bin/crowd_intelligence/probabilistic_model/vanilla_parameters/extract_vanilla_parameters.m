@@ -60,10 +60,10 @@ function [params] = extract_vanilla_parameters( data, param_type )
 	params.a(isnan(params.a)) = 0;
 	params.b(isnan(params.b)) = 0;
 
-	epsilonInf = 1.0;
-	params.a(isinf(params.a)) = epsilonInf*sign(params.a(isinf(params.a)));
-	params.b(isinf(params.b)) = epsilonInf*sign(params.b(isinf(params.b)));
-	% params.a(isinf(params.a)) = 0;
-	% params.b(isinf(params.b)) = 0;
+	% epsilonInf = 1.0;
+	% params.a(isinf(params.a)) = epsilonInf*sign(params.a(isinf(params.a)));
+	% params.b(isinf(params.b)) = epsilonInf*sign(params.b(isinf(params.b)));
+	params.a(isinf(params.a)) = 0;
+	params.b(isinf(params.b)) = 0;
 
 end

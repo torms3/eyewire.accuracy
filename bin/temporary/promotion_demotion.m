@@ -59,4 +59,7 @@ save([UA_path '/' file_name],'STAT_per_cell');
 %
 [STAT] = UA_aggregate_user_accuracy( cell_IDs, period, UA_path, DB_path );
 
+file_name = 'STAT.mat';
+save([UA_path '/' file_name],'STAT');
+
 end

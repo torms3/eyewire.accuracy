@@ -4,8 +4,9 @@ function learning_curve( M, nCube, wSize, step )
 %
 plot_collective = false;
 plot_average = false;
-plot_individual = true;
-plot_qualtiles = true;
+plot_individual = false;
+plot_quartiles = true;
+plot_shadedQualtiles = true;
 
 
 %% Global variables
@@ -151,9 +152,15 @@ if( plot_individual )
 	plot_individual_learning_curve( x, uPrec, uRec, uFs );
 end
 
-% qualtile
-if( plot_qualtiles )
-	plot_qualtiles_accuracy( x, qPrec, qRec, qFs );
+% quartiles
+if( plot_quartiles )
+	plot_quartiles_accuracy( x, qPrec, qRec, qFs );
+	title(title_str);
+end
+
+% shaded quartiles
+if( plot_shadedQualtiles )
+	plot_shaded_quartiles_accuracy( x, qPrec, qRec, qFs );
 	title(title_str);
 end
 
@@ -223,7 +230,7 @@ function plot_individual_learning_curve( x, uPrec, uRec, uFs )
 end
 
 
-function plot_qualtiles_accuracy( x, qPrec, qRec, qFs )
+function plot_quartiles_accuracy( x, qPrec, qRec, qFs )
 
 	figure;
 	hold on;
@@ -248,5 +255,37 @@ function plot_qualtiles_accuracy( x, qPrec, qRec, qFs )
 	xlabel('center of moving window');
 	ylabel('quartiles of accuracy');
 	grid on;
+
+end
+
+
+function plot_shaded_quartiles_accuracy( x, qPrec, qRec, qFs )
+
+	figure;
+	hold on;
+	% h = zeros(1,6);
+	% xlim([0 500]);	
+	
+	% precision
+	upperError = qPrec(1,:) - qPrec(2,:);
+	lowerError = qPrec(2,:) - qPrec(3,:);
+	errorBar = [upperError;lowerError];
+	w = 1;
+	h1=plot(x,qPrec(2,:),'-b','LineWidth',w);
+	shadedErrorBar(x,qPrec(2,:),errorBar,{'-b','LineWidth',w},1);
+
+	% recall
+	upperError = qRec(1,:) - qRec(2,:);
+	lowerError = qRec(2,:) - qRec(3,:);
+	errorBar = [upperError;lowerError];
+	w = 1;
+	h2=plot(x,qRec(2,:),'-r','LineWidth',w);
+	shadedErrorBar(x,qRec(2,:),errorBar,{'-r','LineWidth',1},1);
+
+	hold off;
+	legend([h1 h2],'precision','recall','Location','Best');
+	xlabel('center of moving window');
+	ylabel('quartiles of accuracy');
+	% grid on;
 
 end

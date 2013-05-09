@@ -1,8 +1,11 @@
 function AI_plot_precision_recall_curve( STAT, AI_accuracy, ERR_exp )
 
 %% Option
-accumulate_mode = false;
-nonlinear_color = false;
+upper_right_mode    = true;    % only display the 'good' zone
+cut_line.prec       = 0.7;
+cut_line.rec        = 0.7;
+accumulate_mode     = false;
+nonlinear_color     = true;
 
 
 %% Preprocessing for plotting the figure
@@ -32,7 +35,8 @@ nv_filter = nv > 0;
 if( nonlinear_color )
     nv = log10(nv);
 end
-
+% disp(max(nv)); 
+% 4.210853365314893
 
 %% Plot
 %
@@ -52,7 +56,7 @@ axis equal;
 % thresholding
 if( nonlinear_color )
     unit = 0.25;
-    stage = 11;
+    stage = 17;
 else
     unit = 50;
     stage = 11;
@@ -78,8 +82,13 @@ for i = from:to
     end      
     
     set( gca, 'Color', 'k' );
-    xlim( [0 1.0] );
-    ylim( [0 1.0] );
+    if( upper_right_mode )
+        xlim( [cut_line.rec 1.0] );
+        ylim( [cut_line.prec 1.0] );
+    else
+        xlim( [0 1.0] );
+        ylim( [0 1.0] );
+    end
     
     caxis( [0 stage+1] );    
 
@@ -87,18 +96,21 @@ for i = from:to
     xlabel( 'Recall' );
     ylabel( 'Precision' );
     
-    circle_size = 40;
+    circle_size = 16;
 
     % exclude users w/ small number of cubes
     idx = idx & nv_filter;
 
+    circle_shape = 'o';
+
     idx1 = (w == 1) & idx;
-    h1 = scatter( v_rec(idx1), v_prec(idx1), circle_size, 'o', ...
+    h1 = scatter( v_rec(idx1), v_prec(idx1), circle_size, circle_shape, ...
                     'MarkerEdgeColor', 'k', ...
                     'MarkerFaceColor', color(th+1,:) );
+                    % 'MarkerEdgeColor', color(th+1,:) );
 
     idx0 = (w == 0) & idx;
-    h2 = scatter( v_rec(idx0), v_prec(idx0), circle_size, 'o', ...
+    h2 = scatter( v_rec(idx0), v_prec(idx0), circle_size, circle_shape, ...
                     'MarkerEdgeColor', 'k', ...
                     'MarkerFaceColor', color(th+1,:) );
                     % 'MarkerEdgeColor', color(th+1,:) );
@@ -118,10 +130,10 @@ AI_thresh = extractfield( cell2mat(AI_accuracy), 'threshold' );
 idx = ismember(AI_thresh,0.04:0.05:0.99);
 idx = idx | ismember(AI_thresh,0.94:0.005:0.99);
 idx = idx | ismember(AI_thresh,0.985:0.001:0.99);
-plot( AI_rec(idx), AI_prec(idx) );
-h1 = scatter( AI_rec(idx), AI_prec(idx), 30, 'o', ...
-                    'MarkerEdgeColor', 'w', ...
-                    'MarkerFaceColor', 'b' );
+h1 = plot( AI_rec(idx), AI_prec(idx), '-b', 'LineWidth', 2 );
+% h1 = scatter( AI_rec(idx), AI_prec(idx), 30, 'o', ...
+%                     'MarkerEdgeColor', 'w', ...
+%                     'MarkerFaceColor', 'b' );
 
 
 %% EyeWire consensus
@@ -130,7 +142,7 @@ h2 = scatter( ERR_exp.v_rec, ERR_exp.v_prec, 200, 'p', ...
 					'MarkerEdgeColor', 'w', ...
                     'MarkerFaceColor', 'b' );
 
-h = legend([h1 h2],'AI accuracy','EyeWire consensus','Location','NorthWest');
+h = legend([h1 h2],'AI accuracy','EyeWire consensus','Location','West');
 set(h,'TextColor','w');
 set(h,'EdgeColor','w');
 M = findobj(h,'type','patch');
