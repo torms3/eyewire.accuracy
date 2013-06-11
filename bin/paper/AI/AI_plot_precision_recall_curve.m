@@ -55,8 +55,10 @@ axis equal;
 
 % thresholding
 if( nonlinear_color )
-    unit = 0.25;
-    stage = 17;
+    % unit = 0.25;
+    % stage = 17;
+    unit = 0.5;
+    stage = 8;
 else
     unit = 50;
     stage = 11;
@@ -97,6 +99,7 @@ for i = from:to
     ylabel( 'Precision' );
     
     circle_size = 16;
+    % circle_size = 23;
 
     % exclude users w/ small number of cubes
     idx = idx & nv_filter;
@@ -118,7 +121,13 @@ for i = from:to
 end
 
 h = colorbar('Location','SouthOutside');
-xlabel(h,sprintf('Number of cubes (x %d)',unit));
+% xlabel(h,sprintf('log_{10}(number of cubes) (x %d)',unit));
+xTick = 0:2:9;
+set(h,'XTick',xTick);
+xTickNum = (xTick/2);
+xTickLabel = strtrim(cellstr(num2str(10.^(xTickNum(:)))))';
+set(h,'XTickLabel',xTickLabel);
+xlabel(h,'Number of cubes');
 
 
 %% AI accuracy

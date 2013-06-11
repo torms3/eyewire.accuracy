@@ -22,6 +22,7 @@ s_b = log((1 - s_p1)./s_p0);
 v_a = log((v_p1.*v_p0)./((1 - v_p1).*(1 - v_p0)));
 v_b = log((1 - v_p1)./v_p0);
 
+
 %% Prepare cell arrays
 %
 n_seg = num2cell(UA.tp + UA.fn + UA.fp + UA.tn);

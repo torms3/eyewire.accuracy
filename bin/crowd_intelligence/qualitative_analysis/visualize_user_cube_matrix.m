@@ -28,8 +28,13 @@ function [UCM] = visualize_user_cube_matrix( DB_MAPs, cellID )
 		fprintf('(%d/%d) uID = %d is now processing...\n',i,U.Count,uID);
 
 		uInfo = vals{i};
-		cubes = extractfield( cell2mat(values( V, num2cell(uInfo.vIDs))), 'tID' );		
-		UCM(i,ismember(tIDs,cubes)) = 1;
+		vInfo = cell2mat(values( V, num2cell(uInfo.vIDs) ));
+		cubes = extractfield( vInfo, 'tID' );
+		weights = extractfield( vInfo, 'weight' );
+		% UCM(i,ismember(tIDs,cubes)) = 1;
+
+		UCM(i,ismember(tIDs,cubes(logical(weights)))) = 2;
+		UCM(i,ismember(tIDs,cubes(logical(~weights)))) = 1;
 
 	end
 
@@ -41,7 +46,8 @@ function [UCM] = visualize_user_cube_matrix( DB_MAPs, cellID )
 		subplot(1,2,1);
 	end
 	imagesc(UCM);
-	colormap(gray);
+	% colormap(gray);
+	colormap(hot);
 	xlabel('cube index');
 	ylabel('user index');
 	titleStr = sprintf('visualization for user-cube matrix, cell %d',cellID);
