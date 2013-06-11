@@ -1,15 +1,15 @@
 
 update = false;
 
-test_vanilla_parameters( pwd, 10, update );	% Starburst #1
-test_vanilla_parameters( pwd, 11, update );	% J Cell #1
-test_vanilla_parameters( pwd, 12, update );	% J Cell #2
-test_vanilla_parameters( pwd, 28, update );	% J Cell #3
-test_vanilla_parameters( pwd, 29, update );	% J Cell #4
-test_vanilla_parameters( pwd, 30, update );	% J Cell #5
-test_vanilla_parameters( pwd, 32, update );	% J Cell #6
-test_vanilla_parameters( pwd, 33, update );	% J Cell #7
-test_vanilla_parameters( pwd, 34, update );	% Mystery Cell #1
-test_vanilla_parameters( pwd, 35, update );	% Mystery Cell #2
-test_vanilla_parameters( pwd, 36, update );	% Starburst Challenge
-test_vanilla_parameters( pwd, 37, update );	% Mystery Cell #3
+test_vanilla_parameters( pwd, update, 10 );	% Starburst #1
+test_vanilla_parameters( pwd, update, 11 );	% J Cell #1
+test_vanilla_parameters( pwd, update, 12 );	% J Cell #2
+test_vanilla_parameters( pwd, update, 28 );	% J Cell #3
+test_vanilla_parameters( pwd, update, 29 );	% J Cell #4
+test_vanilla_parameters( pwd, update, 30 );	% J Cell #5
+test_vanilla_parameters( pwd, update, 32 );	% J Cell #6
+test_vanilla_parameters( pwd, update, 33 );	% J Cell #7
+test_vanilla_parameters( pwd, update, 34 );	% Mystery Cell #1
+test_vanilla_parameters( pwd, update, 35 );	% Mystery Cell #2
+test_vanilla_parameters( pwd, update, 36 );	% Starburst Challenge
+test_vanilla_parameters( pwd, update, 37 );	% Mystery Cell #3
