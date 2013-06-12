@@ -1,4 +1,4 @@
-function [UCM] = visualize_user_cube_matrix( DB_MAPs, cellID )
+function [UCM] = visualize_user_cube_matrix( DB_MAPs, cellIDs )
 
 	%% Options
 	%
@@ -50,7 +50,8 @@ function [UCM] = visualize_user_cube_matrix( DB_MAPs, cellID )
 	colormap(hot);
 	xlabel('cube index');
 	ylabel('user index');
-	titleStr = sprintf('visualization for user-cube matrix, cell %d',cellID);
+	cellIDs_str = regexprep(num2str(unique(cellIDs)),' +',' f');
+	titleStr = sprintf('visualization for user-cube matrix, cell %s',cellIDs_str);
 	title(titleStr);
 
 
