@@ -55,6 +55,54 @@ function [UCM] = visualize_user_cube_matrix( DB_MAPs, cellIDs )
 	title(titleStr);
 
 
+	%% Mask
+	%
+	% [06/13/2013 kisuklee]
+	% TODO: make these constants modular somewhere else
+	ACTIVE = 0;
+	STASHED = 6;
+	FROZEN = 10;
+
+	stashed_color = [0 154 222];
+	% frozen_color = [237 26 61];
+	frozen_color = [228 229 66];
+
+	mask = zeros([size(UCM) 3]);
+
+	% mask for stashed cubes
+	status = extractfield( cell2mat(T.values), 'status' );
+	
+	idx = (status == STASHED);
+	mask(:,idx,1) = stashed_color(1);
+	mask(:,idx,2) = stashed_color(2);
+	mask(:,idx,3) = stashed_color(3);
+
+	idx = (status == FROZEN);
+	mask(:,idx,1) = frozen_color(1);
+	mask(:,idx,2) = frozen_color(2);
+	mask(:,idx,3) = frozen_color(3);
+
+	hold on;
+	imagesc(mask/255.0,'AlphaData',0.3);
+	hold off;
+
+
+	%%
+	%
+	figure();
+	if( random_shuffle )
+		subplot(1,2,1);
+	end
+	idx = (status == ACTIVE);
+	imagesc(UCM(:,idx));
+	colormap(hot);
+	xlabel('cube index');
+	ylabel('user index');
+	cellIDs_str = regexprep(num2str(unique(cellIDs)),' +',' f');
+	titleStr = sprintf('visualization for user-cube matrix, cell %s',cellIDs_str);
+	title(titleStr);
+
+
 	%% Random shuffling of the cubes
 	%
 	if( random_shuffle )

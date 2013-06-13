@@ -19,7 +19,7 @@ query_str = [query_str 'ORDER BY validations.finish'];
 [tIDs,vIDs] = mysql( query_str );
 
 % MySQL query 2:
-query_str = ['SELECT task_id,segments,seeds,channel_id,cell,weight ' ...
+query_str = ['SELECT task_id,tasks.status,segments,seeds,channel_id,cell,weight ' ...
              ',depth,left_edge,right_edge,created ' ...
              'FROM validations ' ...
              'INNER JOIN tasks ON task_id=tasks.id ' ...
@@ -27,7 +27,7 @@ query_str = ['SELECT task_id,segments,seeds,channel_id,cell,weight ' ...
             ];
 inner_query = get_qeury_for_affected_task_IDs( where_clause );
 query_str = [query_str 'AND tasks.id IN (' inner_query ') '];
-[task,seg,seed,channel,cell_IDs,weight,depth,left,right,created] = mysql( query_str );
+[task,status,seg,seed,channel,cell_IDs,weight,depth,left,right,created] = mysql( query_str );
 
 % MySQL close
 mysql('close');
@@ -47,6 +47,7 @@ for i = 1:nt
     
     % [01/17/2013 kisuklee] TODO
     % The formula for threshold should be parameterized.
+    vals{i}.status = status(idx);
     vals{i}.cell = cell_IDs(idx);
     vals{i}.weight = weight(idx);
     vals{i}.consensus = sort(extract_consensus( seg{idx}, exp(-0.16*weight(idx)) + 0.2 ),'ascend');
