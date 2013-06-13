@@ -196,8 +196,10 @@ for i = from:to
 
 end
 
-h = colorbar('Location','SouthOutside');
-xlabel(h,sprintf('Number of cubes (x %d)',unit));
+% h = colorbar('Location','SouthOutside');
+h = colorbar;
+% xlabel(h,sprintf('Number of cubes (x %d)',unit));
+ylabel(h,sprintf('Number of cubes (x %d)',unit));
 
 hold off;
 
