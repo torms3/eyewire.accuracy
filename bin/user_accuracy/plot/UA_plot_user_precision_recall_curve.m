@@ -25,6 +25,9 @@ accumulate_mode     = false;    %
 reverse_mode        = false;    % bright color -> dark color
 promotion_check     = true;
 display_cutoff      = true;
+novice_expert       = true;
+iso_f_curv          = false;
+name_background     = false;
 
 
 %% Preprocessing for plotting the figure
@@ -69,12 +72,12 @@ case 'sac'
     nv_filter = nv > 20;
 otherwise
     nv_filter = nv > 0;
+    % nv_filter = nv >= 15;
 end
 enf = good_idx & (w==0) & nv_filter;
 disenf = bad_idx & (w==1);
 [enfIDs] = uIDs(enf);
 if( strcmp(cell_type,'any') && promotion_check )
-    % [enfIDs] = qualify_enfranchisement_candidates( enfIDs );
     [enfIDs] = qualify_enfranchisement_candidates( enfIDs );
 end
 disenfIDs = uIDs(disenf);
@@ -120,10 +123,13 @@ case 'sac'
     unit = 50;
 otherwise
     unit = 100;
+    % unit = 5;
 end
 stage = 6;
+% stage = 9;
 from = 0;
 to = 6;
+% to = 9;
 
 
 color = colormap( hot(stage+1) );
@@ -142,7 +148,7 @@ for i = from:to
         if( th == stage )
             upper_idx = zeros(1,numel(nv));
         else
-            upper_idx = (nv > (th+1)*unit);
+            upper_idx = (nv >= (th+1)*unit);
         end
         idx = xor(lower_idx,upper_idx);
     end      
@@ -162,11 +168,19 @@ for i = from:to
     xlabel( 'Recall' );
     ylabel( 'Precision' );
     
-    if( display_cutoff && (i == from) )
-        % precision cut-line
-        line(xlim,[cut_line.prec cut_line.prec],'Color','r','LineWidth',2);
-        % recall cut-line
-        line([cut_line.rec cut_line.rec],ylim,'Color','r','LineWidth',2);
+    if( i == from )
+        if( display_cutoff )
+            % precision cut-line
+            line(xlim,[cut_line.prec cut_line.prec],'Color','r','LineWidth',2);
+            % recall cut-line
+            line([cut_line.rec cut_line.rec],ylim,'Color','r','LineWidth',2);
+        end
+        if( iso_f_curv )
+            F = 0.937531800095224;
+            R = (F/(2-F)):0.001:1;
+            P = (F*R)./(2*R - F);
+            plot(R,P,'-b','LineWidth',2);
+        end
     end
 
     circle_size = 50;
@@ -174,7 +188,10 @@ for i = from:to
     % exclude users w/ small number of cubes
     % idx = idx & nv_filter;
 
-    idx1 = (w == 1) & idx;
+    idx1 = idx;
+    if( novice_expert )
+        idx1 = (w == 1) & idx1;
+    end
     h1 = scatter( v_rec(idx1), v_prec(idx1), circle_size, 'o', ...
                     'MarkerEdgeColor', 'k', ...
                     'MarkerFaceColor', color(th+1,:) );
@@ -184,14 +201,16 @@ for i = from:to
         gname( names(idx1) );
     end
 
-    idx0 = (w == 0) & idx;
-    h2 = scatter( v_rec(idx0), v_prec(idx0), circle_size, 'o', ...
-                    'MarkerEdgeColor', color(th+1,:) );
-    
-    % Username
-    if( user_name_mode )    
-        set(gcf,'DefaultTextColor','w');
-        gname( names(idx0) );
+    if( novice_expert )
+        idx0 = (w == 0) & idx;
+        h2 = scatter( v_rec(idx0), v_prec(idx0), circle_size, 'o', ...
+                        'MarkerEdgeColor', color(th+1,:) );
+        
+        % Username
+        if( user_name_mode )    
+            set(gcf,'DefaultTextColor','w');
+            gname( names(idx0) );
+        end
     end
 
 end

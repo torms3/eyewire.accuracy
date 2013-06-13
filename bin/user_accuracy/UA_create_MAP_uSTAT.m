@@ -12,15 +12,28 @@ v_prec = UA.tpv./(UA.tpv + UA.fpv);
 v_rec = UA.tpv./(UA.tpv + UA.fnv);
 v_fs = 2*(v_prec.*v_rec)./(v_prec + v_rec);
 
-s_p1 = s_rec;
-s_p0 = UA.tn./(UA.tn + UA.fp);
-v_p1 = v_rec;
-v_p0 = UA.tnv./(UA.tnv + UA.fpv);
+% s_p1 = s_rec;
+% s_p0 = UA.tn./(UA.tn + UA.fp);
+% v_p1 = v_rec;
+% v_p0 = UA.tnv./(UA.tnv + UA.fpv);
 
-s_a = log((s_p1.*s_p0)./((1 - s_p1).*(1 - s_p0)));
-s_b = log((1 - s_p1)./s_p0);
-v_a = log((v_p1.*v_p0)./((1 - v_p1).*(1 - v_p0)));
-v_b = log((1 - v_p1)./v_p0);
+% s_a = log((s_p1.*s_p0)./((1 - s_p1).*(1 - s_p0)));
+% s_b = log((1 - s_p1)./s_p0);
+% v_a = log((v_p1.*v_p0)./((1 - v_p1).*(1 - v_p0)));
+% v_b = log((1 - v_p1)./v_p0);
+
+% supervoxel
+s_p1 = s_rec;
+s_p0 = (s_prec.*(UA.tn + UA.fp))./((1 - s_prec).*(UA.tp + UA.fn));
+s_b = log((1 - s_p1)./(1-s_p1./s_p0));
+s_a = log(s_p0) - s_b;
+
+% voxel
+v_p1 = v_rec;
+v_p0 = (v_prec.*(UA.tnv + UA.fpv))./((1 - v_prec).*(UA.tpv + UA.fnv));
+v_b = log((1 - v_p1)./(1-v_p1./v_p0));
+v_a = log(v_p0) - v_b;
+
 
 %% Prepare cell arrays
 %
