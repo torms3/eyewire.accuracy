@@ -1,63 +1,57 @@
-function [STAT,STAT_per_cell] = promotion_demotion( update, period, cell_IDs )
+function [results] = promotion_demotion( period )
 
-	%%  Extract the IDs of cells that are updated during 
-	%	the specified period.
+	%% Global
 	%
-	if( ~exist('cell_IDs','var') )
-		[cell_IDs] = DB_extract_cell_IDs( period );
-	end
+	update = true;
+	[STAT,STAT_per_cell] = process_user_stat( update, period );
+	
 
-
-	%% Create DB path
+	%% SAC
 	%
-	save_path = DB_get_DB_MAP_path();
-	save_dir = ['DB_MAPs_' get_period_suffix( period )];
-	mkdir(save_path,save_dir);
-	DB_path = [save_path '/' save_dir];
+	segInfo = true;
+	cellIDs = [-34 -35 -37 -40 -43];
+	[SAC_DB_MAPs] = SAC_construct_DB_MAPs( segInfo, cellIDs, period, [0] );
 
+	seed = false;
+	[SAC_UA] = UA_process_user_accuracy( SAC_DB_MAPs, seed );
+	[SAC_uSTAT] = UA_create_MAP_uSTAT( SAC_UA, SAC_DB_MAPs );
+	
 
-	%% Create user accuracy path
+	%% Promotion/demotion info
 	%
-	save_path = UA_get_data_path();
-	save_dir = ['user_accuracy_' get_period_suffix( period )];
-	mkdir(save_path,save_dir);
-	UA_path = [save_path '/' save_dir];
+	[global_uIDs_info] = UA_plot_user_precision_recall_curve( STAT );
+	[SAC_uIDs_info] = UA_plot_user_precision_recall_curve( SAC_uSTAT, 'sac' );
+	uIDs_info.global = global_uIDs_info;
+	uIDs_info.SAC = SAC_uIDs_info;
 
 
-	%% Cell-wise processing
+	%% User list
 	%
-	vals = cell(size(cell_IDs));
-	for i = 1:numel(cell_IDs)
+	global_list.enf_uIDs = global_uIDs_info.enfIDs';
+	global_list.enf_uNames = extractfield( cell2mat(values( STAT, num2cell(global_uIDs_info.enfIDs) )), 'username' )';
 
-		cell_ID = cell_IDs(i);
-		fprintf('%dth cell (cell_id=%d) is now processing...\n',i,cell_ID);
+	global_list.disenf_uIDs = global_uIDs_info.disenfIDs';
+	global_list.disenf_uNames = extractfield( cell2mat(values( STAT, num2cell(global_uIDs_info.disenfIDs) )), 'username' )';
 
-		if( update )
+	SAC_list.enf_uIDs = SAC_uIDs_info.enfIDs';
+	SAC_list.enf_uNames = extractfield( cell2mat(values( STAT, num2cell(SAC_uIDs_info.enfIDs) )), 'username' )';
 
-			% Extract DB MAPs
-			[DB_MAPs] = DB_construct_DB_MAPs( DB_path, true, cell_ID, period );
-
-			% Process user accuracy for this cell
-			[UA] = UA_construct_user_accuracy( UA_path, false, DB_MAPs, cell_ID, period );
-
-		end
-
-		% Cell-wise user stat
-		vals{i} = UA_create_MAP_uSTAT( UA, DB_MAPs );
-
-	end
-
-	keys = num2cell(cell_IDs);
-	STAT_per_cell = containers.Map( keys, vals );
-	file_name = 'STAT_per_cell.mat';
-	save([UA_path '/' file_name],'STAT_per_cell');
+	SAC_list.disenf_uIDs = SAC_uIDs_info.disenfIDs';
+	SAC_list.disenf_uNames = extractfield( cell2mat(values( STAT, num2cell(SAC_uIDs_info.disenfIDs) )), 'username' )';
 
 
-	%% Create user accuracy MAP
+	%% Actual DB update
 	%
-	[STAT] = UA_aggregate_user_accuracy( cell_IDs, period, UA_path, DB_path );
+	DB_update_user_weight( global_uIDs_info.enfIDs, 1 );
+	DB_update_user_weight( global_uIDs_info.disenfIDs, 0 )
+	DB_update_cell_type_user_weight( 'sac', SAC_uIDs_info.enfIDs, 1 );
+	DB_update_cell_type_user_weight( 'sac', SAC_uIDs_info.disenfIDs, 0 );
 
-	file_name = 'STAT.mat';
-	save([UA_path '/' file_name],'STAT');
+
+	%% Return
+	%
+	results.STAT = STAT;
+	results.SAC_uSTAT = SAC_uSTAT;
+	results.uIDs_info = uIDs_info;
 
 end

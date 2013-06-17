@@ -2,7 +2,7 @@ function plot_triples( triples )
 
 %% Option
 %
-probability = false;
+probability = true;
 
 
 %% Plot

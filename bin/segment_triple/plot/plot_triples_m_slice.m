@@ -1,7 +1,7 @@
 function plot_triples_m_slice( triples, m )
 
-% figure();
-clf;
+figure();
+% clf;
 colormap hot;
 
 % threshold

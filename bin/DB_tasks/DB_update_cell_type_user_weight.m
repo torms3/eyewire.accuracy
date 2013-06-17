@@ -42,7 +42,7 @@ if( ~isempty(update_uIDs) )
 				];
 	query_str = sprintf(query_str,weight);
 
-	update_uIDs = update_uIDs';
+	% update_uIDs = update_uIDs';
 	uIDs_str = regexprep(num2str(update_uIDs),' +',',');
 	query_str = [query_str uIDs_str ')'];
 

@@ -43,7 +43,9 @@ where_clause = [where_clause 'AND tasks.id IN (' tIDs_str ') '];
 %% Post-processing
 %
 if( seg_info )
-	DB_extract_segment_size_info( T, VOL );
+	% DB_extract_segment_size_info( T, VOL );
+	% pass by reference; no output needed
+	DB_extract_segment_info( T, VOL );
 end
 
 

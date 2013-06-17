@@ -20,7 +20,7 @@ end
 %% Option
 upper_right_mode    = false;    % only display the 'good' zone
 plot_mode           = true;     % plot prec. vs. rec. curve
-user_name_mode      = true;     % gname
+user_name_mode      = false;     % gname
 accumulate_mode     = false;    % 
 reverse_mode        = false;    % bright color -> dark color
 promotion_check     = true;
