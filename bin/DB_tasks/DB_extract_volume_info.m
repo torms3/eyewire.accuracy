@@ -45,8 +45,8 @@ function [volPath] = extract_local_volume_path( volPathInDB )
 
 homeVolumes = '/omelette/2/omniweb_data';
 
-pos = strfind( volPathInDB, '/' );
+pos = strfind(volPathInDB,'/');
 volPath = volPathInDB(pos(6)+1:pos(9)-1);
-volPath = sprintf( '%s/%s', homeVolumes, volPath );
+volPath = sprintf('%s/%s',homeVolumes,volPath);
 
 end

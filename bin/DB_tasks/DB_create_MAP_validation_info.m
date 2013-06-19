@@ -3,7 +3,7 @@ function [V] = DB_create_MAP_validation_info( where_clause )
 %% MySQL
 %
 % MySQL open
-mysql('open', '127.0.0.1:13306', 'omnidev', 'we8pizza');
+mysql('open','127.0.0.1:13306','omnidev','we8pizza');
 mysql('use omniweb');
 
 % MySQL query
@@ -25,7 +25,7 @@ mysql('close');
 nv = numel(vIDs);
 for i = 1:nv
 
-    fprintf( '(%d / %d) validation (ID=%d) is now processing...\n', i, nv, vIDs(i) );
+    fprintf('(%d/%d) validation (ID=%d) is now processing...\n',i,nv,vIDs(i));
 
     vals{i}.tID = tIDs(i);
     vals{i}.uID = uIDs(i);

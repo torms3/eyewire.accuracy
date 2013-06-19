@@ -11,11 +11,11 @@ if( ~exist('period','var') )
 end
 % tasks.status
 if( ~exist('t_status','var') )
-    t_status = 0;
+    t_status = [0];
 end
 % validations.status
 if( ~exist('v_status','var') )
-    v_status = 0;
+    v_status = [0];
 end
 
 

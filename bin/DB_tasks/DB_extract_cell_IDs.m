@@ -1,10 +1,13 @@
-function [cell_IDs] = DB_extract_cell_IDs( period )
+function [cell_IDs] = DB_extract_cell_IDs( period, t_status )
 
 %% Argument validation
 %
 if( ~exist('period','var') )
     period.since = '';
     period.until = '';
+end
+if( ~exist('t_status','var') )
+	t_status = [0];
 end
 
 
@@ -24,7 +27,7 @@ query_str = ['SELECT DISTINCT(tasks.cell) ' ...
         	];
 
 % get WHERE clause
-[where_clause] = get_where_clause( 0, period, 0, 0 );
+[where_clause] = get_where_clause( 0, period, t_status, 0 );
 
 query_str = [query_str where_clause 'ORDER BY tasks.cell '];
 [cell_IDs] = mysql( query_str );

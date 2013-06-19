@@ -8,6 +8,7 @@ function [UCM] = visualize_user_cube_matrix( DB_MAPs, cellIDs )
 	U = DB_MAPs.U;
 	T = DB_MAPs.T;
 	V = DB_MAPs.V;
+	[hotspot_IDs,super_users] = get_VT_hotspots( V, T );
 
 	nUser = U.Count;
 	nCube = T.Count;
@@ -66,6 +67,8 @@ function [UCM] = visualize_user_cube_matrix( DB_MAPs, cellIDs )
 	stashed_color = [0 154 222];
 	% frozen_color = [237 26 61];
 	frozen_color = [228 229 66];
+	% hotspot_color = [255 0 0];
+	hotspot_color = frozen_color;
 
 	mask = zeros([size(UCM) 3]);
 
@@ -101,6 +104,22 @@ function [UCM] = visualize_user_cube_matrix( DB_MAPs, cellIDs )
 	cellIDs_str = regexprep(num2str(unique(cellIDs)),' +',' f');
 	titleStr = sprintf('visualization for user-cube matrix, cell %s',cellIDs_str);
 	title(titleStr);
+
+
+	%% Mask
+	%
+	mask = zeros([size(UCM(:,idx)) 3]);
+	hotspot_idx = ismember(tIDs,hotspot_IDs);
+	disp(nnz(hotspot_idx));
+	hotspot_idx = hotspot_idx(idx);
+	disp(nnz(hotspot_idx));
+	mask(:,hotspot_idx,1) = hotspot_color(1);
+	mask(:,hotspot_idx,2) = hotspot_color(2);
+	mask(:,hotspot_idx,3) = hotspot_color(3);
+
+	hold on;
+	imagesc(mask/255.0,'AlphaData',0.3);
+	hold off;
 
 
 	%% Random shuffling of the cubes

@@ -1,10 +1,10 @@
-function [STAT,STAT_per_cell] = process_user_stat( update, period, cell_IDs )
+function [STAT,STAT_per_cell] = process_user_stat( update, period, t_status, cell_IDs )
 
 	%%  Extract the IDs of cells that are updated during 
 	%	the specified period.
 	%
 	if( ~exist('cell_IDs','var') )
-		[cell_IDs] = DB_extract_cell_IDs( period );
+		[cell_IDs] = DB_extract_cell_IDs( period, t_status );
 	end
 
 
@@ -35,7 +35,7 @@ function [STAT,STAT_per_cell] = process_user_stat( update, period, cell_IDs )
 		if( update )
 
 			% Extract DB MAPs
-			[DB_MAPs] = DB_construct_DB_MAPs( DB_path, true, cell_ID, period );
+			[DB_MAPs] = DB_construct_DB_MAPs( DB_path, true, cell_ID, period, t_status );
 
 			% Process user accuracy for this cell
 			[UA] = UA_construct_user_accuracy( UA_path, false, DB_MAPs, cell_ID, period );
