@@ -21,7 +21,7 @@ function [process_time] = DB_weekly_update( cell_IDs )
 	DB_path = DB_get_DB_MAP_path();
 	savePath = [DB_path '/with_segSize_info'];
 	mkdir(savePath);
-	process_time = zeros(numel(cell_IDs));	
+	process_time = zeros(numel(cell_IDs),1);
 	for i = 1:numel(cell_IDs)
 
 		cellID = cell_IDs(i);

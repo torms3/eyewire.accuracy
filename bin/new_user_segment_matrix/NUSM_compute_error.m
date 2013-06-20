@@ -16,23 +16,19 @@ function [ERR] = NUSM_compute_error( data, classifier )
 	%% Seed consideration
 	%
 	if( ~seed )
-
 		DW.S_ui(:,data.seed) = [];
 		DW.V_i(:,data.seed) = [];
 		DW.sigma(:,data.seed) = [];
-
 	end
 
 
 	%% Hotspot accuracy
 	%
 	if( hotspot )
-
 		idx = ismember(data.map_tIDs,data.hotIDs);
 		DW.S_ui = DW.S_ui(:,idx);
 		DW.V_i = DW.V_i(:,idx);
 		DW.sigma = DW.sigma(:,idx);
-
 	end
 
 

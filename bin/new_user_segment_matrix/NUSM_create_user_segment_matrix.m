@@ -5,6 +5,7 @@ function [data] = NUSM_create_user_segment_matrix( DB_MAPs )
 	skipV0 = false;
 	skipSuperuser = true;
 	printFreq = 3000;
+	timeSeries = true;
 
 
 	%% DB_MAPs
@@ -13,6 +14,16 @@ function [data] = NUSM_create_user_segment_matrix( DB_MAPs )
 	T = DB_MAPs.T;
 	V = DB_MAPs.V;
 	[hotIDs,superIDs] = get_VT_hotspots( V, T );
+
+
+	%% Time-series processing
+	%
+	if( timeSeries )
+		nBins = 10;
+		% binMode = 'time';
+		binMode = 'validation';		
+		[vTimeIdx] = process_validation_timeseries( V, nBins, binMode );
+	end
 
 
 	%% User-cube matrix
@@ -44,7 +55,7 @@ function [data] = NUSM_create_user_segment_matrix( DB_MAPs )
 		sigma{i} = ismember(uSeg,cSeg);		
 		segIdx{i} = uSeg;
 		segSize{i} = tInfo.seg_size;
-		scaffold{i} = -ones(nUser,numel(uSeg));
+		scaffold{i} = zeros(nUser,numel(uSeg));
 		map_tIDs{i} = tID*ones(1,numel(uSeg));
 
 	end
@@ -64,18 +75,23 @@ function [data] = NUSM_create_user_segment_matrix( DB_MAPs )
 		if( skipSuperuser & (vInfo.weight > 1) )
 			continue;
 		end
-		% if( mod(i,printFreq) == 0 )
-		% 	fprintf('(%d/%d) %dth validation is now being processed...\n',i,nv,i);
-		% end
+		if( mod(i,printFreq) == 0 )
+			fprintf('(%d/%d) %dth validation is now being processed...\n',i,nv,i);
+		end
 
 		col = find(tIDs==vInfo.tID);
 		row = find(uIDs==vInfo.uID);
 
-		M = scaffold{col};
-		M(row,:) = 0;
+		M = scaffold{col};		
 		idx = segIdx{col};
-		voted = ismember(idx,sort(vInfo.segs,'ascend'));
-		M(row,voted) = 1;
+		voted = ismember(idx,sort(vInfo.segs,'ascend'));		
+		if( timeSeries )
+			M(row,:) = -vTimeIdx(i);
+			M(row,voted) = vTimeIdx(i);
+		else
+			M(row,:) = 0;
+			M(row,voted) = 1;
+		end		
 		scaffold{col} = M;
 
 	end
@@ -94,5 +110,8 @@ function [data] = NUSM_create_user_segment_matrix( DB_MAPs )
 	% hotspot & superuser info.
 	data.hotIDs = hotIDs;
 	data.superIDs = superIDs;
+
+	% timeseries
+	data.nBins = nBins;
 
 end
