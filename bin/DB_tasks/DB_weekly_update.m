@@ -1,4 +1,10 @@
-function [process_time] = DB_weekly_update()
+function [process_time] = DB_weekly_update( cell_IDs )
+
+	%% Argument validation
+	%
+	if( ~exist('cell_IDs','var') )
+		[cell_IDs] = DB_extract_DB_cells();
+	end
 
 	%% Period setting
 	%
@@ -8,19 +14,14 @@ function [process_time] = DB_weekly_update()
 	period.since = '';
 	period.until = sprintf('''%s''',[today ' ' midnight]);
 
-
-	%% Cell IDs
-	%
-	t_status = [0];		% only active cubes
-	[cell_IDs] = DB_extract_cell_IDs( period, t_status );
-
 	
 	%% Cell-wise processing
 	%
+	t_status = [0];		% only active cubes
 	DB_path = DB_get_DB_MAP_path();
 	savePath = [DB_path '/with_segSize_info'];
 	mkdir(savePath);
-	process_time = zeros(numel(cell_IDs));
+	process_time = zeros(numel(cell_IDs));	
 	for i = 1:numel(cell_IDs)
 
 		cellID = cell_IDs(i);

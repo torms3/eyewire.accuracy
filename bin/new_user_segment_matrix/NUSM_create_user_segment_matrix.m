@@ -3,7 +3,8 @@ function [data] = NUSM_create_user_segment_matrix( DB_MAPs )
 	%% Configuration
 	%
 	skipV0 = false;
-	printFreq = 2000;
+	skipSuperuser = true;
+	printFreq = 3000;
 
 
 	%% DB_MAPs
@@ -11,7 +12,7 @@ function [data] = NUSM_create_user_segment_matrix( DB_MAPs )
 	U = DB_MAPs.U;
 	T = DB_MAPs.T;
 	V = DB_MAPs.V;
-	[hotspotIDs,super_users] = get_VT_hotspots( V, T );
+	[hotIDs,superIDs] = get_VT_hotspots( V, T );
 
 
 	%% User-cube matrix
@@ -60,9 +61,12 @@ function [data] = NUSM_create_user_segment_matrix( DB_MAPs )
 		if( skipV0 & (vInfo.weight == 0) )
 			continue;
 		end
-		if( mod(i,printFreq) == 0 )
-			fprintf('(%d/%d) %dth validation is now being processed...\n',i,nv,i);
+		if( skipSuperuser & (vInfo.weight > 1) )
+			continue;
 		end
+		% if( mod(i,printFreq) == 0 )
+		% 	fprintf('(%d/%d) %dth validation is now being processed...\n',i,nv,i);
+		% end
 
 		col = find(tIDs==vInfo.tID);
 		row = find(uIDs==vInfo.uID);
@@ -88,6 +92,7 @@ function [data] = NUSM_create_user_segment_matrix( DB_MAPs )
 	data.matrix = cell2mat(scaffold);
 	
 	% hotspot & superuser info.
-	data.hotspot = hotspotIDs;
+	data.hotIDs = hotIDs;
+	data.superIDs = superIDs;
 
 end
