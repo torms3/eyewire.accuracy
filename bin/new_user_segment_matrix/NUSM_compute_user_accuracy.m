@@ -23,13 +23,11 @@ function [stat] = NUSM_compute_user_accuracy( data )
 	
 	%% Compute accuracy
 	%
-	IDX = (M == 1);
-	S = IDX.*M;
+	S = (M == 1);	
 	tpv = S*(sigma.*segSize)';	% true positive
 	fpv = S*(~sigma.*segSize)';	% false positive
 
-	IDX = (M == 0);
-	S = IDX.*M;
+	S = (M == 0);
 	fnv = S*(sigma.*segSize)';	% false negative
 
 	prec = tpv./(tpv+fpv);
