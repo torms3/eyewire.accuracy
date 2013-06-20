@@ -1,5 +1,11 @@
 function [data] = NUSM_create_user_segment_matrix( DB_MAPs )
 
+	%% Configuration
+	%
+	skipV0 = false;
+	printFreq = 2000;
+
+
 	%% DB_MAPs
 	%
 	U = DB_MAPs.U;
@@ -51,7 +57,10 @@ function [data] = NUSM_create_user_segment_matrix( DB_MAPs )
 
 		vID = vIDs(i);
 		vInfo = V(vID);
-		if( mod(i,1000) == 0 )
+		if( skipV0 & (vInfo.weight == 0) )
+			continue;
+		end
+		if( mod(i,printFreq) == 0 )
 			fprintf('(%d/%d) %dth validation is now being processed...\n',i,nv,i);
 		end
 

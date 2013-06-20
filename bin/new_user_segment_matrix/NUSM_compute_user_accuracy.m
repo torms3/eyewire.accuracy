@@ -25,20 +25,20 @@ function [stat] = NUSM_compute_user_accuracy( data )
 	%	
 	% true positive	
 	S = (M == 1);
-	tp = S*(sigma');
+	tp = S*double(sigma');
 	tpv = S*(sigma.*segSize)';
 
 	% false positive
-	fp = S*(~sigma');
+	fp = S*double(~sigma');
 	fpv = S*(~sigma.*segSize)';
 
 	% false negative
 	S = (M == 0);
-	fn = S*(sigma');
+	fn = S*double(sigma');
 	fnv = S*(sigma.*segSize)';
 
 	% true negative
-	tn = S*(~sigma');
+	tn = S*double(~sigma');
 	tnv = S*(~sigma.*segSize)';
 
 	% accuracy
@@ -54,16 +54,23 @@ function [stat] = NUSM_compute_user_accuracy( data )
 	%% User stat
 	%
 	stat.uIDs = data.uIDs;
+	
 	stat.tp = tp;
 	stat.fn = fn;
 	stat.fp = fp;
 	stat.tn = tn;
+	
+	stat.sPrec = sPrec;
+	stat.sRec = sRec;
+	stat.sFs = sFs;
+	
 	stat.tpv = tpv;
 	stat.fnv = fnv;
 	stat.fpv = fpv;
 	stat.tnv = tnv;
-	stat.prec = prec;
-	stat.rec = rec;
-	stat.fs = fs;
+	
+	stat.vPrec = vPrec;
+	stat.vRec = vRec;
+	stat.vFs = vFs;
 
 end
