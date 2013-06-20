@@ -15,32 +15,7 @@ function [data] = NUSM_create_user_segment_matrix( DB_MAPs )
 
 	nCube = numel(tIDs);
 	nUser = numel(uIDs);
-
-	% % user-wise processing
-	% UCM = -ones(nUser,nCube);
-	% UPM = zeros(nUser,nCube);
-	% tic
-	% for i = 1:U.Count
-
-	% 	uID = uIDs(i);
-	% 	% fprintf('(%d/%d) uID = %d is now processing...\n',i,U.Count,uID);
-
-	% 	uInfo = U(uID);
-	% 	vInfo = cell2mat(values( V, num2cell(uInfo.vIDs) ));
-	% 	cubes = extractfield( vInfo, 'tID' );
-	% 	weights = extractfield( vInfo, 'weight' );
-	% 	finishTime = extractfield( vInfo, 'datenum' );
-
-	% 	[~,idx] = sort(cubes);
-	% 	weights = weights(idx);
-	% 	finishTime = finishTime(idx);
-		
-	% 	UCM(i,ismember(tIDs,cubes)) = weights;
-	% 	UPM(i,ismember(tIDs,cubes)) = finishTime;
-		
-	% end
-	% toc
-
+	
 
 	%% Cube-wise pre-processing
 	%
@@ -87,7 +62,7 @@ function [data] = NUSM_create_user_segment_matrix( DB_MAPs )
 		M(row,:) = 0;
 		idx = segIdx{col};
 		voted = ismember(idx,sort(vInfo.segs,'ascend'));
-		M(row,voted) = vInfo.weight + 1;
+		M(row,voted) = 1;
 		scaffold{col} = M;
 
 	end
@@ -100,7 +75,6 @@ function [data] = NUSM_create_user_segment_matrix( DB_MAPs )
 	data.map_tIDs = cell2mat(map_tIDs);
 	data.seed = cell2mat(seed);
 	data.sigma = cell2mat(sigma);
-	data.segIdx = segIdx;
 	data.segSize = cell2mat(segSize);
 	data.matrix = cell2mat(scaffold);
 	
