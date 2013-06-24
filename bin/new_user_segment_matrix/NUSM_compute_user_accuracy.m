@@ -1,23 +1,26 @@
-function [stat] = NUSM_compute_user_accuracy( data )
+function [stat] = NUSM_compute_user_accuracy( data, seed )
 
-	%% Configuration
+	%% Argument validation
 	%
-	seed = false;
+	if( ~exist('seed','var') )
+		seed = false;
+	end
 
 
 	%% Data
 	%
-	M = data.matrix;
+	idx = (data.uIDs == 1);	% remove superuser
+	stat.uIDs = data.uIDs(~idx);
+
+	M = data.matrix(~idx,:);
 	sigma = data.sigma;
-	segSize = data.segSize;	
+	segSize = data.segSize;
 
 	% seed consideration
 	if( ~seed )
-
 		M(:,data.seed) = [];
 		sigma(:,data.seed) = [];
 		segSize(:,data.seed) = [];
-
 	end
 
 	
@@ -33,7 +36,7 @@ function [stat] = NUSM_compute_user_accuracy( data )
 	fpv = S*(~sigma.*segSize)';
 
 	% false negative
-	S = (M == 0);
+	S = (M == -1);
 	fn = S*double(sigma');
 	fnv = S*(sigma.*segSize)';
 
@@ -53,8 +56,6 @@ function [stat] = NUSM_compute_user_accuracy( data )
 
 	%% User stat
 	%
-	stat.uIDs = data.uIDs;
-	
 	stat.tp = tp;
 	stat.fn = fn;
 	stat.fp = fp;

@@ -1,4 +1,11 @@
-function [output] = promotion_demotion( args )
+function [output] = promotion_demotion( args, updateDB )
+
+	%% Argument validation
+	%
+	if( ~exist('updateDB','var') )
+		updateDB = false;
+	end
+
 
 	%% Arguments
 	%
@@ -48,10 +55,12 @@ function [output] = promotion_demotion( args )
 
 	%% Actual DB update
 	%
-	DB_update_user_weight( global_uIDs_info.enfIDs, 1 );
-	DB_update_user_weight( global_uIDs_info.disenfIDs, 0 )
-	DB_update_cell_type_user_weight( 'sac', SAC_uIDs_info.enfIDs, 1 );
-	DB_update_cell_type_user_weight( 'sac', SAC_uIDs_info.disenfIDs, 0 );
+	if( updateDB )		
+		DB_update_user_weight( global_uIDs_info.enfIDs, 1 );
+		DB_update_user_weight( global_uIDs_info.disenfIDs, 0 )
+		DB_update_cell_type_user_weight( 'sac', SAC_uIDs_info.enfIDs, 1 );
+		DB_update_cell_type_user_weight( 'sac', SAC_uIDs_info.disenfIDs, 0 );
+	end
 
 
 	%% Return

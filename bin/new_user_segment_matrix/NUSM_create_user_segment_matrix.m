@@ -1,11 +1,26 @@
-function [data] = NUSM_create_user_segment_matrix( DB_MAPs )
+function [data] = NUSM_create_user_segment_matrix( DB_MAPs, promoDemo )
+
+	%% Argument validation
+	%
+	if( ~exist('promoDemo','var') )
+		promoDemo = false;
+	end
 
 	%% Configuration
 	%
 	skipV0 = false;
-	skipSuperuser = true;
+	skipSuperuser = false;
 	printFreq = 3000;
-	timeSeries = true;
+	timeSeries = false;
+
+
+	%% Setting for promotion/demotion
+	%
+	if( promoDemo )
+		skipV0 = false;
+		skipSuperuser = false;
+		timeSeries = false;
+	end
 
 
 	%% DB_MAPs
@@ -18,10 +33,11 @@ function [data] = NUSM_create_user_segment_matrix( DB_MAPs )
 
 	%% Time-series processing
 	%
+	nBins = 0;
 	if( timeSeries )
 		nBins = 10;
 		% binMode = 'time';
-		binMode = 'validation';		
+		binMode = 'validation';
 		[vTimeIdx] = process_validation_timeseries( V, nBins, binMode );
 	end
 
@@ -33,7 +49,7 @@ function [data] = NUSM_create_user_segment_matrix( DB_MAPs )
 
 	nCube = numel(tIDs);
 	nUser = numel(uIDs);
-	
+
 
 	%% Cube-wise pre-processing
 	%
@@ -89,7 +105,7 @@ function [data] = NUSM_create_user_segment_matrix( DB_MAPs )
 			M(row,:) = -vTimeIdx(i);
 			M(row,voted) = vTimeIdx(i);
 		else
-			M(row,:) = 0;
+			M(row,:) = -1;
 			M(row,voted) = 1;
 		end		
 		scaffold{col} = M;
