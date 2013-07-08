@@ -22,7 +22,7 @@ function [output] = promotion_demotion( args, updateDB )
 	%% SAC
 	%
 	segInfo = true;
-	cellIDs = [-34 -35 -37 -40 -43];
+	cellIDs = [-34 -35 -37 -40 -43 -48];
 	[SAC_DB_MAPs] = SAC_construct_DB_MAPs( segInfo, cellIDs, period, [0] );
 
 	seed = false;
