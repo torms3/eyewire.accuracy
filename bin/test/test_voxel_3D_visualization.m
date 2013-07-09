@@ -14,13 +14,13 @@ function test_voxel_3D_visualization()
 %% Test file path
 %
 root_path = get_project_root_path();
-file_path = [root_path 'data/test/'];
+file_path = [root_path '/data/test'];
 file_name = 'volume.uint32_t.raw';
 
 
 %% Read data
 %
-fp = fopen([file_path file_name],'r');
+fp = fopen([file_path '/' file_name],'r');
 
 sizeChunk = [128 128 128];
 sizeChunkLinear = prod(sizeChunk);
@@ -41,17 +41,18 @@ c_vol = ismember(vol,c_seg);
 fp_seg = setdiff(u_seg,c_seg);
 fp_vol = ismember(vol,fp_seg);
 
-h = vol3d('cdata',smooth3(c_vol));
+% h = vol3d('cdata',smooth3(c_vol));
+h = vol3d('cdata',c_vol);
 view(3);
 axis tight;
 daspect([1 1 1]);
 
-hold on;
-alpha = 0.2 .* fp_vol;
-h = vol3d('cdata',smooth3(fp_vol),'Alpha',alpha);
-hold off;
+% hold on;
+% alpha = 0.2 .* fp_vol;
+% h = vol3d('cdata',smooth3(fp_vol),'Alpha',alpha);
+% hold off;
 
 grid on;
-colormap bone;
+% colormap bone;
 
 end
