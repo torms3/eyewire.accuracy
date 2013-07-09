@@ -1,4 +1,4 @@
-function [T] = extract_child_info( T )
+function [] = extract_child_info( T )
 
 keys = cell2mat(T.keys);
 vals = cell2mat(T.values);

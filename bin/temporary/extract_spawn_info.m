@@ -1,4 +1,4 @@
-function [DB_MAPs] = extract_spawn_info( DB_MAPs )
+function [] = extract_spawn_info( DB_MAPs )
 
 V = DB_MAPs.V;
 T = DB_MAPs.T;
@@ -10,7 +10,9 @@ vIDs = cell2mat(V.keys);
 vVal = cell2mat(V.values);
 
 created 	= extractfield(tVal,'datenum');
+assert(issorted(created));
 finished 	= extractfield(vVal,'datenum');
+assert(issorted(finished));
 weight 		= extractfield(vVal,'weight');
 
 for i = 1:T.Count

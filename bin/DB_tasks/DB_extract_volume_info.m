@@ -8,13 +8,13 @@ mysql('open','127.0.0.1:13306','omnidev','we8pizza');
 mysql('use omniweb');
 
 % MySQL query 1
-query_str = ['SELECT volumes.id,volumes.path '...
+query_str = ['SELECT volumes.id,volumes.path,vx,vy,vz '...
              'FROM volumes ' ...
             ];
 chIDs_str = regexprep(num2str(unique(chIDs)),' +',',');
 where_clause = ['WHERE volumes.id IN (' chIDs_str ') '];
 query_str = [query_str where_clause 'ORDER BY volumes.id '];
-[id,vol_path] = mysql( query_str );
+[id,vol_path,vx,vy,vz] = mysql( query_str );
 
 % MySQL close
 mysql('close');
@@ -32,6 +32,10 @@ for i = 1:nvol
 	% This field should be filled later
 	vals{i}.n_seg = 0;
 	% vals{i}.n_seg = get_total_num_of_segments( volPath );
+
+	vals{i}.vx = vx(i);
+	vals{i}.vy = vy(i);
+	vals{i}.vz = vz(i);
 
 end
 

@@ -1,19 +1,13 @@
 
-U = DB_MAPs.U;
-T = DB_MAPs.T;
-V = DB_MAPs.V;
+% T = DB_MAPs.T;
+% nch = zeros(T.Count,1);
 
-%% Validation-wise processing
-%
-vIDs = cell2mat(V.keys);
-for i = 1:numel(vIDs)
 
-	vID = vIDs(i);
-	vInfo = V(vID);
+% keys 	= T.keys;
+% vals 	= T.values;
+% for i = 1:T.Count
 
-	vSeg = vInfo.segs;
-	uSeg = T(vInfo.tID).union;
+% 	tInfo = vals{i};
+% 	nch(i) = numel(tInfo.children);
 
-	assert( nnz(ismember(uSeg,vSeg)) == numel(vSeg) );
-
-end
+% end
