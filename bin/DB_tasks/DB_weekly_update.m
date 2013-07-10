@@ -13,9 +13,9 @@ function [process_time] = DB_weekly_update( current, cell_IDs )
 
 	period.since = '';
 	if( current )
-		period.until = sprintf('''%s''',[today ' ' midnight]);
-	else
 		period.until = '';
+	else
+		period.until = sprintf('''%s''',[today ' ' midnight]);
 	end
 
 	
