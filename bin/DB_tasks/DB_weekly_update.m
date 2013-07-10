@@ -1,4 +1,4 @@
-function [process_time] = DB_weekly_update( cell_IDs )
+function [process_time] = DB_weekly_update( current, cell_IDs )
 
 	%% Argument validation
 	%
@@ -7,12 +7,16 @@ function [process_time] = DB_weekly_update( cell_IDs )
 	end
 
 	%% Period setting
-	%
+	%	
 	today = datestr(datenum(date),'yyyy-mm-dd');
 	midnight = '00:00:00';
 
 	period.since = '';
-	period.until = sprintf('''%s''',[today ' ' midnight]);
+	if( current )
+		period.until = sprintf('''%s''',[today ' ' midnight]);
+	else
+		period.until = '';
+	end
 
 	
 	%% Cell-wise processing
