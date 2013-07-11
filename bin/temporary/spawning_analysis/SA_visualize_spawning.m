@@ -1,40 +1,37 @@
 function [] = SA_visualize_spawning( DB_MAPs )
 
+	%% Option
+	%
+	frontier_mode = true;
+
+
 	%% Argument validations
 	%
 	T 	= DB_MAPs.T;
+	V 	= DB_MAPs.V;
 	VOL = DB_MAPs.VOL;
 
 	created = extractfield( cell2mat(T.values), 'datenum' );
 	assert( issorted(created) );
-
-
-	%% Image size
-	%
-	vx = extractfield( cell2mat(VOL.values), 'vx' );
-	vy = extractfield( cell2mat(VOL.values), 'vy' );
-	vz = extractfield( cell2mat(VOL.values), 'vz' );
-
-	szx = max(vx) - min(vx);
-	szy = max(vy) - min(vy);
-	szz = max(vz) - min(vz);
-
-	% plane images
-	img_zy = zeros([szz szy]);
-	img_zx = zeros([szz szx]);
-	img_xy = zeros([szx szy]);
 	
 
-	%% Pre-processing
+	%% Pre-compute weight distribution
 	%
-	colormap(hot);
+	[w,vw,hotspot] = SA_compute_weight_distribution( DB_MAPs );
+	vw(vw==0) = 1;
+	maxw = max(vw);
+	color = colormap(jet(maxw));
 
-	%% Cube-wise processing
+
+	%% For representing GrimReaper cubes
 	%
 	X = zeros(T.Count,1);
 	Y = zeros(T.Count,1);
 	Z = zeros(T.Count,1);
+	
 
+	%% Cube-wise processing
+	%
 	keys	= T.keys;
 	for i = 1:T.Count
 
@@ -47,48 +44,55 @@ function [] = SA_visualize_spawning( DB_MAPs )
 		chID = tInfo.chID;
 		volInfo = VOL(chID);
 
-		x = volInfo.vx;
-		y = volInfo.vy;
-		z = volInfo.vz;
+		X(i) = volInfo.vx;
+		Y(i) = volInfo.vy;
+		Z(i) = volInfo.vz;
 
 		% plot a cube
-		% subplot(1,2,1);
-		plotcube( 1.25*[1 1 1], [x y z], 0.3, [.5 .5 .5] );
-		% axis equal;
-		% drawnow;
-
-		% subplot(1,2,2);
-		% img_zy(img_zy~=0) = img_zy(img_zy~=0) + 0.005;
-		% img_zy(z,y) = 1;
-		% imagesc(img_zy);
-		% axis equal;
-		% axis off;
-		% drawnow;
-
-		% X(i) = x; Y(i) = y; Z(i) = z;
-		% scatter(Y(1:i),Z(1:i),120,'s');
-		% axis equal;
-		% drawnow;
-
-		% if( mod(i,10) == 0 )
-		% 	drawnow;
-		% end
+		alpha = 1.0;
+		data = [X(i) Y(i) Z(i)];
+		szCube = 0.9*[1 1 1];
+		if( frontier_mode )
+			if( w(i) < 3 )
+				plotcube( szCube, data, alpha, [1 1 0] );
+			else
+				plotcube( szCube, data, alpha, [.5 .5 .5] );
+			end
+		else
+			plotcube( szCube, data, alpha, color(vw(i),:) );
+		end
 
 	end
+
+
+	%% GrimReaper cubes
+	%
+	X(~hotspot) = [];
+	Y(~hotspot) = [];
+	Z(~hotspot) = [];
+	% scatter3sph( X+.5,Y+.5,Z+.5, 'size', 1.25 );
 
 	axis equal;
 
 end
 
 
-function plot_image( img, sub, idx )
+%% Legacy code
+%
 
-	for i = 1:numel(idx)
+% plane images
+% img_zy = zeros([szz szy]);
+% img_zx = zeros([szz szx]);
+% img_xy = zeros([szx szy]);
 
-	end
-	imagesc(img);
-	exis off;
-	exis equal;
-	drawnow;
+% plot evolution
+% img_zy(img_zy~=0) = img_zy(img_zy~=0) + 0.005;
+% img_zy(z,y) = 1;
+% imagesc(img_zy);
+% axis equal;
+% axis off;
+% drawnow;
 
-end
+% if( mod(i,10) == 0 )
+% 	drawnow;
+% end

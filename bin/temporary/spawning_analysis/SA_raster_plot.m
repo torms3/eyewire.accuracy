@@ -8,7 +8,7 @@ function SA_raster_plot( DB_MAPs )
 	assert( issorted(created) );
 
 	% validations
-	finished = extractfield( cell2mat(V.values), 'datenum' );	
+	finished = extractfield( cell2mat(V.values), 'datenum' );
 	weight = extractfield( cell2mat(V.values), 'weight' );
 
 	% this can happen due to the GrimReaper correction
