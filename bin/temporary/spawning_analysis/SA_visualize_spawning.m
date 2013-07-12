@@ -3,6 +3,7 @@ function [] = SA_visualize_spawning( DB_MAPs )
 	%% Option
 	%
 	frontier_mode = false;
+	GrimReaper_cube = false;
 
 
 	%% Argument validations
@@ -28,16 +29,27 @@ function [] = SA_visualize_spawning( DB_MAPs )
 	X = zeros(T.Count,1);
 	Y = zeros(T.Count,1);
 	Z = zeros(T.Count,1);
-	
+
+
+	%%
+	%
+	global cubePool argVisible argOff argOn
+	cubePool = cell(T.Count,1);
+	argVisible = repmat({'visible'},6,1);
+	argOff = repmat({'off'},6,1);
+	argOn = repmat({'on'},6,1);
+
 
 	%% Cube-wise processing
 	%
+	global keys vals
 	keys	= T.keys;
+	vals 	= T.values;
 	for i = 1:T.Count
 
 		% cube info
 		tID = keys{i};
-		tInfo = T(tID);
+		tInfo = vals{i};
 		fprintf('(%d/%d) %d-th cube is now being processed...\n',i,T.Count,i);
 
 		% volume info`
@@ -54,45 +66,63 @@ function [] = SA_visualize_spawning( DB_MAPs )
 		szCube = 0.9*[1 1 1];
 		if( frontier_mode )
 			if( w(i) < 3 )
-				plotcube( szCube, data, alpha, [1 1 0] );
+				cubePool{i} = plotcube( szCube, data, alpha, [1 1 0] );
 			else
-				plotcube( szCube, data, alpha, [.5 .5 .5] );
+				cubePool{i} = plotcube( szCube, data, alpha, [.5 .5 .5] );
 			end
 		else
-			plotcube( szCube, data, alpha, color(vw(i)+1,:) );
+			cubePool{i} = plotcube( szCube, data, alpha, color(vw(i)+1,:) );
 		end
+
+		cellfun(@set,cubePool{i},argVisible,argOff);
 
 	end
 
 
 	%% GrimReaper cubes
 	%
-	X(~hotspot) = [];
-	Y(~hotspot) = [];
-	Z(~hotspot) = [];
-	% scatter3sph( X+.5,Y+.5,Z+.5, 'size', 1.25 );
+	if( GrimReaper_cube )
+		X(~hotspot) = [];
+		Y(~hotspot) = [];
+		Z(~hotspot) = [];
+		scatter3sph( X+.5,Y+.5,Z+.5, 'size', 1.25 );
+	end
 
+
+	%% Set KeyPressFcn
+	%
+	global cubeIdx
+	cubeIdx = 1;	
 	axis equal;
+	h = gcf;
+	set( h, 'KeyPressFcn', @(obj,evt) moveZ( evt.Key, T.Count ) );
 
 end
 
 
-%% Legacy code
-%
+function moveZ( key, nCube )
 
-% plane images
-% img_zy = zeros([szz szy]);
-% img_zx = zeros([szz szx]);
-% img_xy = zeros([szx szy]);
+	global keys vals
+	global cubePool argVisible argOff argOn
+	global cubeIdx
 
-% plot evolution
-% img_zy(img_zy~=0) = img_zy(img_zy~=0) + 0.005;
-% img_zy(z,y) = 1;
-% imagesc(img_zy);
-% axis equal;
-% axis off;
-% drawnow;
+	switch key
+	case 'rightarrow'
+		cubeIdx = cubeIdx + 1;
+		if( cubeIdx > nCube )
+			cubeIdx = nCube;
+		end
+		cellfun(@set,cubePool{cubeIdx},argVisible,argOn);
+	case 'leftarrow'
+		cellfun(@set,cubePool{cubeIdx},argVisible,argOff);
+		cubeIdx = cubeIdx - 1;
+		if( cubeIdx < 1 )
+			cubeIdx = 1;
+		end
+	end
 
-% if( mod(i,10) == 0 )
-% 	drawnow;
-% end
+	tID = keys{cubeIdx};
+	tInfo = vals{cubeIdx};
+	disp(sprintf('(%d/%d) tID = %d, w = %d',cubeIdx,nCube,tID,tInfo.weight));
+
+end
