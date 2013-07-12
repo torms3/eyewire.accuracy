@@ -10,18 +10,20 @@ vIDs = cell2mat(V.keys);
 vVal = cell2mat(V.values);
 
 created 	= extractfield(tVal,'datenum');
-assert(issorted(created));
+% assert(issorted(created));
 finished 	= extractfield(vVal,'datenum');
-assert(issorted(finished));
+% assert(issorted(finished));
 weight 		= extractfield(vVal,'weight');
 
+
+%% Cube-wise processing
+%
 for i = 1:T.Count
 
 	tID = tIDs(i);
 	tInfo = tVal(i);
 
 	tInfo.spawn = [];
-
 	if( isempty(tInfo.children) )
 		continue;
 	end
@@ -34,41 +36,24 @@ for i = 1:T.Count
 	f = f(valid_idx);
 	w = w(valid_idx);
 
+	% 
 	if( tInfo.weight ~= numel(w) )
-		fprintf('tID = %d\n',tID);
-		fprintf('weight = %d\n',tInfo.weight);
-		fprintf('nv = %d\n',numel(w));
+		assert( tInfo.weight > CONST.GrimReaper_thresh );
+		% fprintf('tID = %d\n',tID);
+		% fprintf('weight = %d\n',tInfo.weight);
+		% fprintf('nv = %d\n',numel(w));
 	end
 
-	idx = ismember(tIDs,tInfo.children);
-	c = created(idx);
-	tInfo.spawn = zeros(1,numel(c));
-	for j = 1:numel(c)
+	ch = tInfo.children;
+	tInfo.spawn = zeros(1,numel(ch));
+	for j = 1:numel(ch)
 
-		tInfo.spawn(j) = nnz(f < c(j));
+		chInfo = T(ch(j));
+		c = chInfo.datenum;
+		tInfo.spawn(j) = nnz(f < c);
 
 	end
-
-	% k = 1;	
-	% for j = 1:numel(vIDs)
-
-	% 	vID = vIDs(j);
-	% 	vInfo = V(vID);
-
-	% 	if( vInfo.datenum > T(tInfo.children(k)).datenum )
-	% 		tInfo.spawn = [tInfo.spawn (j-1)];
-	% 		k = k + 1;
-	% 		if( k > numel(tInfo.children) )
-	% 			break;
-	% 		end
-	% 	end		
-
-	% end
-
-	% if( k == numel(tInfo.children) )
-	% 	tInfo.spawn = [tInfo.spawn numel(vIDs)];
-	% end
-
+	
 	% update
 	T(tID) = tInfo;
 

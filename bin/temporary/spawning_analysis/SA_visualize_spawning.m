@@ -2,7 +2,7 @@ function [] = SA_visualize_spawning( DB_MAPs )
 
 	%% Option
 	%
-	frontier_mode = true;
+	frontier_mode = false;
 
 
 	%% Argument validations
@@ -18,9 +18,9 @@ function [] = SA_visualize_spawning( DB_MAPs )
 	%% Pre-compute weight distribution
 	%
 	[w,vw,hotspot] = SA_compute_weight_distribution( DB_MAPs );
-	vw(vw==0) = 1;
+	% vw(vw==0) = 1;
 	maxw = max(vw);
-	color = colormap(jet(maxw));
+	color = colormap(jet(maxw+1));
 
 
 	%% For representing GrimReaper cubes
@@ -40,7 +40,7 @@ function [] = SA_visualize_spawning( DB_MAPs )
 		tInfo = T(tID);
 		fprintf('(%d/%d) %d-th cube is now being processed...\n',i,T.Count,i);
 
-		% volume info
+		% volume info`
 		chID = tInfo.chID;
 		volInfo = VOL(chID);
 
@@ -59,7 +59,7 @@ function [] = SA_visualize_spawning( DB_MAPs )
 				plotcube( szCube, data, alpha, [.5 .5 .5] );
 			end
 		else
-			plotcube( szCube, data, alpha, color(vw(i),:) );
+			plotcube( szCube, data, alpha, color(vw(i)+1,:) );
 		end
 
 	end
