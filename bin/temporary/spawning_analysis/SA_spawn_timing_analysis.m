@@ -8,20 +8,22 @@ function [sp] = SA_spawn_timing_analysis( DB_MAPs )
 	sp(sp<0) = -sp(sp<0);
 	hist(sp,min(sp):max(sp));
 
+	
+	created = extractfield( cell2mat(DB_MAPs.T.values), 'datenum' );
+	created(1) = [];	% exclude the seed cube
+	created = created/norm(created); % normalize
+
 	% spawning timimg
-	% figure;
-	% vals = DB_MAPs.T.values;
-	% stat = zeros(numel(unique(sp)),1);	
-	% for i = min(sp):max(sp)
+	figure;
+	hold on;
+	for i = min(sp):max(sp)		
 
-	% 	created = extractfield( cell2mat(vals), 'datenum' );
-	% 	created(1) = [];	% exclude the seed cube
+		idx = (sp == i);
+		sub = created(idx);
 
-	% 	idx = (sp == i);
-	% 	created = created(idx);
+		scatter(repmat(i,numel(sub),1),sub,30,'o');
 
-	% 	stat(i-min(sp)+1) = quantile(created,0.5);
-
-	% end	
+	end
+	hold off;
 
 end
