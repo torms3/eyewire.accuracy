@@ -1,29 +1,16 @@
 
-T = DB_MAPs.T;
+savePath = ['/omelette/2/kisuklee/eyewire.accuracy/data/DB_MAPs/with_segSize_info/DB_MAPs__cell_' num2str(cellID) '.mat'];
+load(savePath);
+extract_child_info( DB_MAPs.T );
+extract_parent_info( DB_MAPs.T );
+extract_spawn_info( DB_MAPs );
+sp = extractfield( cell2mat(DB_MAPs.T.values), 'spawn' );
+sp(sp<0) = -sp(sp<0);
+hist(sp,min(sp):max(sp));
 
-sp = zeros(T.Count,2);
-idx = 1;
+% [h,w,p] = size(F(1).cdata);
+% hf = figure;
 
-keys 	= T.keys;
-for i = 1:T.Count
-
-	tID = keys{i};
-	tInfo = T(tID);
-
-	if( isempty(tInfo.children) )
-		assert(isempty(tInfo.spawn));
-		continue;
-	else
-		assert(numel(tInfo.children)==numel(tInfo.spawn));
-	end
-	
-	for j = 1:numel(tInfo.children)
-
-		sp(idx,1) = tInfo.children(j);
-		sp(idx,2) = tInfo.spawn(j);
-
-		idx = idx + 1;
-
-	end
-
-end
+% set(hf,'Position',[150 150 w h]);
+% axis off;
+% movie(hf,F,1,240,[0 0 0 0]);

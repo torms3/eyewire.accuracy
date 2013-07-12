@@ -1,9 +1,11 @@
-function [] = SA_visualize_spawning( DB_MAPs )
+function [F] = SA_visualize_spawning( DB_MAPs )
 
-	%% Option
+	%% Options
 	%
 	frontier_mode = false;
 	GrimReaper_cube = false;
+	interactive_mode = false;
+	movie_recording = true;
 
 
 	%% Argument validations
@@ -40,6 +42,13 @@ function [] = SA_visualize_spawning( DB_MAPs )
 	argOn = repmat({'on'},6,1);
 
 
+	%%
+	%
+	% if( movie_recording )
+	% 	F(T.Count) = struct('cdata',[],'colormap',[]);
+	% end
+
+
 	%% Cube-wise processing
 	%
 	global keys vals
@@ -73,9 +82,9 @@ function [] = SA_visualize_spawning( DB_MAPs )
 		else
 			cubePool{i} = plotcube( szCube, data, alpha, color(vw(i)+1,:) );
 		end
-
+		
 		cellfun(@set,cubePool{i},argVisible,argOff);
-
+		
 	end
 
 
@@ -89,13 +98,32 @@ function [] = SA_visualize_spawning( DB_MAPs )
 	end
 
 
-	%% Set KeyPressFcn
-	%
-	global cubeIdx
-	cubeIdx = 1;	
 	axis equal;
 	h = gcf;
-	set( h, 'KeyPressFcn', @(obj,evt) moveZ( evt.Key, T.Count ) );
+
+	%% Set KeyPressFcn
+	%	
+	if( interactive_mode )
+		global cubeIdx
+		cubeIdx = 1;		
+		set( h, 'KeyPressFcn', @(obj,evt) moveZ( evt.Key, T.Count ) );
+	end
+
+
+	%% Movie recording
+	%
+	if( movie_recording )
+		% set( gca, 'NextPlot', 'replaceChildren' );
+		F(T.Count) = struct('cdata',[],'colormap',[]);
+		for i = 1:T.Count
+
+			cellfun(@set,cubePool{i},argVisible,argOn);			
+			F(i) = getframe(gcf);
+
+		end
+	else
+		F = [];
+	end
 
 end
 

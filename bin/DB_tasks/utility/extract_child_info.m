@@ -34,16 +34,6 @@ for i = 1:T.Count
 	[~,birth_idx] = sort(birth,'ascend');
 	tInfo.children = children(birth_idx);
 
-	% direct parent
-	for j = 1:numel(tInfo.children)
-
-		ch = tInfo.children(j);
-		tCh = T(ch);
-		tCh.parent = tID;
-		T(ch) = tCh;
-
-	end
-
 	% update
 	T(tID) = tInfo;
 
