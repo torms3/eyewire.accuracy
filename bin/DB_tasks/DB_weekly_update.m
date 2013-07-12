@@ -1,4 +1,4 @@
-function [process_time] = DB_weekly_update( current, cell_IDs )
+function [process_time] = DB_update( current, cell_IDs )
 
 	%% Argument validation
 	%
@@ -24,6 +24,10 @@ function [process_time] = DB_weekly_update( current, cell_IDs )
 	t_status = [0];		% only active cubes
 	DB_path = DB_get_DB_MAP_path();
 	savePath = [DB_path '/with_segSize_info'];
+	[b_since,b_until] = check_period( period );
+	if( b_since | b_until )
+		savePath = [savePath '/DB_MAPs_' get_period_suffix( period )];
+	end
 	mkdir(savePath);
 	process_time = zeros(numel(cell_IDs),1);
 	for i = 1:numel(cell_IDs)
