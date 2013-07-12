@@ -78,6 +78,7 @@ for i = 1:nt
     vals{i}.created = created{idx};
     vals{i}.datenum = datenum(created{idx},'yyyy-mm-dd HH:MM:SS');
 
+    vals{i}.parent = [];
     vals{i}.children = [];
     vals{i}.spawn = [];
 

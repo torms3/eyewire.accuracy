@@ -9,12 +9,11 @@ tVal = cell2mat(T.values);
 vIDs = cell2mat(V.keys);
 vVal = cell2mat(V.values);
 
-created = extractfield(tVal,'datenum');
-assert(issorted(created));
-finished = extractfield(vVal,'datenum');
-% The below assertion is not always true due to the GrimReaper activity
+created 	= extractfield(tVal,'datenum');
+% assert(issorted(created));
+finished 	= extractfield(vVal,'datenum');
 % assert(issorted(finished));
-weight = extractfield(vVal,'weight');
+weight 		= extractfield(vVal,'weight');
 
 
 %% Cube-wise processing
