@@ -36,7 +36,7 @@ function [MAP_celltype] = DB_create_MAP_celltype()
 	%	TODO:
 	%		modify DB (cells table)
 	%
-	SAC_IDs = [10 36 39 41 44 45 46 47 49 51];
+	SAC_IDs = [10 36 39 41 44 45 46 47 49 51 52];
 	for i = 1:numel(SAC_IDs)
 		MAP_celltype(SAC_IDs(i)) = 'sac';
 	end
