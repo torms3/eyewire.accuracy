@@ -57,7 +57,7 @@ function [output] = promotion_demotion( args, updateDB )
 	%
 	if( updateDB )		
 		DB_update_user_weight( global_uIDs_info.enfIDs, 1 );
-		DB_update_user_weight( global_uIDs_info.disenfIDs, 0 )
+		DB_update_user_weight( global_uIDs_info.disenfIDs, 0 );
 		DB_update_cell_type_user_weight( 'sac', SAC_uIDs_info.enfIDs, 1 );
 		DB_update_cell_type_user_weight( 'sac', SAC_uIDs_info.disenfIDs, 0 );
 	end
