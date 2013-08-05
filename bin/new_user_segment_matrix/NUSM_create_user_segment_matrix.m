@@ -44,7 +44,7 @@ function [data] = NUSM_create_user_segment_matrix( DB_MAPs, promoDemo )
 
 	%% User-cube matrix
 	%
-	tIDs = cell2mat(T.keys);	% column
+	tIDs = cell2mat(T.keys);	% column	
 	uIDs = cell2mat(U.keys)';	% transpose: row
 
 	nCube = numel(tIDs);
@@ -68,7 +68,7 @@ function [data] = NUSM_create_user_segment_matrix( DB_MAPs, promoDemo )
 		uSeg = tInfo.union;
 		cSeg = tInfo.consensus;
 		seed{i} = ismember(uSeg,tInfo.seed);
-		sigma{i} = ismember(uSeg,cSeg);		
+		sigma{i} = ismember(uSeg,cSeg);
 		segIdx{i} = uSeg;
 		segSize{i} = tInfo.seg_size;
 		scaffold{i} = zeros(nUser,numel(uSeg));
@@ -88,7 +88,7 @@ function [data] = NUSM_create_user_segment_matrix( DB_MAPs, promoDemo )
 		if( skipV0 & (vInfo.weight == 0) )
 			continue;
 		end
-		if( skipSuperuser & (vInfo.weight > 1) )
+		if( skipSuperuser & (vInfo.weight > CONST.GrimReaper_thresh) )
 			continue;
 		end
 		if( mod(i,printFreq) == 0 )
