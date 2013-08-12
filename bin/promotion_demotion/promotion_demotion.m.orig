@@ -22,7 +22,11 @@ function [output] = promotion_demotion( args, updateDB )
 	%% SAC
 	%
 	segInfo = true;
+<<<<<<< HEAD
+	cellIDs = [-34 -35 -37 -40 -43 -48 -50 -53 -54 -58];	% filter out mystery cells
+=======
 	cellIDs = [-34 -35 -37 -40 -43 -48 -50 -53 -54];	% filter out mystery cells
+>>>>>>> 99e951dff85f0476363ac2c88d667f77d78f277a
 	[SAC_DB_MAPs] = SAC_construct_DB_MAPs( segInfo, cellIDs, period, [0] );
 
 	seed = false;

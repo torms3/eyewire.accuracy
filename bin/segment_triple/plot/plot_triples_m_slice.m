@@ -1,18 +1,26 @@
-function plot_triples_m_slice( triples, m )
+function plot_triples_m_slice( triples, m, celltype )
+
+%% Argument validation
+%
+if( ~exist('celltype','var') )
+	celltype = 'none';
+end
+
 
 figure();
-% clf;
 colormap hot;
 
 % threshold
-th = m*min(0.99,exp(-0.16*m)+0.2);
+th = m*get_celltype_threshold( m, celltype );
+[best] = best_threshold( triples, m );
 
 % sigma = 0 -> i = 1
 % sigma = 1 -> i = 2
 for i = 1:2
 
 	% distribution
-	subplot(2,2,2*i-1);
+	% subplot(2,2,2*i-1);
+	subplot(2,1,i);
 	hold on;
 	
 		% slice data (fixed m)
@@ -38,10 +46,16 @@ for i = 1:2
 		end
 		set( ch, 'FaceVertexCData', fvcd );
 
+		% draw best decision line
+		disp_th = best - 0.5;
+		h1 = line([disp_th disp_th],ylim,'LineStyle','--','Color','b','LineWidth',2);
+
 		% draw decision line		
-		% line([th th],ylim,'Color','b','LineWidth',2);
-		disp_th = floor(th) + 1 - 0.5;
-		line([disp_th disp_th],ylim,'Color','b','LineWidth',2);
+		disp_th = floor(th) + 0.5;
+		h2 = line([disp_th disp_th],ylim,'Color','r','LineWidth',2);
+
+		legend([h1 h2],'best decision line','current decision lien','Location','best');
+		title(sprintf('m = %d, sigma = %d',m,i-1));
 
 	hold off;
 
@@ -74,43 +88,61 @@ end
 fprintf( 'precision=%f\n', precision );
 fprintf( 'recall=%f\n', recall );
 
-% print recall
-subplot(2,2,2);
-prec_str = sprintf( 'Precision = %f', precision );
-text(sum(xlim)/2.,sum(ylim)*0.85,prec_str,'FontSize',30,'FontWeight','bold');
+% % print recall
+% subplot(2,2,2);
+% prec_str = sprintf( 'Precision = %f', precision );
+% text(sum(xlim)/2.,sum(ylim)*0.85,prec_str,'FontSize',30,'FontWeight','bold');
 
-% print precision
-subplot(2,2,4);
-recall_str = sprintf( 'Recall = %f', recall );
-text(sum(xlim)/2.,sum(ylim)*0.85,recall_str,'FontSize',30,'FontWeight','bold');
+% % print precision
+% subplot(2,2,4);
+% recall_str = sprintf( 'Recall = %f', recall );
+% text(sum(xlim)/2.,sum(ylim)*0.85,recall_str,'FontSize',30,'FontWeight','bold');
 
 end
 
 
 function [precision,recall] = cacluate_precision_recall( triples, m, th )
 
-% floor( threshold )
-f_th = floor( th );
+	% floor( threshold )
+	f_th = floor( th );
 
-% data for true postive & false negative
-data = triples(m,1:m+1,2);
-%assert( f_th+2 <= length(data) );
+	% data for true postive & false negative
+	data = triples(m,1:m+1,2);
+	% assert( f_th+2 <= length(data) );
 
-% true positive & false negative
-tp = sum( data(f_th+2:end) );
-fn = sum( data(1:f_th+1) );
+	% true positive & false negative
+	tp = sum( data(f_th+2:end) );
+	fn = sum( data(1:f_th+1) );
 
-% data for false positive
-data = triples(m,1:m+1,1);
-%assert( f_th+2 <= length(data) );
+	% data for false positive
+	data = triples(m,1:m+1,1);
+	% assert( f_th+2 <= length(data) );
 
-% false positive & true negative
-fp = sum( data(f_th+2:end) );
-tn = sum( data(1:f_th+1) );
+	% false positive & true negative
+	fp = sum( data(f_th+2:end) );
+	tn = sum( data(1:f_th+1) );
 
-% precision & recall
-% Precision & recall
-precision   = double(tp)/double(tp+fp);
-recall      = double(tp)/double(tp+fn);
+	% precision & recall
+	precision   = double(tp)/double(tp+fp);
+	recall      = double(tp)/double(tp+fn);
+
+end
+
+
+function [best] = best_threshold( triples, m )
+
+	fs = zeros(m,1);
+
+	thresh = 1:m;
+	for i = 1:numel(thresh)
+
+		th = thresh(i) - 0.5;
+		[prec,rec] = cacluate_precision_recall( triples, m, th );
+		fs(i) = (2*prec*rec)/(prec+rec);
+
+	end
+
+	[~,idx] = sort(fs,'descend');
+	best = idx(1);
 
 end

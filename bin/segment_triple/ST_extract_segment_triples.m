@@ -1,4 +1,4 @@
-function ST_extract_segment_triples( save_path, DB_MAPs )
+function ST_extract_segment_triples( savePath, DB_MAPs )
 
 %% Cube-wise processing
 %
@@ -79,7 +79,7 @@ for i = 1:T.Count
 	end
 
 	file_name = sprintf('tID_%d.dat',tID);
-	dlmwrite([save_path file_name],triples);
+	dlmwrite([savePath file_name],triples);
 
 end
 

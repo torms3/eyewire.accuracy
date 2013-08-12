@@ -71,11 +71,12 @@ hold off;
 % real & optimal threshold (n vs. m)
 figure();
 hold on;
+axis([1 max_m 0 max(max(ceil(real_th)),max(optimal_th+1))+1]);
 h1=plot(min_m:max_m, real_th,'-ok');
-h2=plot(min_m:max_m, floor(real_th),'ok','MarkerFaceColor','k');
-h3=plot(min_m:max_m, optimal_th,'or','MarkerSize',7,'LineWidth',2);
+h2=plot(min_m:max_m, ceil(real_th),'ok','MarkerFaceColor','k','MarkerSize',7);
+h3=plot(min_m:max_m, optimal_th+1,'or','MarkerFaceColor','r');
 xlabel('m');
-ylabel('threshold (n)');
+ylabel('Threshold (n)');
 title('Threshold for n in each segment to be regarded as truth');
 legend([h1,h2,h3],'real-valued threshold','discretized threshold','descretized frontier (F-measure)','Location','Best');
 grid on;
@@ -92,7 +93,7 @@ h2=plot(x, y2,'ok','MarkerFaceColor','k');
 y3=optimal_th'./x;
 h3=plot(x, y3,'or','MarkerSize',7,'LineWidth',2);
 xlabel('m');
-ylabel('threshold probability (n/m)');
+ylabel('Threshold probability (n/m)');
 ylim([0 1.0]);
 % title('Threshold for n in each segment to be regarded as truth');
 legend([h1,h2,h3],'real-valued threshold probability', ...
@@ -107,28 +108,27 @@ end
 
 function [precision,recall] = cacluate_precision_recall( triples, m, th )
 
-% floor( threshold )
-f_th = floor( th );
+	% floor( threshold )
+	f_th = floor( th );
 
-% data for true postive & false negative
-data = triples(m,1:m+1,2);
-%assert( f_th+2 <= length(data) );
+	% data for true postive & false negative
+	data = triples(m,1:m+1,2);
+	% assert( f_th+2 <= length(data) );
 
-% true positive & false negative
-tp = sum( data(f_th+2:end) );
-fn = sum( data(1:f_th+1) );
+	% true positive & false negative
+	tp = sum( data(f_th+2:end) );
+	fn = sum( data(1:f_th+1) );
 
-% data for false positive
-data = triples(m,1:m+1,1);
-%assert( f_th+2 <= length(data) );
+	% data for false positive
+	data = triples(m,1:m+1,1);
+	% assert( f_th+2 <= length(data) );
 
-% false positive & true negative
-fp = sum( data(f_th+2:end) );
-tn = sum( data(1:f_th+1) );
+	% false positive & true negative
+	fp = sum( data(f_th+2:end) );
+	tn = sum( data(1:f_th+1) );
 
-% precision & recall
-% Precision & recall
-precision   = double(tp)/double(tp+fp);
-recall      = double(tp)/double(tp+fn);
+	% precision & recall
+	precision   = double(tp)/double(tp+fp);
+	recall      = double(tp)/double(tp+fn);
 
 end
