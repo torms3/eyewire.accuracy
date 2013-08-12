@@ -33,7 +33,7 @@ UA.hot  = zeros(1,nUsers);
 %% User-wise processing
 %
 keys    = DB_MAPs.U.keys;
-for i = 1:DB_MAPs.U.Count
+parfor i = 1:DB_MAPs.U.Count
    
     uID = keys{i};
     fprintf('%dth user (uID=%d) is now processing...\n',i,uID);

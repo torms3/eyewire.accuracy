@@ -4,7 +4,7 @@ function DB_extract_segment_info( T, VOL )
 %
 keys 	= T.keys;
 vals 	= T.values;
-for i = 1:T.Count
+parfor i = 1:T.Count
 
 	tID 	= keys{i};
 	tInfo 	= vals{i};
