@@ -16,7 +16,7 @@ for i = 1:numel(from:to)
 	day = datestr(from+i-1,'yyyy-mm-dd');
 	period.since = sprintf('''%s''',[day ' ' midnight]);
 	disp(period.since);
-	day = datestr(fom+i,'yyyy-mm-dd');
+	day = datestr(from+i,'yyyy-mm-dd');
 	period.until = sprintf('''%s''',[day ' ' midnight]);
 	disp(period.until);
 
