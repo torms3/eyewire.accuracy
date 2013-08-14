@@ -1,8 +1,8 @@
 
 %% Period
 %
-from = datenum('2013-08-05','yyyy-mm-dd');
-to = datenum('2013-08-11','yyyy-mm-dd');
+from = datenum('2013-08-04','yyyy-mm-dd');
+to = datenum('2013-08-04','yyyy-mm-dd');
 midnight = '00:00:00';
 
 

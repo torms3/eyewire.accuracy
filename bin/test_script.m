@@ -1,12 +1,27 @@
 
-% MySQL open
-mysql('open','127.0.0.1:13306','omnidev','we8pizza');
-mysql('use omniweb');
+filtered = cell(size(stats));
+for i = 1:numel(stats)
 
-query = ['SELECT DISTINCT(tasks.id) FROM tasks INNER JOIN cells ON cells.id=tasks.cell ' ...
-		 'WHERE tasks.status=0 and cells.celltype=''sac'' '];
-SAC_tIDs2 = mysql(query);
-mysql('close');
+	idx = stats{i}.nv >= 20;
+	filtered{i}.username = stats{i}.username(idx);
+	filtered{i}.nv = stats{i}.nv(idx);
+	filtered{i}.tpv = stats{i}.tpv(idx);
+	filtered{i}.fnv = stats{i}.fnv(idx);
+	filtered{i}.fpv = stats{i}.fpv(idx);
+	filtered{i}.v_prec = stats{i}.v_prec(idx);
+	filtered{i}.v_rec = stats{i}.v_rec(idx);
+	filtered{i}.v_fs = stats{i}.v_fs(idx);
+
+end
+
+% % MySQL open
+% mysql('open','127.0.0.1:13306','omnidev','we8pizza');
+% mysql('use omniweb');
+
+% query = ['SELECT DISTINCT(tasks.id) FROM tasks INNER JOIN cells ON cells.id=tasks.cell ' ...
+% 		 'WHERE tasks.status=0 and cells.celltype=''sac'' '];
+% SAC_tIDs2 = mysql(query);
+% mysql('close');
 
 % savePath = ['/omelette/2/kisuklee/eyewire.accuracy/data/DB_MAPs/with_segSize_info/DB_MAPs__cell_' num2str(cellID) '.mat'];
 % load(savePath);
