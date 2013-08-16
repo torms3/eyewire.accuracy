@@ -19,7 +19,9 @@ end
 
 %% Get SAC challenge tasks
 %
-[SAC_tIDs] = get_SAC_challenge_tasks( t_status );
+% [SAC_tIDs] = get_SAC_challenge_tasks( t_status );
+[SAC_tIDs] = get_SAC_tasks( t_status );
+SAC_tIDs = SAC_tIDs';
 
 
 %% Construct where clause

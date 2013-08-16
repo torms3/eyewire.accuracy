@@ -4,8 +4,8 @@ function [F] = SA_visualize_spawning( DB_MAPs )
 	%
 	frontier_mode = false;
 	GrimReaper_cube = false;
-	interactive_mode = false;
-	movie_recording = true;
+	interactive_mode = true;
+	movie_recording = false;
 
 
 	%% Argument validations

@@ -13,6 +13,14 @@ function [MAP_celltype] = DB_create_MAP_celltype()
             	 ];
 	[id,celltype] = mysql( query_str );
 
+	% MySQL query
+	query_str = ['SELECT DISTINCT(cell) ' ...
+    	         'FROM tasks ' ...
+    	         'WHERE status=0 ' ...
+        	     'ORDER BY cell ' ...
+            	 ];
+	[cellIDs] = mysql( query_str );
+
 	% MySQL close
 	mysql('close');
 
@@ -28,13 +36,12 @@ function [MAP_celltype] = DB_create_MAP_celltype()
 	%	TODO:
 	%		modify DB (cells table)
 	%
-	SAC_IDs = [10 36 39 41 44 45 46 47];
+	SAC_IDs = [10 36 39 41 44 45 46 47 49 51 52 55 56 57 59];
 	for i = 1:numel(SAC_IDs)
 		MAP_celltype(SAC_IDs(i)) = 'sac';
 	end
 
-	keys = cell2mat(MAP_celltype.keys);
-	cellIDs = [6 7 8 9 10 11 12 28 29 30 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48];
+	keys = cell2mat(MAP_celltype.keys);	
 	omittedIDs = setdiff(cellIDs,keys);
 	for i = 1:numel(omittedIDs)
 		MAP_celltype(omittedIDs(i)) = [''];

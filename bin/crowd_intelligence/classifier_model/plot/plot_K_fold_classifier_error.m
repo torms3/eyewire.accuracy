@@ -71,13 +71,19 @@ if( EXP.K > 1 )	% K-fold cross-validation
 	fnv = zeros(2,n_samples);
 	fpv = zeros(2,n_samples);
 
+	% prec = zeros(2,n_samples);
+	% rec = zeros(2,n_samples);
+	% CE = zeros(2,n_samples);	
+	
 	th_const.tpv = 0;
 	th_const.fnv = 0;
 	th_const.fpv = 0;
+	th_const.CE = 0;
 
 	th_exp.tpv = 0;
 	th_exp.fnv = 0;
 	th_exp.fpv = 0;
+	th_exp.CE = 0;
 
 	for k = 1:EXP.K
 
@@ -95,7 +101,10 @@ if( EXP.K > 1 )	% K-fold cross-validation
 		tpv(1,:) = tpv(1,:) + extractfield(CM_error,'tpv');
 		fnv(1,:) = fnv(1,:) + extractfield(CM_error,'fnv');
 		fpv(1,:) = fpv(1,:) + extractfield(CM_error,'fpv');
-
+		% prec(1,:) = prec(1,:) + extractfield(CM_error,'v_prec');
+		% rec(1,:) = rec(1,:) + extractfield(CM_error,'v_rec');
+		% CE(1,:) = CE(1,:) + extractfield(CM_error,'CE');
+		
 		% test load
 		file_name = 'test_result.mat';
 		load([k_path '/' file_name]);
@@ -105,48 +114,56 @@ if( EXP.K > 1 )	% K-fold cross-validation
 		tpv(2,:) = tpv(2,:) + extractfield(CM_error,'tpv');
 		fnv(2,:) = fnv(2,:) + extractfield(CM_error,'fnv');
 		fpv(2,:) = fpv(2,:) + extractfield(CM_error,'fpv');
-
+		% prec(2,:) = prec(2,:) + extractfield(CM_error,'v_prec');
+		% rec(2,:) = rec(2,:) + extractfield(CM_error,'v_rec');
+		% CE(2,:) = CE(2,:) + extractfield(CM_error,'CE');
+		
 		th_const.tpv = th_const.tpv + test_result.ERR_const.tpv;
 		th_const.fnv = th_const.fnv + test_result.ERR_const.fnv;
 		th_const.fpv = th_const.fpv + test_result.ERR_const.fpv;
+		th_const.CE = th_const.CE + test_result.ERR_const.CE;
 
 		th_exp.tpv = th_exp.tpv + test_result.ERR_exp.tpv;
 		th_exp.fnv = th_exp.fnv + test_result.ERR_exp.fnv;
 		th_exp.fpv = th_exp.fpv + test_result.ERR_exp.fpv;
+		th_exp.CE = th_exp.CE + test_result.ERR_exp.CE;
 
 	end
 
 	prec = tpv./(tpv + fpv);
 	rec  = tpv./(tpv + fnv);
-	CE 	 = (fpv + fnv)/58303421;
+	CE 	 = (fpv + fnv)./(tpv + fnv);	
+	% prec = 0.3333*prec;
+	% rec = 0.3333*rec;
+	% CE = 0.3333*CE;
 
 	th_const.prec 	= th_const.tpv/(th_const.tpv + th_const.fpv);
 	th_const.rec 	= th_const.tpv/(th_const.tpv + th_const.fnv);
-	th_const.CE 	= (th_const.fpv + th_const.fnv)/58303421;
-
+	th_const.CE 	= (th_const.fpv + th_const.fnv)./(th_const.tpv + th_const.fnv);
+	
 	th_exp.prec = th_exp.tpv/(th_exp.tpv + th_exp.fpv);
 	th_exp.rec 	= th_exp.tpv/(th_exp.tpv + th_exp.fnv);
-	th_exp.CE 	= (th_exp.fpv + th_exp.fnv)/58303421;
-	
+	th_exp.CE 	= (th_exp.fpv + th_exp.fnv)./(th_exp.tpv + th_exp.fnv);
+		
 	% train
-	plot(h(1),sample_epoch,prec(1,:),'-.o','Color',color);
-	plot(h(2),sample_epoch,rec(1,:),'-.o','Color',color);
-	plot(h(3),sample_epoch,CE(1,:),'-.o','Color',color);
+	plot(h(1),sample_epoch,prec(1,:),'-.o','Color',color,'LineWidth',1.2);
+	plot(h(2),sample_epoch,rec(1,:),'-.o','Color',color,'LineWidth',1.2);
+	plot(h(3),sample_epoch,CE(1,:),'-.o','Color',color,'LineWidth',1.2);
 
 	% test
-	plot(h(1),sample_epoch,prec(2,:),'-o','Color',color);
-	plot(h(2),sample_epoch,rec(2,:),'-o','Color',color);
-	plot(h(3),sample_epoch,CE(2,:),'-o','Color',color);	
+	plot(h(1),sample_epoch,prec(2,:),'-o','Color',color,'LineWidth',1.2);
+	plot(h(2),sample_epoch,rec(2,:),'-o','Color',color,'LineWidth',1.2);
+	plot(h(3),sample_epoch,CE(2,:),'-o','Color',color,'LineWidth',1.2);	
 	
 	% constant threshold classifier
 	axes(h(1));
-	line(xlim,[th_const.prec th_const.prec],'LineStyle','-.','Color','r','LineWidth',2);
+	% line(xlim,[th_const.prec th_const.prec],'LineStyle','-.','Color','r','LineWidth',2);
 	line(xlim,[th_exp.prec th_exp.prec],'LineStyle','--','Color','r','LineWidth',2);
 	axes(h(2));
-	line(xlim,[th_const.rec th_const.rec],'LineStyle','-.','Color','r','LineWidth',2);
+	% line(xlim,[th_const.rec th_const.rec],'LineStyle','-.','Color','r','LineWidth',2);
 	line(xlim,[th_exp.rec th_exp.rec],'LineStyle','--','Color','r','LineWidth',2);
 	axes(h(3));
-	line(xlim,[th_const.CE th_const.CE],'LineStyle','-.','Color','r','LineWidth',2);
+	% line(xlim,[th_const.CE th_const.CE],'LineStyle','-.','Color','r','LineWidth',2);
 	line(xlim,[th_exp.CE th_exp.CE],'LineStyle','--','Color','r','LineWidth',2);
 
 end

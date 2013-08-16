@@ -41,18 +41,18 @@ c_vol = ismember(vol,c_seg);
 fp_seg = setdiff(u_seg,c_seg);
 fp_vol = ismember(vol,fp_seg);
 
-% h = vol3d('cdata',smooth3(c_vol));
-h = vol3d('cdata',c_vol);
+h = vol3d('cdata',smooth3(c_vol));
+% h = vol3d('cdata',c_vol);
 view(3);
 axis tight;
 daspect([1 1 1]);
 
 % hold on;
-% alpha = 0.2 .* fp_vol;
-% h = vol3d('cdata',smooth3(fp_vol),'Alpha',alpha);
-% hold off;
+alpha = 0.2 .* fp_vol;
+h = vol3d('cdata',smooth3(fp_vol),'Alpha',alpha);
+hold off;
 
 grid on;
-% colormap bone;
+colormap bone;
 
 end

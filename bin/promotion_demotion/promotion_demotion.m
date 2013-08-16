@@ -22,7 +22,7 @@ function [output] = promotion_demotion( args, updateDB )
 	%% SAC
 	%
 	segInfo = true;
-	cellIDs = [-34 -35 -37 -40 -43 -48];
+	cellIDs = [-34 -35 -37 -40 -43 -48 -50 -53 -54 -58];	% filter out mystery cells
 	[SAC_DB_MAPs] = SAC_construct_DB_MAPs( segInfo, cellIDs, period, [0] );
 
 	seed = false;
@@ -57,7 +57,7 @@ function [output] = promotion_demotion( args, updateDB )
 	%
 	if( updateDB )		
 		DB_update_user_weight( global_uIDs_info.enfIDs, 1 );
-		DB_update_user_weight( global_uIDs_info.disenfIDs, 0 )
+		DB_update_user_weight( global_uIDs_info.disenfIDs, 0 );
 		DB_update_cell_type_user_weight( 'sac', SAC_uIDs_info.enfIDs, 1 );
 		DB_update_cell_type_user_weight( 'sac', SAC_uIDs_info.disenfIDs, 0 );
 	end

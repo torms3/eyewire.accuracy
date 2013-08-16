@@ -27,7 +27,7 @@ function [stat] = NUSM_compute_user_accuracy( data, seed )
 	%% Compute accuracy
 	%	
 	% true positive	
-	S = (M == 1);
+	S = (M > 0);
 	tp = S*double(sigma');
 	tpv = S*(sigma.*segSize)';
 
@@ -36,7 +36,7 @@ function [stat] = NUSM_compute_user_accuracy( data, seed )
 	fpv = S*(~sigma.*segSize)';
 
 	% false negative
-	S = (M == -1);
+	S = (M < 0);
 	fn = S*double(sigma');
 	fnv = S*(sigma.*segSize)';
 
