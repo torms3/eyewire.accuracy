@@ -24,13 +24,6 @@ for i = 1:numel(from:to)
 	[STAT] = extract_accuracy( period );
 
 	% results
-	stats{i}.username = extractfield( cell2mat(STAT.values), 'username' );
-	stats{i}.nv = extractfield( cell2mat(STAT.values), 'nv' );
-	stats{i}.tpv = extractfield( cell2mat(STAT.values), 'tpv' );
-	stats{i}.fnv = extractfield( cell2mat(STAT.values), 'fnv' );
-	stats{i}.fpv = extractfield( cell2mat(STAT.values), 'fpv' );
-	stats{i}.v_prec = extractfield( cell2mat(STAT.values), 'v_prec' );
-	stats{i}.v_rec = extractfield( cell2mat(STAT.values), 'v_rec' );
-	stats{i}.v_fs = extractfield( cell2mat(STAT.values), 'v_fs' );
+	stats{i} = EyeWireSupport_extract_accuracy_stats( STAT );
 
 end
