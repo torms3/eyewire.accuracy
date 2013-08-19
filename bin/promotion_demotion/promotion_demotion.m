@@ -79,6 +79,6 @@ function [output] = promotion_demotion( args, updateDB )
 	fname = 'SAC.mat';
 	save([UA_path '/' fname],'SAC_uSTAT');
 	fname = 'uIDs_info.mat';
-	save([UA_path '/' fname],'uIds_info');
+	save([UA_path '/' fname],'uIDs_info');
 
 end
