@@ -61,8 +61,6 @@ function [output] = promotion_demotion( args, updateDB )
 		DB_update_user_weight( global_uIDs_info.disenfIDs, 0 );
 		DB_update_cell_type_user_weight( 'sac', SAC_uIDs_info.enfIDs, 1 );
 		DB_update_cell_type_user_weight( 'sac', SAC_uIDs_info.disenfIDs, 0 );
-
-		
 	end
 
 
@@ -71,5 +69,16 @@ function [output] = promotion_demotion( args, updateDB )
 	output.STAT = STAT;
 	output.SAC_uSTAT = SAC_uSTAT;
 	output.uIDs_info = uIDs_info;
+
+
+	%% Save
+	%
+	savePath = UA_get_data_path();
+	saveDir = ['user_accuracy_' get_period_suffix( period )];
+	UA_path = [savePath '/' saveDir];
+	fname = 'SAC.mat';
+	save([UA_path '/' fname],'SAC_uSTAT');
+	fname = 'uIDs_info.mat';
+	save([UA_path '/' fname],'uIds_info');
 
 end
