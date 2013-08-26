@@ -69,6 +69,8 @@ function [output] = promotion_demotion( args, updateDB )
 	output.STAT = STAT;
 	output.SAC_uSTAT = SAC_uSTAT;
 	output.uIDs_info = uIDs_info;
+	output.global_list = global_list;
+	output.SAC_list = SAC_list;
 
 
 	%% Save
@@ -76,9 +78,7 @@ function [output] = promotion_demotion( args, updateDB )
 	savePath = UA_get_data_path();
 	saveDir = ['user_accuracy_' get_period_suffix( period )];
 	UA_path = [savePath '/' saveDir];
-	fname = 'SAC.mat';
-	save([UA_path '/' fname],'SAC_uSTAT');
-	fname = 'uIDs_info.mat';
-	save([UA_path '/' fname],'uIDs_info');
+	fname = 'output.mat';
+	save([UA_path '/' fname],'output');
 
 end

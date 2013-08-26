@@ -6,7 +6,6 @@ function [STAT,STAT_per_cell] = process_user_stat( update, period, t_status, cel
 	if( ~exist('cell_IDs','var') )
 		[cell_IDs] = DB_extract_cell_IDs( period, t_status );
 	end
-	cell_IDs
 
 
 	%% Create DB path
