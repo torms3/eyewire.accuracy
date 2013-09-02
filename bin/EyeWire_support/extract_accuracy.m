@@ -15,7 +15,7 @@ function [STAT] = extract_accuracy( period, celltype )
 	%% Cell IDs
 	%
 	[cellIDs] = DB_extract_cell_IDs( period, t_status );
-	if( celltype == 'SAC' )
+	if( strcmp(celltype,'SAC') )
 		[MAP_celltype] = DB_create_MAP_celltype();
 		keys = cell2mat(MAP_celltype.keys);
 		vals = MAP_celltype.values;
