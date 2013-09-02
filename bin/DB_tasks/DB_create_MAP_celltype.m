@@ -36,15 +36,15 @@ function [MAP_celltype] = DB_create_MAP_celltype()
 	%	TODO:
 	%		modify DB (cells table)
 	%
-	SAC_IDs = [10 36 39 41 44 45 46 47 49 51 52 55 56 57 59 61 63];
-	for i = 1:numel(SAC_IDs)
-		MAP_celltype(SAC_IDs(i)) = 'sac';
-	end
+	% SAC_IDs = [10 36 39 41 44 45 46 47 49 51 52 55 56 57 59 61 63];
+	% for i = 1:numel(SAC_IDs)
+	% 	MAP_celltype(SAC_IDs(i)) = 'sac';
+	% end
 
-	keys = cell2mat(MAP_celltype.keys);	
-	omittedIDs = setdiff(cellIDs,keys);
-	for i = 1:numel(omittedIDs)
-		MAP_celltype(omittedIDs(i)) = [''];
-	end
+	% keys = cell2mat(MAP_celltype.keys);	
+	% omittedIDs = setdiff(cellIDs,keys);
+	% for i = 1:numel(omittedIDs)
+	% 	MAP_celltype(omittedIDs(i)) = [''];
+	% end
 
 end
