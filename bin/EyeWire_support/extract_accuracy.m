@@ -21,12 +21,11 @@ function [STAT] = extract_accuracy( period, celltype )
 		vals = MAP_celltype.values;
 		cellIDs = intersect(cellIDs,keys(strcmp(vals,'sac')));
 	end
-	disp(cellIDs)
 
 
-	%% Global
+	%% Accuracy
 	%
-	% update = true;
-	% [STAT,~] = process_user_stat( update, period, t_status, cellIDs );
+	update = true;
+	[STAT,~] = process_user_stat( update, period, t_status, cellIDs );
 
 end
