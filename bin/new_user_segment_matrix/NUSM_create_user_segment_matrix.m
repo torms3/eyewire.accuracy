@@ -1,15 +1,19 @@
-function [data] = NUSM_create_user_segment_matrix( DB_MAPs, promoDemo )
+function [data] = NUSM_create_user_segment_matrix( DB_MAPs, skipV0, skipSuperuser )
 
 	%% Argument validation
 	%
 	if( ~exist('promoDemo','var') )
 		promoDemo = false;
 	end
+	if( ~exist('skipV0','var') )
+		skipV0 = false;
+	end
+	if( ~exist('skipSuperuser','var') )
+		skipSuperuser = true;
+	end
 
 	%% Configuration
 	%
-	skipV0 = false;
-	skipSuperuser = false;
 	printFreq = 3000;
 	timeSeries = false;
 
@@ -48,7 +52,9 @@ function [data] = NUSM_create_user_segment_matrix( DB_MAPs, promoDemo )
 	uIDs = cell2mat(U.keys)';	% transpose: row
 
 	nCube = numel(tIDs);
+	disp(['Number of cubes: ' num2str(nCube)]);
 	nUser = numel(uIDs);
+	disp(['Number of users: ' num2str(nUser)]);
 
 
 	%% Cube-wise pre-processing
@@ -85,7 +91,7 @@ function [data] = NUSM_create_user_segment_matrix( DB_MAPs, promoDemo )
 
 		vID = vIDs(i);
 		vInfo = V(vID);
-		if( skipV0 & (vInfo.weight == 0) )
+		if( skipV0 & (vInfo.weight < CONST.weight_thresh) )
 			continue;
 		end
 		if( skipSuperuser & (vInfo.weight > CONST.GrimReaper_thresh) )

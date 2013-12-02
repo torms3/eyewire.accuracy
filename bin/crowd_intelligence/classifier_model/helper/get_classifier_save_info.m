@@ -1,7 +1,7 @@
-function [save_info] = get_classifier_save_info( save_path, n_users, setting )
+function [saveInfo] = get_classifier_save_info( savePath, nUser, setting )
 %% Argument description
 %
-%	save_path
+%	savePath
 %
 %	setting:
 %		setting.eta:	learning rate parameter
@@ -10,8 +10,8 @@ function [save_info] = get_classifier_save_info( save_path, n_users, setting )
 %		setting.dense:	dense sampling interval (epochs)
 %
 
-save_info.save_path = save_path;
-prefix = sprintf('params__u_%d_eta_%g_iter_%d',n_users,setting.eta,setting.iter);
-save_info.prefix = prefix;
+saveInfo.savePath = savePath;
+prefix = sprintf('params__u%d_eta%g_iter%d',nUser,setting.eta,setting.iter);
+saveInfo.prefix = prefix;
 
 end

@@ -2,7 +2,7 @@ function DB_update_cell_type_user_weight( cell_type, uIDs, weight )
 
 %% Argument validation
 %
-assert( (weight == 1) || (weight == 0) );
+% assert( (weight == 1) || (weight == 0) );
 if( numel(uIDs) < 1 )
 	return;
 end

@@ -1,18 +1,31 @@
 
-filtered = cell(size(stats));
-for i = 1:numel(stats)
+SAC_cellIDs = [];
 
-	idx = stats{i}.nv >= 20;
-	filtered{i}.username = stats{i}.username(idx);
-	filtered{i}.nv = stats{i}.nv(idx);
-	filtered{i}.tpv = stats{i}.tpv(idx);
-	filtered{i}.fnv = stats{i}.fnv(idx);
-	filtered{i}.fpv = stats{i}.fpv(idx);
-	filtered{i}.v_prec = stats{i}.v_prec(idx);
-	filtered{i}.v_rec = stats{i}.v_rec(idx);
-	filtered{i}.v_fs = stats{i}.v_fs(idx);
+keys = MAP_celltype.keys();
+vals = MAP_celltype.values();
+for i = 1:MAP_celltype.Count
+
+	if( strcmp(vals{i},'sac') )
+		disp(keys{i});
+		SAC_cellIDs = [SAC_cellIDs keys{i}];
+	end
 
 end
+
+% filtered = cell(size(stats));
+% for i = 1:numel(stats)
+
+% 	idx = stats{i}.nv >= 20;
+% 	filtered{i}.username = stats{i}.username(idx);
+% 	filtered{i}.nv = stats{i}.nv(idx);
+% 	filtered{i}.tpv = stats{i}.tpv(idx);
+% 	filtered{i}.fnv = stats{i}.fnv(idx);
+% 	filtered{i}.fpv = stats{i}.fpv(idx);
+% 	filtered{i}.v_prec = stats{i}.v_prec(idx);
+% 	filtered{i}.v_rec = stats{i}.v_rec(idx);
+% 	filtered{i}.v_fs = stats{i}.v_fs(idx);
+
+% end
 
 % % MySQL open
 % mysql('open','127.0.0.1:13306','omnidev','we8pizza');

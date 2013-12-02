@@ -1,4 +1,4 @@
-function [params] = initialize_classifier_parameters( nUser, setting )
+function [params] = NCM_initialize_classifier_parameters( uIDs, setting, param )
 %% Argument description
 %
 %	setting:
@@ -8,6 +8,8 @@ function [params] = initialize_classifier_parameters( nUser, setting )
 %		setting.dense:	dense sampling interval (epochs)
 %
 
+nUser = numel(uIDs);
+
 %% Parameter initialization
 %
 % w, theta
@@ -16,6 +18,18 @@ epsilon_theta 	= 0.01;
 params.nUser	= nUser;
 params.w 		= rand(nUser,1)*epsilon_w;
 params.theta	= rand(nUser,1)*epsilon_theta;
+
+if( exist('param','var') )	
+	for i = 1:nUser
+		uID = uIDs(i);
+		if( isKey(param,uID) )
+			idx = find(uIDs == uID);
+			val = param(uID);
+			params.w(idx) = val.w;
+			params.theta(idx) = val.theta;
+		end
+	end
+end
 
 % learning rate
 params.eta = setting.eta;
