@@ -74,7 +74,7 @@ otherwise
     nv_filter = nv > 0;
     % nv_filter = nv >= 15;
 end
-enf = good_idx & (w==0) & nv_filter;
+enf = good_idx & (w<0.5) & nv_filter;
 disenf = bad_idx & (w==1);
 [enfIDs] = uIDs(enf);
 if( strcmp(cell_type,'any') && promotion_check )
