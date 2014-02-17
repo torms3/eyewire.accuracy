@@ -48,7 +48,7 @@ vals = vals(valid_idx);
 %
 uIDs = keys;
 n_users = numel(uIDs);
-good_idx = (v_prec > cut_line.prec) & (v_rec > cut_line.rec);
+good_idx = (v_prec >= cut_line.prec) & (v_rec >= cut_line.rec);
 bad_idx  = ~good_idx; 
 n_good = nnz(good_idx);
 n_bad = n_users - n_good;
