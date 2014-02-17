@@ -8,6 +8,11 @@ function [STAT,STAT_per_cell] = process_user_stat( update, period, t_status, cel
 	end
 
 
+	%% [02/17/2014 kisuklee]
+	%   remove 'Omniwire Test' from the cell ID list
+	[cell_IDs] = cell_IDs(cell_IDs ~= 130);
+
+
 	%% Create DB path
 	%
 	save_path = DB_get_DB_MAP_path();
