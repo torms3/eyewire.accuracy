@@ -15,7 +15,8 @@ function [STAT,STAT_per_cell] = process_user_stat( update, period, t_status, cel
 	% [02/24/2014 kisuklee]
 	% remove 'Evil Cube Challenge' from the cell ID list
 	[cell_IDs] = cell_IDs(cell_IDs ~= 140);	
-
+	% remove 'Omniwire Test 2' from the cell ID list
+	[cell_IDs] = cell_IDs(cell_IDs ~= 145);
 
 
 	%% Create DB path
