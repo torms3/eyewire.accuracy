@@ -19,17 +19,23 @@ page_num = 0;
 
 seg_file = sprintf('segment_page%d.data.ver4',page_num);
 full_path = [vol_path seg_path seg_file];
-[segID,segSize] = read_segment_size( full_path );
+try
+	[segID,segSize] = read_segment_size( full_path );
 
-idx = segID > 0;
-segID = segID(idx);
-segSize = segSize(idx);
-% assert( isequal(size(segID),size(segSize)) );
+	idx = segID > 0;
+	segID = segID(idx);
+	segSize = segSize(idx);
+	% assert( isequal(size(segID),size(segSize)) );
 
-% [size_of_seg] = segSize(seg);
-idx = ismember(segID,seg);
-[~,IA,IB] = intersect(segID,seg);
-size_of_seg(IB) = segSize(IA);
-[n_seg] = numel(segID);
+	% [size_of_seg] = segSize(seg);
+	idx = ismember(segID,seg);
+	[~,IA,IB] = intersect(segID,seg);
+	size_of_seg(IB) = segSize(IA);
+	[n_seg] = numel(segID);
+catch err
+	disp(['Error in read_segment_size()']);
+	size_of_seg = [];
+	n_seg = 0;
+end
 
 end

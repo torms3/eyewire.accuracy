@@ -42,6 +42,10 @@ for i = 1:nv
     tID     = vInfo.tID;
     tInfo   = T(tID);
 
+    if isempty(tInfo.seg_size)
+        continue;
+    end
+
     % [match,miss,extra] = process_each_validation( vInfo, tInfo );
     [VA] = process_each_validation( vInfo, tInfo, include_seed );
     
