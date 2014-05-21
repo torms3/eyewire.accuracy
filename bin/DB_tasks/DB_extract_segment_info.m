@@ -15,6 +15,7 @@ for i = 1:T.Count
 	volInfo = VOL(chID);
 	seg 	= tInfo.union;
 	
+	% [segSize,nSeg] = get_size_of_segments_old( volInfo, seg );
 	[segSize,nSeg] = get_size_of_segments( volInfo, seg );
 
 	% update task information

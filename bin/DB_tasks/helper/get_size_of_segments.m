@@ -4,6 +4,8 @@ size_of_seg = [];
 n_seg = 0;
 if( isempty(seg) )
 	return;
+else
+	seg = uint32(seg);	
 end
 size_of_seg = zeros(1,numel(seg));
 

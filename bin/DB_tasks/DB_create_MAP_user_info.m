@@ -9,11 +9,11 @@ mysql('use omniweb');
 
 % MySQL query 1:
 % user information
-query_str = ['SELECT id,username,weight ' ...
+query_str = ['SELECT id,username,weight,class ' ...
              'FROM accounts ' ...
              'ORDER BY id ' ...
             ];
-[user,name,weight] = mysql( query_str );
+[user,name,weight,cls] = mysql( query_str );
 
 % MySQL query 2:
 query_str = ['SELECT user_id,validations.id ' ...
@@ -42,6 +42,7 @@ for i = 1:nu
     vals{i}.weight = weight(user == uID);
     vals{i}.vIDs = vIDs(uIDs == uID);
     vals{i}.nv = numel(vals{i}.vIDs);
+    vals{i}.class = cls(user == uID);
     
 end
 

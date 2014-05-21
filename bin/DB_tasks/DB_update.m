@@ -3,8 +3,11 @@ function [process_time] = DB_update( current, cell_IDs )
 	%% Argument validation
 	%
 	if( ~exist('cell_IDs','var') )
-		[cell_IDs] = DB_extract_DB_cells();
+		% [cell_IDs] = DB_extract_DB_cells();
+		[cell_IDs] = DB_extract_cell_IDs();
 	end
+
+	cell_IDs(cell_IDs <= 270) = [];
 
 	%% Period setting
 	%	
@@ -33,6 +36,7 @@ function [process_time] = DB_update( current, cell_IDs )
 	for i = 1:numel(cell_IDs)
 
 		cellID = cell_IDs(i);
+		disp(['Processing cell ' num2str(cellID) ' now...']);
 		
 		tic;		
 		DB_construct_DB_MAPs( savePath, true, cellID, period, t_status );

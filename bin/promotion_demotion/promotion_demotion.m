@@ -2,14 +2,14 @@ function [output] = promotion_demotion( args, updateDB )
 
 	%% Argument validation
 	%
-	if( ~exist('updateDB','var') )
+	if ~exist('updateDB','var')
 		updateDB = false;
 	end
 
 
 	%% Arguments
 	%
-	period = args.period;
+	period 	 = args.period;
 	t_status = args.t_status;
 
 
@@ -28,8 +28,16 @@ function [output] = promotion_demotion( args, updateDB )
 	seed = false;
 	[SAC_UA] = UA_process_user_accuracy( SAC_DB_MAPs, seed );
 	[SAC_uSTAT] = UA_create_MAP_uSTAT( SAC_UA, SAC_DB_MAPs );
-	
 
+
+	%% Exclude tracers from the analysis
+	%
+	[tracers] = DB_extract_tracer_uIDs();
+	tracer_uIDs = cell2mat(tracers.keys);
+	remove(STAT,tracer_uIDs);
+	remove(SAC_uSTAT,tracer_uIDs);
+
+	
 	%% Promotion/demotion info
 	%
 	[global_uIDs_info] = UA_plot_user_precision_recall_curve( STAT );

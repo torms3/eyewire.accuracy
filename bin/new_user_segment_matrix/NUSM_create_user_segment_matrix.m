@@ -120,20 +120,31 @@ function [data] = NUSM_create_user_segment_matrix( DB_MAPs, skipV0, skipSuperuse
 
 
 	%% Return data
-	%	
-	data.tIDs = tIDs;
-	data.uIDs = uIDs;
-	data.map_tIDs = cell2mat(map_tIDs);
-	data.seed = cell2mat(seed);
-	data.sigma = cell2mat(sigma);
-	data.segSize = cell2mat(segSize);
-	data.matrix = cell2mat(scaffold);
-	
-	% hotspot & superuser info.
-	data.hotIDs = hotIDs;
-	data.superIDs = superIDs;
+	%
+	MSR = true;
+	if MSR
+		data.cubeIDs = tIDs;
+		data.userIDs = uIDs;
+		data.map_to_cubeID = cell2mat(map_tIDs);
+		data.seed = cell2mat(seed);
+		data.truth = cell2mat(sigma);
+		data.size = cell2mat(segSize);
+		data.matrix = cell2mat(scaffold);
+	else
+		data.tIDs = tIDs;
+		data.uIDs = uIDs;
+		data.map_tIDs = cell2mat(map_tIDs);
+		data.seed = cell2mat(seed);
+		data.sigma = cell2mat(sigma);
+		data.segSize = cell2mat(segSize);
+		data.matrix = cell2mat(scaffold);
+		
+		% hotspot & superuser info.
+		data.hotIDs = hotIDs;
+		data.superIDs = superIDs;
 
-	% timeseries
-	data.nBins = nBins;
+		% timeseries
+		data.nBins = nBins;
+	end
 
 end
