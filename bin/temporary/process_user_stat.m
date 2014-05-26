@@ -3,13 +3,13 @@ function [STAT,STAT_per_cell] = process_user_stat( update, period, t_status, cel
 	%%  Extract the IDs of cells that are updated during 
 	%	the specified period.
 	%
-	if( ~exist('cell_IDs','var') )
+	if ~exist('cell_IDs','var')
 		[cell_IDs] = DB_extract_cell_IDs( period, t_status );
 	end
 
 
-	%% [02/17/2014 kisuklee]
-	%   remove 'Evil Cube Challenge' from the cell ID list
+	% [02/24/2014 kisuklee]
+	% remove 'Evil Cube Challenge' from the cell ID list
 	[cell_IDs] = cell_IDs(cell_IDs ~= 140);
 
 
