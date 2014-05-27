@@ -42,7 +42,7 @@ for i = 1:nv
     tID     = vInfo.tID;
     tInfo   = T(tID);
 
-    if tInfo.n_seg == 0
+    if isempty(tInfo.seg_size)
         continue;
     end
 
