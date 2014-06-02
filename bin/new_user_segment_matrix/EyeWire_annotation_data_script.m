@@ -18,8 +18,9 @@ function [] = EyeWire_annotation_data_script( DB_MAPs_path, save_path )
 
 			% save data matrix
 			file_name_header = 'EyeWire_annotation_cell_';
-			save([save_path '/' file_name_header num2str(cellID) '.mat'],'data');			
+			save([save_path '/' file_name_header num2str(cellID) '.mat'],'data','-v7.3');
 		catch
+			disp(['Skip ' file_name '...']);
 			continue;
 		end
 

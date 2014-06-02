@@ -129,6 +129,7 @@ function [data] = NUSM_create_user_segment_matrix( DB_MAPs, skipV0, skipSuperuse
 		data.seed = cell2mat(seed);
 		data.truth = cell2mat(sigma);
 		data.size = cell2mat(segSize);
+		data.segIDs = cell2mat(segIdx);
 		data.matrix = cell2mat(scaffold);
 	else
 		data.tIDs = tIDs;
