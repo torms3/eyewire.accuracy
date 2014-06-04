@@ -1,6 +1,6 @@
 function [MAPs] = user_accuracy_MAPs( username, period )
 
-		%% Argument validation
+	%% Argument validation
 	if( ~exist('period','var') )
 	    period.since = '';
 	    period.until = '';
