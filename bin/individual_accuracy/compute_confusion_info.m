@@ -1,5 +1,8 @@
 function [] = compute_confusion_info( MAPs )
 
+	%% Cell-type information
+	[MAP_celltype] = DB_create_MAP_celltype();
+
 	%% Validation-wise processing
 	vIDs = cell2mat(MAPs.V.keys);
 	nv = numel(vIDs);
@@ -10,6 +13,9 @@ function [] = compute_confusion_info( MAPs )
 
 	    tID     = vInfo.tID;
 	    tInfo   = MAPs.T(tID);
+
+	    cellID	= tInfo.cell;
+	    SAC		= strcmp(MAP_celltype(cellID),'sac');
 
 	    if isempty(tInfo.seg_size)
 	        continue;
@@ -29,6 +35,9 @@ function [] = compute_confusion_info( MAPs )
 	    vInfo.fnv = sum(tInfo.seg_size(ismember(u_seg,VA.fn)));
 	    vInfo.fpv = sum(tInfo.seg_size(ismember(u_seg,VA.fp)));
 	    vInfo.tnv = sum(tInfo.seg_size(ismember(u_seg,VA.tn)));
+
+	    % SAC or non-SAC
+	    vInfo.SAC = SAC;
 
 	    MAPs.V(vID) = vInfo;
 	    
