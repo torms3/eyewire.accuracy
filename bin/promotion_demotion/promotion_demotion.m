@@ -33,7 +33,7 @@ function [output] = promotion_demotion( args, updateDB )
 	%% Exclude tracers from the analysis
 	%
 	[tracers] = DB_extract_tracer_uIDs();
-	tracer_uIDs = cell2mat(tracers.keys);
+	tracer_uIDs = tracers.keys;
 	remove(STAT,tracer_uIDs);
 	remove(SAC_uSTAT,tracer_uIDs);
 

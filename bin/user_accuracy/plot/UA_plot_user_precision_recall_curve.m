@@ -1,4 +1,4 @@
-function [uIDs_info] = UA_plot_user_precision_recall_curve( STAT, cell_type, cut_line )
+ [uIDs_info] = UA_plot_user_precision_recall_curve( STAT, cell_type, cut_line )
 
 %% Argument validation
 %
@@ -86,6 +86,7 @@ fprintf('%d out of %d users (%.2f %%) are above the cut-line.\n',n_good,n_users,
 fprintf('%d out of %d users (%.2f %%) are below the cut-line.\n',n_bad,n_users,n_bad*100.0/n_users);
 fprintf('%d users (%.2f %%) will be enfranchised.\n',numel(enfIDs),numel(enfIDs)*100.0/n_users);
 fprintf('%d users (%.2f %%) will be disenfranchised.\n',nnz(disenf),nnz(disenf)*100.0/n_users);
+report_cube_proportion( STAT );
 
 uIDs_info.goodIDs   = goodIDs;
 uIDs_info.badIDs    = badIDs;
