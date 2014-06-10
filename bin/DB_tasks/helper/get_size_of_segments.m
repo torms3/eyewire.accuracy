@@ -35,6 +35,7 @@ try
 	size_of_seg(IB) = segSize(IA);
 	[n_seg] = numel(segID);
 catch err
+	disp(['Error in read_segment_size()']);
 	size_of_seg = [];
 	n_seg = 0;
 end
