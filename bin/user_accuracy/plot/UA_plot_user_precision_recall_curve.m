@@ -1,4 +1,4 @@
- [uIDs_info] = UA_plot_user_precision_recall_curve( STAT, cell_type, cut_line )
+function [uIDs_info] = UA_plot_user_precision_recall_curve( STAT, cell_type, cut_line )
 
 %% Argument validation
 %
