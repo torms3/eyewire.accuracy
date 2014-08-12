@@ -13,7 +13,7 @@ function [] = EyeWire_annotation_data_script( DB_MAPs_path, save_path )
 		
 			% construct data matrix
 			skipV0 = false;
-			skipSuperuser = true;
+			skipSuperuser = false;
 			[data] = NUSM_create_user_segment_matrix( DB_MAPs, skipV0, skipSuperuser );
 
 			% save data matrix

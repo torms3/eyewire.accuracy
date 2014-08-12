@@ -7,8 +7,7 @@ function [] = prepare_hierarchical_segmentation( DB_MAPs, save_path )
 	%	
 	keys 	= T.keys;
 	tInfos 	= T.values;
-	% for i = 1:T.Count
-	for i = 1:10
+	for i = 1:T.Count
 
 		tID = keys{i};
 		fprintf('(%d/%d) tID = %d is now processing...\n',i,T.Count,tID);
@@ -34,10 +33,10 @@ function [] = prepare_hierarchical_segmentation( DB_MAPs, save_path )
 
 		%% Copy channel & segmentation data (mip-level 1)
 		%
-		chn_path = '/channels/channel1/1/volume.float.raw';
-		seg_path = '/segmentations/segmentation1/1/volume.uint32_t.raw';
-		system(['cp ' volPath chn_path ' ' full_path '/']);
-		system(['cp ' volPath seg_path ' ' full_path '/']);		
+		% chn_path = '/channels/channel1/1/volume.float.raw';
+		% seg_path = '/segmentations/segmentation1/1/volume.uint32_t.raw';
+		% system(['cp ' volPath chn_path ' ' full_path '/']);
+		% system(['cp ' volPath seg_path ' ' full_path '/']);
 
 		%% Copy channel & segmentation data (mip-level 0)
 		%
