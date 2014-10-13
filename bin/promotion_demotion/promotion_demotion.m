@@ -1,9 +1,12 @@
-function [output] = promotion_demotion( args, updateDB )
+function [output] = promotion_demotion( args, SAC, updateDB )
 
 	%% Argument validation
 	%
 	if ~exist('updateDB','var')
 		updateDB = false;
+	end
+	if ~exist('SAC','var')
+		SAC = false;
 	end
 
 
@@ -21,13 +24,15 @@ function [output] = promotion_demotion( args, updateDB )
 
 	%% SAC
 	%
-	segInfo = true;
-	cellIDs = [0];
-	[SAC_DB_MAPs] = SAC_construct_DB_MAPs( segInfo, cellIDs, period, [0] );
+	if SAC
+		segInfo = true;
+		cellIDs = [0];
+		[SAC_DB_MAPs] = SAC_construct_DB_MAPs( segInfo, cellIDs, period, [0] );
 
-	seed = false;
-	[SAC_UA] = UA_process_user_accuracy( SAC_DB_MAPs, seed );
-	[SAC_uSTAT] = UA_create_MAP_uSTAT( SAC_UA, SAC_DB_MAPs );
+		seed = false;
+		[SAC_UA] = UA_process_user_accuracy( SAC_DB_MAPs, seed );
+		[SAC_uSTAT] = UA_create_MAP_uSTAT( SAC_UA, SAC_DB_MAPs );
+	end
 
 
 	%% Exclude tracers from the analysis
@@ -35,15 +40,21 @@ function [output] = promotion_demotion( args, updateDB )
 	[tracers] = DB_extract_tracer_uIDs();
 	tracer_uIDs = tracers.keys;
 	remove(STAT,tracer_uIDs);
-	remove(SAC_uSTAT,tracer_uIDs);
+	if SAC
+		remove(SAC_uSTAT,tracer_uIDs);
+	end
 
 	
 	%% Promotion/demotion info
 	%
 	[global_uIDs_info] = UA_plot_user_precision_recall_curve( STAT );
-	[SAC_uIDs_info] = UA_plot_user_precision_recall_curve( SAC_uSTAT, 'sac' );
+	if SAC
+		[SAC_uIDs_info] = UA_plot_user_precision_recall_curve( SAC_uSTAT, 'sac' );
+	end
 	uIDs_info.global = global_uIDs_info;
-	uIDs_info.SAC = SAC_uIDs_info;
+	if SAC
+		uIDs_info.SAC = SAC_uIDs_info;
+	end
 
 
 	%% User list
@@ -54,32 +65,36 @@ function [output] = promotion_demotion( args, updateDB )
 	global_list.disenf_uIDs = global_uIDs_info.disenfIDs';
 	global_list.disenf_uNames = extractfield( cell2mat(values( STAT, num2cell(global_uIDs_info.disenfIDs) )), 'username' )';
 
-	SAC_list.enf_uIDs = SAC_uIDs_info.enfIDs';
-	SAC_list.enf_uNames = extractfield( cell2mat(values( STAT, num2cell(SAC_uIDs_info.enfIDs) )), 'username' )';
+	if SAC
+		SAC_list.enf_uIDs = SAC_uIDs_info.enfIDs';
+		SAC_list.enf_uNames = extractfield( cell2mat(values( STAT, num2cell(SAC_uIDs_info.enfIDs) )), 'username' )';
 
-	SAC_list.disenf_uIDs = SAC_uIDs_info.disenfIDs';
-	SAC_list.disenf_uNames = extractfield( cell2mat(values( STAT, num2cell(SAC_uIDs_info.disenfIDs) )), 'username' )';
+		SAC_list.disenf_uIDs = SAC_uIDs_info.disenfIDs';
+		SAC_list.disenf_uNames = extractfield( cell2mat(values( STAT, num2cell(SAC_uIDs_info.disenfIDs) )), 'username' )';
+	end
 
 
 	%% Actual DB update
 	%
 	if( updateDB )
 		DB_update_user_weight( global_uIDs_info.enfIDs, 1 );
-		% DB_update_user_weight( global_uIDs_info.disenfIDs, 0 );
 		DB_update_user_weight( global_uIDs_info.disenfIDs, 0.1 );
-		DB_update_cell_type_user_weight( 'sac', SAC_uIDs_info.enfIDs, 1 );
-		% DB_update_cell_type_user_weight( 'sac', SAC_uIDs_info.disenfIDs, 0 );
-		DB_update_cell_type_user_weight( 'sac', SAC_uIDs_info.disenfIDs, 0.1 );
+		if SAC
+			DB_update_cell_type_user_weight( 'sac', SAC_uIDs_info.enfIDs, 1 );
+			DB_update_cell_type_user_weight( 'sac', SAC_uIDs_info.disenfIDs, 0.1 );
+		end
 	end
 
 
 	%% Return
 	%
 	output.STAT = STAT;
-	output.SAC_uSTAT = SAC_uSTAT;
 	output.uIDs_info = uIDs_info;
 	output.global_list = global_list;
-	output.SAC_list = SAC_list;
+	if SAC
+		output.SAC_uSTAT = SAC_uSTAT;
+		output.SAC_list = SAC_list;
+	end
 
 
 	%% Save

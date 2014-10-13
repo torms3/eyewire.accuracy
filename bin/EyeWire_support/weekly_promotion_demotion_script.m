@@ -5,7 +5,8 @@ function [output] = weekly_promotion_demotion_script( period )
 
 	args.period = period;
 	args.t_status = [0];
-	updateDB = false;
-	[output] = promotion_demotion( args, updateDB );
+	updateDB = true;
+	SAC = false;
+	[output] = promotion_demotion( args, SAC, updateDB );
 
 end
